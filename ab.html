@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px 24px;
+            color: white;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e40af;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #1e40af;
+        }
+
+        /* BALANCE CARD */
+        .balance-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .balance-label {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .eye-icon {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .balance-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .balance-action {
+            background: white;
+            border: none;
+            padding: 12px 8px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .balance-action:active {
+            transform: scale(0.95);
+        }
+
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .action-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        /* PROMO BANNER */
+        .promo-section {
+            padding: 16px 20px;
+            background: white;
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .promo-icon {
+            font-size: 32px;
+        }
+
+        .promo-content h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #78350f;
+            margin-bottom: 2px;
+        }
+
+        .promo-content p {
+            font-size: 12px;
+            color: #92400e;
+            font-weight: 500;
+        }
+
+        /* SERVICES GRID */
+        .services-section {
+            padding: 20px;
+            background: white;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .view-all {
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .service-item:active {
+            transform: scale(0.95);
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: #f3f4f6;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.2s;
+        }
+
+        .service-item:hover .service-icon {
+            background: #e5e7eb;
+        }
+
+        .service-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            text-align: center;
+        }
+
+        /* QUICK LINKS */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quick-link {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-link:active {
+            transform: scale(0.98);
+        }
+
+        .quick-link-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .quick-link-text {
+            flex: 1;
+        }
+
+        .quick-link-text h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .quick-link-text p {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* TRANSACTIONS */
+        .transactions-section {
+            padding: 0 20px 20px;
+            background: white;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 44px;
+            height: 44px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .transaction-icon.success {
+            background: #dcfce7;
+        }
+
+        .transaction-icon.failed {
+            background: #fee2e2;
+        }
+
+        .transaction-icon.pending {
+            background: #fef3c7;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 3px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .transaction-amount {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .transaction-amount.debit {
+            color: #dc2626;
+        }
+
+        .transaction-amount.credit {
+            color: #059669;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        /* REFERRAL BANNER */
+        .referral-banner {
+            margin: 16px 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 12px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .referral-content h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .referral-content p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .referral-btn {
+            background: white;
+            color: #059669;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        @media (max-width: 480px) {
+            .services-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <div class="user-info">
+                    <div class="avatar">EA</div>
+                    <div class="user-details">
+                        <h3>Emmanuel Adeola</h3>
+                        <p>ID: PAY234567890</p>
+                    </div>
+                </div>
+                <div class="header-icons">
+                    <button class="icon-btn">
+                        🔔
+                        <span class="badge"></span>
+                    </button>
+                    <button class="icon-btn">💬</button>
+                </div>
+            </div>
+
+            <!-- BALANCE CARD -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="balance-label">Wallet Balance</div>
+                    <button class="eye-icon" id="toggleBalance">👁️</button>
+                </div>
+                <div class="balance-amount" id="balanceAmount">₦125,450.00</div>
+                <div class="balance-actions">
+                    <button class="balance-action" onclick="location.href='#fund'">
+                        <div class="action-icon">➕</div>
+                        <div class="action-text">Add Money</div>
+                    </button>
+                    <button class="balance-action" onclick="location.href='#withdraw'">
+                        <div class="action-icon">💳</div>
+                        <div class="action-text">Withdraw</div>
+                    </button>
+                    <button class="balance-action" onclick="location.href='#transfer'">
+                        <div class="action-icon">📤</div>
+                        <div class="action-text">Transfer</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROMO BANNER -->
+        <div class="promo-section">
+            <div class="promo-banner">
+                <div class="promo-icon">🎁</div>
+                <div class="promo-content">
+                    <h4>Get ₦500 Cashback!</h4>
+                    <p>On your next airtime purchase above ₦1000</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICES -->
+        <div class="services-section">
+            <div class="section-header">
+                <h2 class="section-title">Services</h2>
+                <span class="view-all">See All →</span>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-item" onclick="location.href='#airtime'">
+                    <div class="service-icon">📱</div>
+                    <div class="service-name">Airtime</div>
+                </div>
+                <div class="service-item" onclick="location.href='#data'">
+                    <div class="service-icon">📶</div>
+                    <div class="service-name">Data</div>
+                </div>
+                <div class="service-item" onclick="location.href='#electricity'">
+                    <div class="service-icon">⚡</div>
+                    <div class="service-name">Electricity</div>
+                </div>
+                <div class="service-item" onclick="location.href='#tv'">
+                    <div class="service-icon">📺</div>
+                    <div class="service-name">Cable TV</div>
+                </div>
+                <div class="service-item" onclick="location.href='#betting'">
+                    <div class="service-icon">🎲</div>
+                    <div class="service-name">Betting</div>
+                </div>
+                <div class="service-item" onclick="location.href='#internet'">
+                    <div class="service-icon">🌐</div>
+                    <div class="service-name">Internet</div>
+                </div>
+                <div class="service-item" onclick="location.href='#education'">
+                    <div class="service-icon">🎓</div>
+                    <div class="service-name">Education</div>
+                </div>
+                <div class="service-item" onclick="location.href='#more'">
+                    <div class="service-icon">➕</div>
+                    <div class="service-name">More</div>
+                </div>
+            </div>
+
+            <!-- QUICK LINKS -->
+            <div class="quick-links">
+                <div class="quick-link" onclick="location.href='#cards'">
+                    <div class="quick-link-icon">💳</div>
+                    <div class="quick-link-text">
+                        <h4>Virtual Cards</h4>
+                        <p>Create & manage cards</p>
+                    </div>
+                </div>
+                <div class="quick-link" onclick="location.href='#loans'">
+                    <div class="quick-link-icon">💰</div>
+                    <div class="quick-link-text">
+                        <h4>Quick Loans</h4>
+                        <p>Get instant credit</p>
+                    </div>
+                </div>
+                <div class="quick-link" onclick="location.href='#savings'">
+                    <div class="quick-link-icon">🏦</div>
+                    <div class="quick-link-text">
+                        <h4>Savings</h4>
+                        <p>Save & earn interest</p>
+                    </div>
+                </div>
+                <div class="quick-link" onclick="location.href='#rewards'">
+                    <div class="quick-link-icon">⭐</div>
+                    <div class="quick-link-text">
+                        <h4>Rewards</h4>
+                        <p>Cashback & bonuses</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REFERRAL BANNER -->
+        <div class="referral-banner">
+            <div class="referral-content">
+                <h4>Invite Friends & Earn</h4>
+                <p>Get ₦1000 per referral</p>
+            </div>
+            <button class="referral-btn">Invite</button>
+        </div>
+
+        <!-- TRANSACTIONS -->
+        <div class="transactions-section">
+            <div class="section-header">
+                <h2 class="section-title">Recent Transactions</h2>
+                <span class="view-all">See All →</span>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon success">✓</div>
+                <div class="transaction-details">
+                    <div class="transaction-title">MTN Airtime Purchase</div>
+                    <div class="transaction-date">Today, 10:30 AM</div>
+                </div>
+                <div class="transaction-amount debit">-₦500</div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon success">✓</div>
+                <div class="transaction-details">
+                    <div class="transaction-title">Wallet Funding - Card</div>
+                    <div class="transaction-date">Today, 9:15 AM</div>
+                </div>
+                <div class="transaction-amount credit">+₦20,000</div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon success">✓</div>
+                <div class="transaction-details">
+                    <div class="transaction-title">DSTV Subscription</div>
+                    <div class="transaction-date">Yesterday, 6:45 PM</div>
+                </div>
+                <div class="transaction-amount debit">-₦6,800</div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon success">✓</div>
+                <div class="transaction-details">
+                    <div class="transaction-title">EKEDC - Electricity</div>
+                    <div class="transaction-date">Yesterday, 2:20 PM</div>
+                </div>
+                <div class="transaction-amount debit">-₦5,000</div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon pending">⏱️</div>
+                <div class="transaction-details">
+                    <div class="transaction-title">Bank Transfer</div>
+                    <div class="transaction-date">2 days ago</div>
+                </div>
+                <div class="transaction-amount debit">-₦15,000</div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon success">✓</div>
+                <div class="transaction-details">
+                    <div class="transaction-title">Glo Data Bundle - 10GB</div>
+                    <div class="transaction-date">3 days ago</div>
+                </div>
+                <div class="transaction-amount debit">-₦3,500</div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Balance visibility toggle
+        const toggleBtn = document.getElementById('toggleBalance');
+        const balanceEl = document.getElementById('balanceAmount');
+        let visible = true;
+        const actualBalance = '₦125,450.00';
+
+        toggleBtn.addEventListener('click', function() {
+            visible = !visible;
+            balanceEl.textContent = visible ? actualBalance : '••••••';
+            this.textContent = visible ? '👁️' : '👁️‍🗨️';
+        });
+
+        // Bottom navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Dynamic greeting
+        const hour = new Date().getHours();
+        const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    </script>
+</body>
+</html>
