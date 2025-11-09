@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+/* Header */
+.header {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    padding: 20px;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.back-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.header-content {
+    flex: 1;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.header-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+        /* Progress Steps */
+        .progress-container {
+            padding: 24px 20px;
+            background: white;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 18px;
+            left: 36px;
+            right: 36px;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 0;
+        }
+
+        .progress-line-active {
+            position: absolute;
+            top: 18px;
+            left: 36px;
+            height: 2px;
+            background: #3b82f6;
+            z-index: 1;
+            transition: width 0.3s;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #9ca3af;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-circle {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .step.completed .step-circle {
+            border-color: #10b981;
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #374151;
+        }
+
+        /* Content */
+        .content {
+            padding: 24px 20px;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 24px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #9ca3af;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            color: #6b7280;
+            pointer-events: none;
+        }
+
+        .hint-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        /* Document Upload */
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 32px 20px;
+            text-align: center;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .upload-area.has-file {
+            border-color: #10b981;
+            background: #dcfce7;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .uploaded-file {
+            display: none;
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+        }
+
+        .uploaded-file.show {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-icon {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .remove-file {
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Camera Capture */
+        .camera-section {
+            margin-top: 16px;
+        }
+
+        .camera-btn {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 700;
+            color: #374151;
+            transition: all 0.2s;
+        }
+
+        .camera-btn:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        /* Verification Tips */
+        .tips-card {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tips-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            font-size: 12px;
+            color: #78350f;
+            margin-bottom: 6px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .tips-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+            font-weight: 700;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* Messages */
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            color: #dc2626;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            color: #047857;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0) rotate(-180deg); }
+            to { transform: scale(1) rotate(0deg); }
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .success-subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .verification-info {
+            background: #eff6ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: #1e40af;
+            font-weight: 700;
+        }
+
+        /* Date Input */
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 2fr 2fr 3fr;
+            gap: 10px;
+        }
+
+        .date-input {
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .progress-steps {
+                gap: 0;
+            }
+
+            .step-label {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <!-- Header -->
+<div class="header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <div class="header-content">
+        <h1 class="header-title">Identity Verification</h1>
+        <p class="header-subtitle">Complete your KYC to unlock all features</p>
+    </div>
+</div>
+
+        <!-- Progress Steps -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-line"></div>
+                <div class="progress-line-active" id="progressLine"></div>
+                
+                <div class="step active" id="stepIndicator1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Personal Info</div>
+                </div>
+                <div class="step" id="stepIndicator2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">ID Verification</div>
+                </div>
+                <div class="step" id="stepIndicator3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Selfie</div>
+                </div>
+                <div class="step" id="stepIndicator4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Review</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- STEP 1: Personal Information -->
+            <div class="step-content active" id="step1">
+                <h2 class="section-title">Personal Information</h2>
+                <p class="section-subtitle">Please provide your accurate personal details as they appear on your ID</p>
+
+                <div class="error-message" id="step1Error">
+                    <p id="step1ErrorText">Please fill all required fields</p>
+                </div>
+
+                <form id="step1Form">
+                    <div class="form-group">
+                        <label class="label">Full Name <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">👤</span>
+                            <input type="text" class="input-field" placeholder="Enter full name" id="fullName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Date of Birth <span class="required">*</span></label>
+                        <div class="date-inputs">
+                            <input type="number" class="date-input" placeholder="DD" id="day" min="1" max="31" required>
+                            <input type="number" class="date-input" placeholder="MM" id="month" min="1" max="12" required>
+                            <input type="number" class="date-input" placeholder="YYYY" id="year" min="1940" max="2010" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Gender <span class="required">*</span></label>
+                        <div class="select-wrapper">
+                            <span class="input-icon">⚥</span>
+                            <select class="select-field" id="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Prefer not to say</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">BVN (Bank Verification Number) <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🏦</span>
+                            <input type="text" class="input-field" placeholder="Enter 11-digit BVN" id="bvn" maxlength="11" required>
+                        </div>
+                        <p class="hint-text">Dial *565*0# to get your BVN</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Residential Address <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">📍</span>
+                            <input type="text" class="input-field" placeholder="Enter your address" id="address" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Continue</button>
+                </form>
+            </div>
+
+            <!-- STEP 2: ID Verification -->
+            <div class="step-content" id="step2">
+                <h2 class="section-title">Government Issued ID</h2>
+                <p class="section-subtitle">Upload a clear photo of your valid government ID</p>
+
+                <div class="error-message" id="step2Error">
+                    <p>Please upload a valid ID document</p>
+                </div>
+
+                <form id="step2Form">
+                    <div class="form-group">
+                        <label class="label">Select ID Type <span class="required">*</span></label>
+                        <div class="select-wrapper">
+                            <span class="input-icon">🪪</span>
+                            <select class="select-field" id="idType" required>
+                                <option value="">Choose ID type</option>
+                                <option value="nin">National ID Card (NIN)</option>
+                                <option value="license">Driver's License</option>
+                                <option value="passport">International Passport</option>
+                                <option value="voters">Voter's Card</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">ID Number <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔢</span>
+                            <input type="text" class="input-field" placeholder="Enter ID number" id="idNumber" required>
+                        </div>
+                    </div>
+
+                    <div class="tips-card">
+                        <p class="tips-title">📸 Photo Requirements</p>
+                        <ul class="tips-list">
+                            <li>Ensure all corners of the ID are visible</li>
+                            <li>Photo should be clear and not blurry</li>
+                            <li>Avoid glare or shadows on the ID</li>
+                            <li>Text and photo must be readable</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Upload ID Document <span class="required">*</span></label>
+                        <div class="upload-area" id="uploadArea" onclick="document.getElementById('idFile').click()">
+                            <div class="upload-icon">📄</div>
+                            <p class="upload-text">Tap to upload document</p>
+                            <p class="upload-hint">JPG, PNG or PDF • Max 5MB</p>
+                        </div>
+                        <input type="file" id="idFile" class="file-input" accept="image/*,.pdf">
+                        
+                        <div class="uploaded-file" id="uploadedFile">
+                            <div class="file-icon">📎</div>
+                            <div class="file-info">
+                                <p class="file-name" id="fileName">document.jpg</p>
+                                <p class="file-size" id="fileSize">2.4 MB</p>
+                            </div>
+                            <button type="button" class="remove-file" onclick="removeFile()">×</button>
+                        </div>
+                    </div>
+
+                    <div class="camera-section">
+                        <button type="button" class="camera-btn" onclick="openCamera()">
+                            <span>📷</span> Take Photo with Camera
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="step2Btn" disabled>Continue</button>
+                    <button type="button" class="btn btn-secondary" onclick="goToStep(1)">Back</button>
+                </form>
+            </div>
+
+            <!-- STEP 3: Selfie Verification -->
+            <div class="step-content" id="step3">
+                <h2 class="section-title">Selfie Verification</h2>
+                <p class="section-subtitle">Take a selfie holding your ID next to your face</p>
+
+                <div class="error-message" id="step3Error">
+                    <p>Please upload a selfie with your ID</p>
+                </div>
+
+                <form id="step3Form">
+                    <div class="tips-card">
+                        <p class="tips-title">🤳 Selfie Guidelines</p>
+                        <ul class="tips-list">
+                            <li>Hold your ID next to your face</li>
+                            <li>Ensure your face and ID are clearly visible</li>
+                            <li>Use good lighting, avoid backlighting</li>
+                            <li>Look directly at the camera</li>
+                            <li>Don't wear sunglasses or hats</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Upload Selfie <span class="required">*</span></label>
+                        <div class="upload-area" id="selfieUploadArea" onclick="document.getElementById('selfieFile').click()">
+                            <div class="upload-icon">🤳</div>
+                            <p class="upload-text">Tap to upload selfie</p>
+                            <p class="upload-hint">JPG or PNG • Max 5MB</p>
+                        </div>
+                        <input type="file" id="selfieFile" class="file-input" accept="image/*">
+                        
+                        <div class="uploaded-file" id="uploadedSelfie">
+                            <div class="file-icon">🖼️</div>
+                            <div class="file-info">
+                                <p class="file-name" id="selfieFileName">selfie.jpg</p>
+                                <p class="file-size" id="selfieFileSize">1.8 MB</p>
+                            </div>
+                            <button type="button" class="remove-file" onclick="removeSelfie()">×</button>
+                        </div>
+                    </div>
+
+                    <div class="camera-section">
+                        <button type="button" class="camera-btn" onclick="openSelfieCamera()">
+                            <span>📷</span> Take Selfie with Camera
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="step3Btn" disabled>Continue</button>
+                    <button type="button" class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+                </form>
+            </div>
+
+            <!-- STEP 4: Review & Submit -->
+            <div class="step-content" id="step4">
+                <h2 class="section-title">Review Your Information</h2>
+                <p class="section-subtitle">Please review all information before submitting</p>
+
+                <div class="verification-info">
+                    <div class="info-row">
+                        <span class="info-label">Full Name:</span>
+                        <span class="info-value" id="reviewName">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Date of Birth:</span>
+                        <span class="info-value" id="reviewDOB">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Gender:</span>
+                        <span class="info-value" id="reviewGender">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">BVN:</span>
+                        <span class="info-value" id="reviewBVN">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">ID Type:</span>
+                        <span class="info-value" id="reviewIDType">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">ID Number:</span>
+                        <span class="info-value" id="reviewIDNumber">-</span>
+                    </div>
+                </div>
+
+                <div class="tips-card">
+                    <p class="tips-title">⏱️ Verification Timeline</p>
+                    <ul class="tips-list">
+                        <li>Documents are reviewed within 24-48 hours</li>
+                        <li>You'll receive email and SMS notifications</li>
+                        <li>Keep your phone number active during review</li>
+                        <li>Contact support if you need urgent verification</li>
+                    </ul>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="submitKYC()">Submit for Verification</button>
+                <button type="button" class="btn btn-secondary" onclick="goToStep(3)">Back to Edit</button>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="step-content" id="successStep">
+                <div class="success-screen">
+                    <div class="success-icon">✓</div>
+                    <h2 class="success-title">Verification Submitted!</h2>
+                    <p class="success-subtitle">Your documents have been submitted successfully. We'll review them within 24-48 hours and notify you via email and SMS.</p>
+
+                    <div class="verification-info">
+                        <div class="info-row">
+                            <span class="info-label">Reference ID:</span>
+                            <span class="info-value" id="referenceID">KYC2024110812345</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Submitted:</span>
+                            <span class="info-value" id="submittedDate">Nov 08, 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value">Under Review</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="goToDashboard()">Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let kycData = {
+            personal: {},
+            idDocument: {},
+            selfie: {}
+        };
+
+        // Update progress line
+        function updateProgress() {
+            const progressLine = document.getElementById('progressLine');
+            const width = ((currentStep - 1) / 3) * 100;
+            progressLine.style.width = `calc(${width}% - 36px)`;
+        }
+
+        // Navigation
+        function goToStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+            
+            // Show current step
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            // Update step indicators
+            for (let i = 1; i <= 4; i++) {
+                const indicator = document.getElementById(`stepIndicator${i}`);
+                indicator.classList.remove('active', 'completed');
+                
+                if (i < step) {
+                    indicator.classList.add('completed');
+                    indicator.querySelector('.step-circle').textContent = '✓';
+                } else if (i === step) {
+                    indicator.classList.add('active');
+                    indicator.querySelector('.step-circle').textContent = i;
+                } else {
+                    indicator.querySelector('.step-circle').textContent = i;
+                }
+            }
+            
+            currentStep = step;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        // STEP 1: Personal Information
+        document.getElementById('step1Form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const day = document.getElementById('day').value;
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+            const gender = document.getElementById('gender').value;
+            const bvn = document.getElementById('bvn').value;
+            const address = document.getElementById('address').value;
+
+            // Validation
+            if (!fullName || !day || !month || !year || !gender || !bvn || !address) {
+                showError('step1Error', 'Please fill all required fields');
+                return;
+            }
+
+            if (bvn.length !== 11) {
+                showError('step1Error', 'BVN must be 11 digits');
+                return;
+            }
+
+            // Store data
+            kycData.personal = {
+                fullName,
+                dob: `${day}/${month}/${year}`,
+                gender,
+                bvn,
+                address
+            };
+
+            goToStep(2);
+        });
+
+        // STEP 2: ID Document Upload
+        const idFileInput = document.getElementById('idFile');
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadedFile = document.getElementById('uploadedFile');
+
+        idFileInput.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                const fileSize = (file.size / 1024 / 1024).toFixed(1);
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    showError('step2Error', 'File size must be less than 5MB');
+                    return;
+                }
+                
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = fileSize + ' MB';
+                uploadedFile.classList.add('show');
+                uploadArea.classList.add('has-file');
+                document.getElementById('step2Btn').disabled = false;
+                
+                kycData.idDocument.file = file;
+            }
+        });
+
+        function removeFile() {
+            idFileInput.value = '';
+            uploadedFile.classList.remove('show');
+            uploadArea.classList.remove('has-file');
+            document.getElementById('step2Btn').disabled = true;
+            delete kycData.idDocument.file;
+        }
+
+        function openCamera() {
+            alert('📷 Camera Access\n\nThis would open your device camera to capture the ID document.\n\nIn production, this uses the device camera API.');
+        }
+
+        document.getElementById('step2Form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const idType = document.getElementById('idType').value;
+            const idNumber = document.getElementById('idNumber').value;
+            
+            if (!idType || !idNumber || !kycData.idDocument.file) {
+                showError('step2Error', 'Please complete all fields and upload your ID');
+                return;
+            }
+            
+            kycData.idDocument.type = idType;
+            kycData.idDocument.number = idNumber;
+            
+            goToStep(3);
+        });
+
+        // STEP 3: Selfie Upload
+        const selfieFileInput = document.getElementById('selfieFile');
+        const selfieUploadArea = document.getElementById('selfieUploadArea');
+        const uploadedSelfie = document.getElementById('uploadedSelfie');
+
+        selfieFileInput.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                const fileSize = (file.size / 1024 / 1024).toFixed(1);
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    showError('step3Error', 'File size must be less than 5MB');
+                    return;
+                }
+                
+                document.getElementById('selfieFileName').textContent = file.name;
+                document.getElementById('selfieFileSize').textContent = fileSize + ' MB';
+                uploadedSelfie.classList.add('show');
+                selfieUploadArea.classList.add('has-file');
+                document.getElementById('step3Btn').disabled = false;
+                
+                kycData.selfie.file = file;
+            }
+        });
+
+        function removeSelfie() {
+            selfieFileInput.value = '';
+            uploadedSelfie.classList.remove('show');
+            selfieUploadArea.classList.remove('has-file');
+            document.getElementById('step3Btn').disabled = true;
+            delete kycData.selfie.file;
+        }
+
+        function openSelfieCamera() {
+            alert('🤳 Selfie Camera\n\nThis would open your device camera for selfie capture.\n\nIn production, this uses the device camera API with face detection.');
+        }
+
+        document.getElementById('step3Form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!kycData.selfie.file) {
+                showError('step3Error', 'Please upload a selfie with your ID');
+                return;
+            }
+            
+            // Populate review step
+            document.getElementById('reviewName').textContent = kycData.personal.fullName;
+            document.getElementById('reviewDOB').textContent = kycData.personal.dob;
+            document.getElementById('reviewGender').textContent = kycData.personal.gender.charAt(0).toUpperCase() + kycData.personal.gender.slice(1);
+            document.getElementById('reviewBVN').textContent = kycData.personal.bvn.substring(0, 3) + '***' + kycData.personal.bvn.substring(8);
+            
+            const idTypes = {
+                'nin': 'National ID Card',
+                'license': "Driver's License",
+                'passport': 'International Passport',
+                'voters': "Voter's Card"
+            };
+            document.getElementById('reviewIDType').textContent = idTypes[kycData.idDocument.type] || kycData.idDocument.type;
+            document.getElementById('reviewIDNumber').textContent = kycData.idDocument.number;
+            
+            goToStep(4);
+        });
+
+        // STEP 4: Submit KYC
+        function submitKYC() {
+            const submitBtn = event.target;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            // Simulate API submission
+            setTimeout(() => {
+                // Generate reference ID
+                const date = new Date();
+                const refId = 'KYC' + date.getFullYear() + 
+                             String(date.getMonth() + 1).padStart(2, '0') + 
+                             String(date.getDate()).padStart(2, '0') + 
+                             Math.floor(Math.random() * 100000);
+                
+                document.getElementById('referenceID').textContent = refId;
+                
+                const dateStr = date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                document.getElementById('submittedDate').textContent = dateStr;
+                
+                document.getElementById('step4').classList.remove('active');
+                document.getElementById('successStep').classList.add('active');
+                
+                submitBtn.textContent = 'Submit for Verification';
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        function goToDashboard() {
+            alert('Success! ✓\n\nRedirecting to dashboard...\n\nYou can now use limited features while we verify your documents.');
+            // In production: window.location.href = 'dashboard.html';
+        }
+
+        // Helper functions
+        function showError(errorId, message) {
+            const errorEl = document.getElementById(errorId);
+            const errorText = errorEl.querySelector('p');
+            if (errorText) {
+                errorText.textContent = '❌ ' + message;
+            } else {
+                errorEl.textContent = '❌ ' + message;
+            }
+            errorEl.classList.add('show');
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 3000);
+        }
+
+        // BVN input - only numbers
+        document.getElementById('bvn').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Date inputs - only numbers
+        document.getElementById('day').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (parseInt(this.value) > 31) this.value = '31';
+        });
+
+        document.getElementById('month').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (parseInt(this.value) > 12) this.value = '12';
+        });
+
+        document.getElementById('year').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
