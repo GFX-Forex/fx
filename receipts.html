@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Receipt - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* Success Animation */
+        .success-animation {
+            text-align: center;
+            padding: 40px 20px 30px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .success-subtitle {
+            font-size: 15px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        /* Receipt Card */
+        .receipt-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Amount Section */
+        .amount-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 32px 24px;
+            text-align: center;
+            border-bottom: 2px dashed #cbd5e1;
+        }
+
+        .amount-label {
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .amount-value {
+            font-size: 42px;
+            font-weight: 900;
+            color: #1e40af;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .amount-description {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Transaction Details */
+        .transaction-details {
+            padding: 24px;
+        }
+
+        .detail-section {
+            margin-bottom: 24px;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-icon {
+            font-size: 16px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #1f2937;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .detail-value.success {
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Reference Number */
+        .reference-box {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .reference-label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reference-number {
+            font-size: 16px;
+            color: #1f2937;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            padding: 20px 24px 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Support Section */
+        .support-section {
+            background: #f8fafc;
+            padding: 20px 24px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .support-text {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .support-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .support-btn {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .support-btn:hover {
+            background: #f9fafb;
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .success-animation,
+            .action-buttons,
+            .support-section,
+            .bottom-nav {
+                display: none;
+            }
+
+            .receipt-card {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .success-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
+            }
+
+            .success-title {
+                font-size: 22px;
+            }
+
+            .amount-value {
+                font-size: 36px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Floating Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #fbbf24;
+            position: absolute;
+            animation: confetti-fall 3s linear;
+            z-index: 1;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Success Animation -->
+        <div class="success-animation">
+            <div class="success-icon">✓</div>
+            <h1 class="success-title">Payment Successful!</h1>
+            <p class="success-subtitle">Your transaction was completed successfully</p>
+        </div>
+
+        <!-- Receipt Card -->
+        <div class="receipt-card">
+            <!-- Amount Section -->
+            <div class="amount-section">
+                <div class="amount-label">Amount Paid</div>
+                <div class="amount-value">₦2,000.00</div>
+                <div class="amount-description">MTN Airtime Purchase</div>
+            </div>
+
+            <!-- Transaction Details -->
+            <div class="transaction-details">
+                <!-- Transaction Info -->
+                <div class="detail-section">
+                    <div class="section-title">Transaction Information</div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">📱</span>
+                            Phone Number
+                        </div>
+                        <div class="detail-value">080 1234 5678</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">🏢</span>
+                            Network
+                        </div>
+                        <div class="detail-value">MTN Nigeria</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">📊</span>
+                            Status
+                        </div>
+                        <div class="detail-value success">
+                            <span class="status-badge">Successful</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="detail-section">
+                    <div class="section-title">Payment Details</div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">💳</span>
+                            Payment Method
+                        </div>
+                        <div class="detail-value">Wallet Balance</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">💰</span>
+                            Amount
+                        </div>
+                        <div class="detail-value">₦2,000.00</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">📈</span>
+                            Service Charge
+                        </div>
+                        <div class="detail-value">₦0.00</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">✓</span>
+                            Total Paid
+                        </div>
+                        <div class="detail-value" style="color: #3b82f6; font-size: 16px;">₦2,000.00</div>
+                    </div>
+                </div>
+
+                <!-- Transaction Metadata -->
+                <div class="detail-section">
+                    <div class="section-title">Transaction Details</div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">🕐</span>
+                            Date & Time
+                        </div>
+                        <div class="detail-value" id="transactionDate"></div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">⚡</span>
+                            Transaction Type
+                        </div>
+                        <div class="detail-value">Airtime Purchase</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span class="detail-icon">👤</span>
+                            Recipient
+                        </div>
+                        <div class="detail-value">Self</div>
+                    </div>
+                </div>
+
+                <!-- Reference Number -->
+                <div class="reference-box">
+                    <div class="reference-label">Transaction Reference</div>
+                    <div class="reference-number">
+                        <span id="refNumber">TXN2024110812345678</span>
+                        <button class="copy-btn" id="copyBtn">Copy</button>
+                    </div>
+                </div>
+
+                <!-- Note -->
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 8px; margin-top: 16px;">
+                    <p style="font-size: 12px; color: #92400e; font-weight: 600; margin-bottom: 4px;">💡 Keep This Receipt</p>
+                    <p style="font-size: 11px; color: #78350f; line-height: 1.5;">
+                        Save this receipt for your records. You may need the reference number for any transaction queries.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="shareReceipt()">
+                    <span>📤</span> Share
+                </button>
+                <button class="btn btn-secondary" onclick="downloadReceipt()">
+                    <span>💾</span> Save
+                </button>
+                <button class="btn btn-primary" onclick="window.print()">
+                    <span>🖨️</span> Print
+                </button>
+            </div>
+
+            <!-- Support Section -->
+            <div class="support-section">
+                <p class="support-text">Need help with this transaction?</p>
+                <div class="support-buttons">
+                    <button class="support-btn" onclick="contactSupport()">
+                        <span>💬</span> Chat Support
+                    </button>
+                    <button class="support-btn" onclick="reportIssue()">
+                        <span>⚠️</span> Report Issue
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="#home" class="nav-link">🏠 Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Set transaction date
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+        });
+        const timeStr = now.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        document.getElementById('transactionDate').textContent = `${dateStr}, ${timeStr}`;
+
+        // Copy reference number
+        const copyBtn = document.getElementById('copyBtn');
+        const refNumber = document.getElementById('refNumber').textContent;
+
+        copyBtn.addEventListener('click', function() {
+            navigator.clipboard.writeText(refNumber).then(() => {
+                this.textContent = 'Copied!';
+                this.classList.add('copied');
+                
+                setTimeout(() => {
+                    this.textContent = 'Copy';
+                    this.classList.remove('copied');
+                }, 2000);
+            });
+        });
+
+        // Share receipt
+        function shareReceipt() {
+            const receiptText = `
+Transaction Receipt - PayUtility
+
+Amount: ₦2,000.00
+Service: MTN Airtime
+Phone: 080 1234 5678
+Status: Successful
+Reference: ${refNumber}
+Date: ${dateStr}, ${timeStr}
+            `.trim();
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Transaction Receipt',
+                    text: receiptText
+                }).catch(err => console.log('Share failed', err));
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(receiptText).then(() => {
+                    alert('Receipt copied to clipboard!');
+                });
+            }
+        }
+
+        // Download receipt
+        function downloadReceipt() {
+            alert('Download feature!\n\nIn production, this would:\n- Generate a PDF receipt\n- Save it to device\n- Or send via email');
+        }
+
+        // Contact support
+        function contactSupport() {
+            alert('Opening chat support...\n\nThis would open a live chat with customer support.');
+        }
+
+        // Report issue
+        function reportIssue() {
+            alert('Report Issue\n\nThis would open a form to report any problems with this transaction.');
+        }
+
+        // Create confetti effect on load
+        function createConfetti() {
+            const colors = ['#fbbf24', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Trigger confetti on page load
+        window.addEventListener('load', createConfetti);
+
+        // Generate realistic reference number
+        function generateReference() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const random = Math.floor(Math.random() * 100000000);
+            return `TXN${year}${month}${day}${random}`;
+        }
+
+        // Update reference on page load
+        document.getElementById('refNumber').textContent = generateReference();
+    </script>
+</body>
+</html>
