@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Loans - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Eligibility Card */
+        .eligibility-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .eligibility-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .eligibility-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .eligibility-info h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .eligibility-info p {
+            font-size: 24px;
+            font-weight: 900;
+            margin-top: 4px;
+        }
+
+        .eligibility-status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        /* Section */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        /* Loan Plans Grid */
+        .plans-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .loan-card {
+            background: white;
+            border: 2px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #1e40af 0%, #3b82f6 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .loan-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+        }
+
+        .loan-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .loan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .loan-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .loan-badge {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .loan-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 6px;
+        }
+
+        .loan-description {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .loan-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .loan-stat {
+            text-align: center;
+        }
+
+        .loan-stat-label {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .loan-stat-value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        /* Active Loans */
+        .loans-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .loan-item {
+            background: white;
+            border: 1px solid #f3f4f6;
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .loan-item:active {
+            transform: scale(0.98);
+        }
+
+        .loan-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .loan-item-info {
+            flex: 1;
+        }
+
+        .loan-item-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .loan-item-details {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .loan-item-amount {
+            font-size: 18px;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .loan-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .loan-status.active {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .loan-status.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .loan-status.completed {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            font-size: 12px;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+
+        .info-box strong {
+            font-weight: 700;
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-btn:active {
+            transform: scale(0.98);
+        }
+
+        .cta-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Calculator */
+        .calculator-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .calculator-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calculator-result {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .result-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .result-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .result-value.highlight {
+            font-size: 20px;
+            color: #3b82f6;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-content {
+            padding: 20px 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .slider-container {
+            margin: 16px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+
+        .slider-value {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-top: 12px;
+        }
+
+        .modal-actions {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #f3f4f6;
+            position: sticky;
+            bottom: 0;
+            background: white;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        /* Requirements Checklist */
+        .requirements-list {
+            margin: 20px 0;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .requirement-icon {
+            width: 32px;
+            height: 32px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .requirement-icon.pending {
+            background: #fef3c7;
+        }
+
+        .requirement-text {
+            font-size: 13px;
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .loan-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <div class="header-title">
+                    <h1>Quick Loans</h1>
+                    <p>Get instant credit</p>
+                </div>
+                <div class="header-icon" onclick="alert('Loan history')">📋</div>
+            </div>
+
+            <!-- Eligibility Card -->
+            <div class="eligibility-card">
+                <div class="eligibility-header">
+                    <div class="eligibility-icon">✓</div>
+                    <div class="eligibility-info">
+                        <h3>Your Loan Limit</h3>
+                        <p>₦500,000</p>
+                    </div>
+                </div>
+                <div class="eligibility-status">
+                    <span>🎉</span>
+                    <span>You're eligible for instant loans up to ₦500,000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('explore')">Loan Types</button>
+                <button class="tab" onclick="switchTab('active')">My Loans</button>
+                <button class="tab" onclick="switchTab('calculator')">Calculator</button>
+            </div>
+
+            <!-- Explore Loans Section -->
+            <div class="section active" id="explore-section">
+                <h3 class="section-title">Available Loan Options</h3>
+
+                <div class="info-box">
+                    <p><strong>💡 Quick Tip:</strong> Your loan limit increases with good repayment history. Borrow responsibly!</p>
+                </div>
+
+                <div class="plans-grid">
+                    <!-- Instant Loan -->
+                    <div class="loan-card" onclick="openLoanApplication('instant')">
+                        <div class="loan-header">
+                            <div class="loan-icon">⚡</div>
+                            <div class="loan-badge">Most Popular</div>
+                        </div>
+                        <h4 class="loan-name">Instant Loan</h4>
+                        <p class="loan-description">Get money in minutes with no collateral or paperwork required</p>
+                        <div class="loan-stats">
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Amount</div>
+                                <div class="loan-stat-value">₦5K-₦100K</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Interest</div>
+                                <div class="loan-stat-value">5% flat</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Duration</div>
+                                <div class="loan-stat-value">7-30 days</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salary Advance -->
+                    <div class="loan-card" onclick="openLoanApplication('salary')">
+                        <div class="loan-header">
+                            <div class="loan-icon">💼</div>
+                            <div class="loan-badge">Zero Interest</div>
+                        </div>
+                        <h4 class="loan-name">Salary Advance</h4>
+                        <p class="loan-description">Access up to 50% of your salary before payday at no extra cost</p>
+                        <div class="loan-stats">
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Amount</div>
+                                <div class="loan-stat-value">Up to 50%</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Interest</div>
+                                <div class="loan-stat-value">0%</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Repayment</div>
+                                <div class="loan-stat-value">Next salary</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Business Loan -->
+                    <div class="loan-card" onclick="openLoanApplication('business')">
+                        <div class="loan-header">
+                            <div class="loan-icon">🏢</div>
+                        </div>
+                        <h4 class="loan-name">Business Loan</h4>
+                        <p class="loan-description">Expand your business with flexible repayment terms and competitive rates</p>
+                        <div class="loan-stats">
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Amount</div>
+                                <div class="loan-stat-value">₦100K-₦5M</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Interest</div>
+                                <div class="loan-stat-value">3% monthly</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Duration</div>
+                                <div class="loan-stat-value">3-12 months</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Loan -->
+                    <div class="loan-card" onclick="openLoanApplication('emergency')">
+                        <div class="loan-header">
+                            <div class="loan-icon">🆘</div>
+                            <div class="loan-badge">24/7 Available</div>
+                        </div>
+                        <h4 class="loan-name">Emergency Loan</h4>
+                        <p class="loan-description">Quick access to funds for urgent needs, available anytime</p>
+                        <div class="loan-stats">
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Amount</div>
+                                <div class="loan-stat-value">₦10K-₦50K</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Interest</div>
+                                <div class="loan-stat-value">4% flat</div>
+                            </div>
+                            <div class="loan-stat">
+                                <div class="loan-stat-label">Duration</div>
+                                <div class="loan-stat-value">7-14 days</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="cta-btn" onclick="openLoanApplication('instant')">
+                    <span>💰</span> Apply for Loan Now
+                </button>
+            </div>
+
+            <!-- My Loans Section -->
+            <div class="section" id="active-section">
+                <h3 class="section-title">Active Loans</h3>
+
+                <div class="loans-list">
+                    <!-- Active Loan 1 -->
+                    <div class="loan-item" onclick="viewLoanDetails('loan1')">
+                        <div class="loan-item-header">
+                            <div class="loan-item-info">
+                                <div class="loan-item-name">⚡ Instant Loan #1234</div>
+                                <div class="loan-item-details">Due: Dec 15, 2024</div>
+                            </div>
+                            <div class="loan-item-amount">₦50,000</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <div class="progress-text">₦30,000 paid • ₦20,000 remaining</div>
+                        <div style="margin-top: 8px;">
+                            <span class="loan-status active">Active</span>
+                        </div>
+                    </div>
+
+                    <!-- Active Loan 2 -->
+                    <div class="loan-item" onclick="viewLoanDetails('loan2')">
+                        <div class="loan-item-header">
+                            <div class="loan-item-info">
+                                <div class="loan-item-name">💼 Salary Advance #5678</div>
+                                <div class="loan-item-details">Due: Nov 30, 2024</div>
+                            </div>
+                            <div class="loan-item-amount">₦75,000</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                        <div class="progress-text">₦67,500 paid • ₦7,500 remaining</div>
+                        <div style="margin-top: 8px;">
+                            <span class="loan-status active">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-title" style="margin-top: 24px;">Loan History</h3>
+
+                <div class="loans-list">
+                    <!-- Completed Loan -->
+                    <div class="loan-item" onclick="viewLoanDetails('loan3')">
+                        <div class="loan-item-header">
+                            <div class="loan-item-info">
+                                <div class="loan-item-name">🆘 Emergency Loan #9012</div>
+                                <div class="loan-item-details">Paid: Oct 20, 2024</div>
+                            </div>
+                            <div class="loan-item-amount">₦25,000</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text">Fully paid • On time</div>
+                        <div style="margin-top: 8px;">
+                            <span class="loan-status completed">Completed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="cta-btn" onclick="openLoanApplication('instant')">
+                    <span>💰</span> Apply for New Loan
+                </button>
+            </div>
+
+            <!-- Calculator Section -->
+            <div class="section" id="calculator-section">
+                <h3 class="section-title">Loan Calculator</h3>
+
+                <div class="calculator-card">
+                    <div class="calculator-title">
+                        <span>🧮</span> Calculate Your Loan
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Loan Amount</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="loanAmount" min="5000" max="500000" step="5000" value="100000" oninput="calculateLoan()">
+                            <div class="slider-value" id="loanAmountValue">₦100,000</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Loan Duration (Days)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="loanDuration" min="7" max="365" step="7" value="30" oninput="calculateLoan()">
+                            <div class="slider-value" id="loanDurationValue">30 days</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Interest Rate</label>
+                        <select class="select-field" id="loanType" onchange="calculateLoan()">
+                            <option value="5">Instant Loan (5% flat)</option>
+                            <option value="0">Salary Advance (0%)</option>
+                            <option value="3">Business Loan (3% monthly)</option>
+                            <option value="4">Emergency Loan (4% flat)</option>
+                        </select>
+                    </div>
+
+                    <div class="calculator-result">
+                        <div class="result-row">
+                            <span class="result-label">Loan Amount</span>
+                            <span class="result-value" id="resultAmount">₦100,000</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Interest</span>
+                            <span class="result-value" id="resultInterest">₦5,000</span>
+                        </div>
+                        <div class="result-row" style="border-top: 2px solid #e5e7eb; padding-top: 12px; margin-top: 8px;">
+                            <span class="result-label" style="font-size: 15px;">Total Repayment</span>
+                            <span class="result-value highlight" id="resultTotal">₦105,000</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Daily Repayment</span>
+                            <span class="result-value" id="resultDaily">₦3,500</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="cta-btn" onclick="openLoanApplication('instant')">
+                    <span>💰</span> Apply for This Loan
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Loans</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loan Application Modal -->
+    <div class="modal-overlay" id="loanApplicationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">
+                    <span>💰</span> Apply for Loan
+                </h3>
+            </div>
+            <div class="modal-content">
+                <div class="info-box">
+                    <p><strong>✓ Pre-approved:</strong> You can borrow up to ₦500,000 instantly!</p>
+                </div>
+
+                <form id="loanApplicationForm">
+                    <div class="form-group">
+                        <label class="label">Loan Amount</label>
+                        <input type="number" class="input-field" placeholder="₦0" id="applyAmount" min="5000" max="500000" step="1000" required>
+                        <p style="font-size: 11px; color: #6b7280; margin-top: 6px;">Available limit: ₦500,000</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Loan Purpose</label>
+                        <select class="select-field" id="loanPurpose" required>
+                            <option value="">Select purpose</option>
+                            <option value="personal">Personal Use</option>
+                            <option value="business">Business</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="education">Education</option>
+                            <option value="medical">Medical</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Repayment Duration</label>
+                        <select class="select-field" id="applyDuration" required>
+                            <option value="7">7 Days</option>
+                            <option value="14">14 Days</option>
+                            <option value="30" selected>30 Days</option>
+                            <option value="60">60 Days</option>
+                            <option value="90">90 Days</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Disbursement Account</label>
+                        <select class="select-field" id="disbursementAccount" required>
+                            <option value="wallet">PayUtility Wallet</option>
+                            <option value="bank">Bank Account (GTBank - 0123456789)</option>
+                        </select>
+                    </div>
+
+                    <div class="requirements-list">
+                        <div class="requirement-item">
+                            <div class="requirement-icon">✓</div>
+                            <div class="requirement-text">Account verified</div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-icon">✓</div>
+                            <div class="requirement-text">BVN linked</div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-icon">✓</div>
+                            <div class="requirement-text">Active for 90+ days</div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-icon pending">⏱</div>
+                            <div class="requirement-text">Bank statement (Optional)</div>
+                        </div>
+                    </div>
+
+                    <div class="calculator-result" style="margin-top: 16px;">
+                        <div class="result-row">
+                            <span class="result-label">Loan Amount</span>
+                            <span class="result-value" id="modalLoanAmount">₦0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Interest (5%)</span>
+                            <span class="result-value" id="modalInterest">₦0</span>
+                        </div>
+                        <div class="result-row" style="border-top: 2px solid #e5e7eb; padding-top: 12px; margin-top: 8px;">
+                            <span class="result-label" style="font-size: 15px; font-weight: 700;">Total Repayment</span>
+                            <span class="result-value highlight" id="modalTotal">₦0</span>
+                        </div>
+                    </div>
+
+                    <div style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-top: 16px;">
+                        <p style="font-size: 11px; color: #78350f; line-height: 1.5;">
+                            <strong>⚠️ Important:</strong> By proceeding, you agree to our loan terms and conditions. Failure to repay on time may affect your credit score and future loan eligibility.
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitLoanApplication()">Apply Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedLoanType = 'instant';
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tab}-section`).classList.add('active');
+
+            // Initialize calculator if switching to calculator tab
+            if (tab === 'calculator') {
+                calculateLoan();
+            }
+        }
+
+        // Open loan application modal
+        function openLoanApplication(type) {
+            selectedLoanType = type;
+            const modal = document.getElementById('loanApplicationModal');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            const titles = {
+                'instant': '⚡ Apply for Instant Loan',
+                'salary': '💼 Apply for Salary Advance',
+                'business': '🏢 Apply for Business Loan',
+                'emergency': '🆘 Apply for Emergency Loan'
+            };
+            
+            modalTitle.innerHTML = titles[type] || titles['instant'];
+            modal.classList.add('active');
+
+            // Reset form
+            document.getElementById('loanApplicationForm').reset();
+            updateModalCalculation();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('loanApplicationModal').classList.remove('active');
+        }
+
+        // Update modal calculation
+        function updateModalCalculation() {
+            const amount = parseFloat(document.getElementById('applyAmount').value) || 0;
+            const interest = amount * 0.05; // 5% flat
+            const total = amount + interest;
+
+            document.getElementById('modalLoanAmount').textContent = `₦${amount.toLocaleString()}`;
+            document.getElementById('modalInterest').textContent = `₦${interest.toLocaleString()}`;
+            document.getElementById('modalTotal').textContent = `₦${total.toLocaleString()}`;
+        }
+
+        // Listen to amount changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const amountInput = document.getElementById('applyAmount');
+            if (amountInput) {
+                amountInput.addEventListener('input', updateModalCalculation);
+            }
+        });
+
+        // Calculate loan
+        function calculateLoan() {
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const duration = parseInt(document.getElementById('loanDuration').value);
+            const rate = parseFloat(document.getElementById('loanType').value);
+
+            // Update display values
+            document.getElementById('loanAmountValue').textContent = `₦${amount.toLocaleString()}`;
+            document.getElementById('loanDurationValue').textContent = `${duration} days`;
+
+            // Calculate interest based on type
+            let interest;
+            if (rate === 3) { // Monthly rate for business loan
+                const months = Math.ceil(duration / 30);
+                interest = amount * (rate / 100) * months;
+            } else {
+                interest = amount * (rate / 100);
+            }
+
+            const total = amount + interest;
+            const daily = total / duration;
+
+            // Update results
+            document.getElementById('resultAmount').textContent = `₦${amount.toLocaleString()}`;
+            document.getElementById('resultInterest').textContent = `₦${Math.round(interest).toLocaleString()}`;
+            document.getElementById('resultTotal').textContent = `₦${Math.round(total).toLocaleString()}`;
+            document.getElementById('resultDaily').textContent = `₦${Math.round(daily).toLocaleString()}`;
+        }
+
+        // Submit loan application
+        function submitLoanApplication() {
+            const amount = document.getElementById('applyAmount').value;
+            const purpose = document.getElementById('loanPurpose').value;
+            const duration = document.getElementById('applyDuration').value;
+            const account = document.getElementById('disbursementAccount').value;
+
+            if (!amount || !purpose || !duration || !account) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            const amountNum = parseFloat(amount);
+            if (amountNum < 5000 || amountNum > 500000) {
+                alert('Loan amount must be between ₦5,000 and ₦500,000');
+                return;
+            }
+
+            // Simulate application process
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const interest = amountNum * 0.05;
+                const total = amountNum + interest;
+                
+                alert(`✓ Loan Application Successful!\n\nLoan Amount: ₦${amountNum.toLocaleString()}\nInterest: ₦${interest.toLocaleString()}\nTotal Repayment: ₦${total.toLocaleString()}\nDuration: ${duration} days\n\nYour loan will be disbursed to your ${account === 'wallet' ? 'PayUtility Wallet' : 'Bank Account'} within 5 minutes.\n\nReference: LN${Date.now()}`);
+                
+                btn.textContent = originalText;
+                btn.disabled = false;
+                closeModal();
+                
+                // Switch to active loans tab
+                document.querySelectorAll('.tab')[1].click();
+            }, 2000);
+        }
+
+        // View loan details
+        function viewLoanDetails(loanId) {
+            const loans = {
+                'loan1': {
+                    name: '⚡ Instant Loan #1234',
+                    amount: '₦50,000',
+                    paid: '₦30,000',
+                    remaining: '₦20,000',
+                    due: 'Dec 15, 2024',
+                    interest: '₦2,500',
+                    status: 'Active'
+                },
+                'loan2': {
+                    name: '💼 Salary Advance #5678',
+                    amount: '₦75,000',
+                    paid: '₦67,500',
+                    remaining: '₦7,500',
+                    due: 'Nov 30, 2024',
+                    interest: '₦0',
+                    status: 'Active'
+                },
+                'loan3': {
+                    name: '🆘 Emergency Loan #9012',
+                    amount: '₦25,000',
+                    paid: '₦26,000',
+                    remaining: '₦0',
+                    due: 'Oct 20, 2024',
+                    interest: '₦1,000',
+                    status: 'Completed'
+                }
+            };
+
+            const loan = loans[loanId];
+            if (loan) {
+                alert(`Loan Details\n\n${loan.name}\n\nLoan Amount: ${loan.amount}\nInterest: ${loan.interest}\nPaid: ${loan.paid}\nRemaining: ${loan.remaining}\nDue Date: ${loan.due}\nStatus: ${loan.status}\n\n[In production, this would open a detailed view with payment options]`);
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('loanApplicationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Initialize calculator on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateLoan();
+        });
+
+        // Format currency inputs
+        document.getElementById('applyAmount').addEventListener('blur', function() {
+            if (this.value) {
+                const formatted = parseFloat(this.value).toLocaleString();
+                console.log('Amount:', formatted);
+            }
+        });
+
+        // Validate loan amount in real-time
+        document.getElementById('applyAmount').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value > 500000) {
+                this.value = 500000;
+                alert('Maximum loan amount is ₦500,000');
+            } else if (value < 0) {
+                this.value = 0;
+            }
+        });
+
+        // Auto-calculate on slider change
+        document.getElementById('loanAmount').addEventListener('input', function() {
+            calculateLoan();
+        });
+
+        document.getElementById('loanDuration').addEventListener('input', function() {
+            calculateLoan();
+        });
+
+        console.log('PayUtility Loan Application initialized successfully! 💰');
+    </script>
+</body>
+</html>
