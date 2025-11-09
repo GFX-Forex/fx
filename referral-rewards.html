@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral & Rewards - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px 24px;
+            color: white;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .history-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* STATS CARD */
+        .stats-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 20px 0;
+        }
+
+        .total-earnings {
+            text-align: center;
+        }
+
+        .total-label {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .total-amount {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .withdraw-btn {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: #1e40af;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .withdraw-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* REFERRAL CODE SECTION */
+        .referral-section {
+            padding: 20px;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        .referral-code-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .code-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .code-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 2px dashed #3b82f6;
+        }
+
+        .code-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 2px;
+        }
+
+        .copy-btn {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .share-btn {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 14px 8px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .share-btn:active {
+            transform: scale(0.95);
+        }
+
+        .share-icon {
+            font-size: 28px;
+        }
+
+        .share-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        /* HOW IT WORKS */
+        .how-it-works {
+            padding: 0 20px 20px;
+            background: white;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 6px;
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .step-description {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        /* REWARDS TIERS */
+        .rewards-section {
+            padding: 20px;
+            background: #f9fafb;
+        }
+
+        .tier-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tier-card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tier-card.active {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .tier-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+
+        .tier-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tier-icon {
+            font-size: 36px;
+        }
+
+        .tier-info h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .tier-info p {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .tier-progress {
+            margin-bottom: 12px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .tier-rewards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .reward-tag {
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .tier-card.active .reward-tag {
+            background: white;
+            color: #1e40af;
+        }
+
+        /* LEADERBOARD */
+        .leaderboard-section {
+            padding: 20px;
+            background: white;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .view-all {
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+
+        .leaderboard-item.you {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+        }
+
+        .rank {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .rank.gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        .rank.silver {
+            background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+        }
+
+        .rank.bronze {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e40af;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .user-referrals {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .user-earnings {
+            font-size: 14px;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        /* REFERRAL HISTORY */
+        .history-section {
+            padding: 20px;
+            background: #f9fafb;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .history-icon {
+            width: 44px;
+            height: 44px;
+            background: #dcfce7;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .history-icon.pending {
+            background: #fef3c7;
+        }
+
+        .history-details {
+            flex: 1;
+        }
+
+        .history-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 3px;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .history-amount {
+            font-size: 15px;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .history-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .history-status.success {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .history-status.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            display: none;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <div class="header-title">
+                    <h1>Referral & Rewards</h1>
+                    <p>Earn while you share</p>
+                </div>
+                <button class="history-btn" onclick="scrollToHistory()">📜</button>
+            </div>
+
+            <!-- STATS CARD -->
+            <div class="stats-card">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Referrals</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="total-earnings">
+                    <div class="total-label">Total Earnings</div>
+                    <div class="total-amount">₦12,000</div>
+                    <button class="withdraw-btn" onclick="withdrawEarnings()">Withdraw to Wallet</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- REFERRAL CODE SECTION -->
+        <div class="referral-section">
+            <h2 class="section-title">Share Your Code</h2>
+
+            <div class="referral-code-card">
+                <div class="code-label">Your Referral Code</div>
+                <div class="code-display">
+                    <div class="code-text" id="referralCode">PAY-EA2024</div>
+                    <button class="copy-btn" onclick="copyCode()">
+                        <span>📋</span>
+                        <span>Copy</span>
+                    </button>
+                </div>
+
+                <div class="share-buttons">
+                    <button class="share-btn" onclick="shareVia('whatsapp')">
+                        <div class="share-icon">💬</div>
+                        <div class="share-label">WhatsApp</div>
+                    </button>
+                    <button class="share-btn" onclick="shareVia('twitter')">
+                        <div class="share-icon">🐦</div>
+                        <div class="share-label">Twitter</div>
+                    </button>
+                    <button class="share-btn" onclick="shareVia('facebook')">
+                        <div class="share-icon">📘</div>
+                        <div class="share-label">Facebook</div>
+                    </button>
+                    <button class="share-btn" onclick="shareVia('more')">
+                        <div class="share-icon">➕</div>
+                        <div class="share-label">More</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOW IT WORKS -->
+        <div class="how-it-works">
+            <h2 class="section-title">How It Works</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Share Your Code</div>
+                        <div class="step-description">Send your unique referral code to friends and family</div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">They Sign Up</div>
+                        <div class="step-description">Your friend registers using your code and completes verification</div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">First Transaction</div>
+                        <div class="step-description">They make their first transaction of ₦500 or more</div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">You Both Earn!</div>
+                        <div class="step-description">Get ₦1,000 instantly and they get ₦500 welcome bonus</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REWARDS TIERS -->
+        <div class="rewards-section">
+            <h2 class="section-title">Rewards Tiers</h2>
+
+            <div class="tier-cards">
+                <div class="tier-card active">
+                    <div class="tier-badge">Current</div>
+                    <div class="tier-header">
+                        <div class="tier-icon">🥈</div>
+                        <div class="tier-info">
+                            <h3>Silver Member</h3>
+                            <p>5-14 referrals</p>
+                        </div>
+                    </div>
+                    <div class="tier-progress">
+                        <div class="progress-label">
+                            <span class="progress-text">12 of 15 referrals</span>
+                            <span class="progress-text">80%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="tier-rewards">
+                        <div class="reward-tag">₦1,000 per referral</div>
+                        <div class="reward-tag">2% cashback</div>
+                        <div class="reward-tag">Priority support</div>
+                    </div>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <div class="tier-icon">🥇</div>
+                        <div class="tier-info">
+                            <h3>Gold Member</h3>
+                            <p>15-29 referrals</p>
+                        </div>
+                    </div>
+                    <div class="tier-rewards">
+                        <div class="reward-tag">₦1,500 per referral</div>
+                        <div class="reward-tag">3% cashback</div>
+                        <div class="reward-tag">Premium support</div>
+                        <div class="reward-tag">Exclusive offers</div>
+                    </div>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <div class="tier-icon">💎</div>
+                        <div class="tier-info">
+                            <h3>Diamond Member</h3>
+                            <p>30+ referrals</p>
+                        </div>
+                    </div>
+                    <div class="tier-rewards">
+                        <div class="reward-tag">₦2,000 per referral</div>
+                        <div class="reward-tag">5% cashback</div>
+                        <div class="reward-tag">VIP support</div>
+                        <div class="reward-tag">Monthly bonus</div>
+                        <div class="reward-tag">Special perks</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEADERBOARD -->
+        <div class="leaderboard-section">
+            <div class="leaderboard-header">
+                <h2 class="section-title">Top Referrers</h2>
+                <span class="view-all">View All →</span>
+            </div>
+
+            <div class="leaderboard-list">
+                <div class="leaderboard-item">
+                    <div class="rank gold">1</div>
+                    <div class="user-avatar">AO</div>
+                    <div class="user-info">
+                        <div class="user-name">Adebayo Oluwaseun</div>
+                        <div class="user-referrals">45 referrals</div>
+                    </div>
+                    <div class="user-earnings">₦67,500</div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="rank silver">2</div>
+                    <div class="user-avatar">CI</div>
+                    <div class="user-info">
+                        <div class="user-name">Chioma Ibrahim</div>
+                        <div class="user-referrals">38 referrals</div>
+                    </div>
+                    <div class="user-earnings">₦57,000</div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="rank bronze">3</div>
+                    <div class="user-avatar">MO</div>
+                    <div class="user-info">
+                        <div class="user-name">Mohammed Yusuf</div>
+                        <div class="user-referrals">32 referrals</div>
+                    </div>
+                    <div class="user-earnings">₦48,000</div>
+                </div>
+
+                <div class="leaderboard-item you">
+                    <div class="rank">8</div>
+                    <div class="user-avatar">EA</div>
+                    <div class="user-info">
+                        <div class="user-name">You (Emmanuel)</div>
+                        <div class="user-referrals">12 referrals</div>
+                    </div>
+                    <div class="user-earnings">₦12,000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REFERRAL HISTORY -->
+        <div class="history-section" id="historySection">
+            <h2 class="section-title">Referral History</h2>
+
+            <div class="history-list">
+                <div class="history-item">
+                    <div class="history-icon">✓</div>
+                    <div class="history-details">
+                        <div class="history-title">Blessing Okoro</div>
+                        <div class="history-date">Joined 2 days ago</div>
+                    </div>
+                    <div>
+                        <div class="history-amount">+₦1,000</div>
+                        <div class="history-status success">Earned</div>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-icon pending">⏱️</div>
+                    <div class="history-details">
+                        <div class="history-title">David Eze</div>
+                        <div class="history-date">Joined 3 days ago</div>
+                    </div>
+                    <div>
+                        <div class="history-amount">₦1,000</div>
+                        <div class="history-status pending">Pending</div>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-icon">✓</div>
+                    <div class="history-details">
+                        <div class="history-title">Faith Okafor</div>
+                        <div class="history-date">Joined 5 days ago</div>
+                    </div>
+                    <div>
+                        <div class="history-amount">+₦1,000</div>
+                        <div class="history-status success">Earned</div>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-icon">✓</div>
+                    <div class="history-details">
+                        <div class="history-title">Ibrahim Musa</div>
+                        <div class="history-date">Joined 1 week ago</div>
+                    </div>
+                    <div>
+                        <div class="history-amount">+₦1,000</div>
+                        <div class="history-status success">Earned</div>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-icon pending">⏱️</div>
+                    <div class="history-details">
+                        <div class="history-title">Grace Akinola</div>
+                        <div class="history-date">Joined 1 week ago</div>
+                    </div>
+                    <div>
+                        <div class="history-amount">₦1,000</div>
+                        <div class="history-status pending">Pending</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">⭐</div>
+                <div class="nav-label">Rewards</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Copy referral code
+        function copyCode() {
+            const code = document.getElementById('referralCode').textContent;
+            
+            // Copy to clipboard
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showToast('Referral code copied!');
+                }).catch(() => {
+                    fallbackCopy(code);
+                });
+            } else {
+                fallbackCopy(code);
+            }
+        }
+
+        // Fallback copy method for older browsers
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast('Referral code copied!');
+            } catch (err) {
+                showToast('Failed to copy code');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Share via different platforms
+        function shareVia(platform) {
+            const code = document.getElementById('referralCode').textContent;
+            const message = `Hey! Join me on PayUtility and get ₦500 welcome bonus. Use my referral code: ${code}. Download now: https://payutility.app`;
+            
+            switch(platform) {
+                case 'whatsapp':
+                    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'twitter':
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'facebook':
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=https://payutility.app&quote=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'more':
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'Join PayUtility',
+                            text: message
+                        }).catch(() => {
+                            showToast('Sharing cancelled');
+                        });
+                    } else {
+                        copyCode();
+                    }
+                    break;
+            }
+        }
+
+        // Withdraw earnings
+        function withdrawEarnings() {
+            const totalEarnings = 12000;
+            
+            if (totalEarnings < 1000) {
+                showToast('Minimum withdrawal is ₦1,000');
+                return;
+            }
+
+            if (confirm(`Withdraw ₦${totalEarnings.toLocaleString()} to your wallet?`)) {
+                // Simulate withdrawal process
+                showToast('Processing withdrawal...');
+                
+                setTimeout(() => {
+                    showToast('₦12,000 added to your wallet!');
+                    // Update UI
+                    document.querySelector('.total-amount').textContent = '₦0';
+                    document.querySelector('.withdraw-btn').disabled = true;
+                    document.querySelector('.withdraw-btn').textContent = 'No earnings to withdraw';
+                    document.querySelector('.withdraw-btn').style.opacity = '0.5';
+                }, 2000);
+            }
+        }
+
+        // Scroll to history section
+        function scrollToHistory() {
+            const historySection = document.getElementById('historySection');
+            historySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Bottom navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Animate progress bar on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const progressFill = document.querySelector('.progress-fill');
+                progressFill.style.width = '80%';
+            }, 500);
+        });
+
+        // View all leaderboard
+        document.querySelector('.leaderboard-section .view-all').addEventListener('click', function() {
+            alert('Full leaderboard coming soon!');
+        });
+
+        // Add click animations to cards
+        const clickableCards = document.querySelectorAll('.tier-card, .leaderboard-item, .history-item');
+        clickableCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking buttons inside
+                if (e.target.tagName === 'BUTTON') return;
+                
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+
+        // Handle tier card clicks
+        document.querySelectorAll('.tier-card:not(.active)').forEach(card => {
+            card.addEventListener('click', function() {
+                const tierName = this.querySelector('h3').textContent;
+                showToast(`Keep referring to unlock ${tierName}!`);
+            });
+        });
+
+        // Handle leaderboard item clicks
+        document.querySelectorAll('.leaderboard-item:not(.you)').forEach(item => {
+            item.addEventListener('click', function() {
+                const userName = this.querySelector('.user-name').textContent;
+                showToast(`Viewing ${userName}'s profile`);
+            });
+        });
+
+        // Handle history item clicks
+        document.querySelectorAll('.history-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const name = this.querySelector('.history-title').textContent;
+                const status = this.querySelector('.history-status').textContent;
+                
+                if (status === 'PENDING') {
+                    showToast(`${name} needs to complete their first transaction`);
+                } else {
+                    showToast(`Earned from ${name}'s referral`);
+                }
+            });
+        });
+
+        // Smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Add transition to tier cards
+        document.querySelectorAll('.tier-card').forEach(card => {
+            card.style.transition = 'all 0.2s ease';
+        });
+
+        // Generate random referral activity (simulation)
+        function simulateNewReferral() {
+            const names = [
+                'Tunde Bakare', 'Aisha Mohammed', 'Emeka Obi', 'Funke Adeyemi',
+                'Chinedu Okafor', 'Aminat Suleiman', 'Oluwaseun Bello', 'Ngozi Eze'
+            ];
+            
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomTime = Math.floor(Math.random() * 60) + 1;
+            
+            // This would trigger a notification
+            console.log(`New referral: ${randomName} joined ${randomTime} minutes ago`);
+        }
+
+        // Optional: Simulate activity every 30 seconds (for demo purposes)
+        // setInterval(simulateNewReferral, 30000);
+
+        // Add pulse animation to stats on hover
+        const statValues = document.querySelectorAll('.stat-value');
+        statValues.forEach(stat => {
+            stat.style.transition = 'transform 0.2s ease';
+            stat.parentElement.addEventListener('mouseenter', function() {
+                stat.style.transform = 'scale(1.1)';
+            });
+            stat.parentElement.addEventListener('mouseleave', function() {
+                stat.style.transform = 'scale(1)';
+            });
+        });
+
+        // Update total amount display with animation
+        function updateTotalAmount(newAmount) {
+            const totalAmountEl = document.querySelector('.total-amount');
+            const currentAmount = parseInt(totalAmountEl.textContent.replace(/[₦,]/g, ''));
+            
+            let start = currentAmount;
+            const end = newAmount;
+            const duration = 1000;
+            const startTime = Date.now();
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(start + (end - start) * progress);
+                
+                totalAmountEl.textContent = `₦${current.toLocaleString()}`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+
+        // Add confetti effect for milestones (optional enhancement)
+        function celebrateMilestone() {
+            showToast('🎉 Congratulations! You\'ve reached a new milestone!');
+        }
+
+        // Check for milestone achievements
+        function checkMilestones() {
+            const referralCount = parseInt(document.querySelector('.stat-value').textContent);
+            
+            if (referralCount === 5 || referralCount === 10 || referralCount === 15 || referralCount === 20) {
+                celebrateMilestone();
+            }
+        }
+
+        // Easter egg: Konami code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+        document.addEventListener('keydown', function(e) {
+            konamiCode.push(e.key);
+            if (konamiCode.length > 10) konamiCode.shift();
+            
+            if (JSON.stringify(konamiCode) === JSON.stringify(konamiSequence)) {
+                showToast('🎮 Cheat code activated! +1000 bonus points!');
+                konamiCode = [];
+            }
+        });
+
+        // Handle online/offline status
+        window.addEventListener('online', function() {
+            showToast('Back online! Your progress is synced.');
+        });
+
+        window.addEventListener('offline', function() {
+            showToast('You\'re offline. Changes will sync when connected.');
+        });
+
+        // Add swipe gesture for mobile (optional)
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 100;
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0) {
+                    // Swiped right
+                    console.log('Swipe right detected');
+                } else {
+                    // Swiped left
+                    console.log('Swipe left detected');
+                }
+            }
+        }
+
+        // Performance optimization: Lazy load images (if any)
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+        }
+
+        // Add loading state management
+        function setLoadingState(isLoading) {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.disabled = isLoading;
+                if (isLoading) {
+                    btn.style.opacity = '0.6';
+                    btn.style.cursor = 'not-allowed';
+                } else {
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                }
+            });
+        }
+
+        // Initialize tooltips (if needed)
+        function initTooltips() {
+            const tooltipElements = document.querySelectorAll('[data-tooltip]');
+            tooltipElements.forEach(el => {
+                el.addEventListener('mouseenter', function() {
+                    const tooltipText = this.getAttribute('data-tooltip');
+                    showToast(tooltipText);
+                });
+            });
+        }
+
+        // Call initialization functions
+        initTooltips();
+
+        console.log('PayUtility Referral & Rewards initialized successfully! 🎉');
+    </script>
+</body>
+</html>
