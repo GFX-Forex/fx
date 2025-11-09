@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Chat - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            position: relative;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border: 2px solid #1e40af;
+            border-radius: 50%;
+        }
+
+        .agent-details {
+            flex: 1;
+        }
+
+        .agent-name {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .agent-status {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        /* Quick Actions Banner */
+        .quick-actions-banner {
+            background: #eff6ff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        .quick-actions-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .quick-actions-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-action-chip {
+            background: white;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action-chip:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #f9fafb;
+        }
+
+        /* Messages */
+        .message {
+            display: flex;
+            gap: 8px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .message-content {
+            max-width: 70%;
+        }
+
+        .message-bubble {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-text {
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .message.user .message-time {
+            color: rgba(255, 255, 255, 0.7);
+            text-align: right;
+        }
+
+        /* System Message */
+        .system-message {
+            text-align: center;
+            padding: 8px 16px;
+            margin: 8px 0;
+        }
+
+        .system-text {
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .typing-indicator.show {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Suggested Replies */
+        .suggested-replies {
+            display: none;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 20px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .suggested-replies.show {
+            display: flex;
+        }
+
+        .suggestion-chip {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 8px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .suggestion-chip:hover {
+            background: #e5e7eb;
+            border-color: #3b82f6;
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 12px 20px 16px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .attach-btn {
+            width: 40px;
+            height: 40px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .attach-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            display: flex;
+            align-items: flex-end;
+            padding: 8px 12px;
+            transition: all 0.2s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 4px;
+            font-size: 15px;
+            color: #1f2937;
+            resize: none;
+            max-height: 100px;
+            font-family: inherit;
+        }
+
+        .message-input:focus {
+            outline: none;
+        }
+
+        .message-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn:disabled {
+            background: #e5e7eb;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Attachment Preview */
+        .attachment-preview {
+            display: none;
+            padding: 8px 20px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .attachment-preview.show {
+            display: flex;
+            gap: 8px;
+        }
+
+        .attachment-item {
+            background: #f3f4f6;
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .remove-attachment {
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Rating Modal */
+        .rating-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 20px;
+            border: 2px solid #e5e7eb;
+            text-align: center;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .rating-card h3 {
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .rating-card p {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .star {
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.2s;
+            filter: grayscale(100%);
+        }
+
+        .star.active {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        .submit-rating-btn {
+            width: 100%;
+            padding: 12px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* File Input Hidden */
+        .file-input {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .message-content {
+                max-width: 75%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <div class="agent-info">
+                <div class="agent-avatar">
+                    👨‍💼
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="agent-details">
+                    <div class="agent-name">Support Agent</div>
+                    <div class="agent-status">Online • Avg response: 2 min</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="alert('Voice call feature')">📞</button>
+                <button class="icon-btn" onclick="alert('More options')">⋮</button>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions-banner">
+            <div class="quick-actions-scroll">
+                <div class="quick-action-chip" onclick="sendQuickMessage('I need help with a transaction')">💳 Transaction Issue</div>
+                <div class="quick-action-chip" onclick="sendQuickMessage('How do I add money to my wallet?')">💰 Add Money</div>
+                <div class="quick-action-chip" onclick="sendQuickMessage('I forgot my PIN')">🔑 Reset PIN</div>
+                <div class="quick-action-chip" onclick="sendQuickMessage('Track my KYC verification')">🪪 KYC Status</div>
+                <div class="quick-action-chip" onclick="sendQuickMessage('Report a bug')">🐛 Report Bug</div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area" id="chatArea">
+            <!-- System Message -->
+            <div class="system-message">
+                <span class="system-text">Chat started at 10:45 AM</span>
+            </div>
+
+            <!-- Bot Welcome Message -->
+            <div class="message">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <div class="message-text">Hello! 👋 Welcome to PayUtility Support. I'm here to help you with any questions or issues. How can I assist you today?</div>
+                    </div>
+                    <div class="message-time">10:45 AM</div>
+                </div>
+            </div>
+
+            <!-- Sample User Message -->
+            <div class="message user">
+                <div class="message-avatar">👤</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <div class="message-text">Hi, I need help with a failed transaction</div>
+                    </div>
+                    <div class="message-time">10:46 AM</div>
+                </div>
+            </div>
+
+            <!-- Agent Response -->
+            <div class="message">
+                <div class="message-avatar">👨‍💼</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <div class="message-text">I'm sorry to hear that! I'd be happy to help you resolve this. Could you please provide me with the transaction reference number or the amount involved?</div>
+                    </div>
+                    <div class="message-time">10:46 AM</div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="message-avatar">👨‍💼</div>
+                <div class="typing-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suggested Replies -->
+        <div class="suggested-replies" id="suggestedReplies">
+            <div class="suggestion-chip" onclick="sendSuggestion('Yes, please help')">Yes, please help</div>
+            <div class="suggestion-chip" onclick="sendSuggestion('I need more time')">I need more time</div>
+            <div class="suggestion-chip" onclick="sendSuggestion('Talk to a human agent')">Talk to agent</div>
+        </div>
+
+        <!-- Attachment Preview -->
+        <div class="attachment-preview" id="attachmentPreview">
+            <!-- Attachments will appear here -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <button class="attach-btn" onclick="document.getElementById('fileInput').click()">
+                📎
+            </button>
+            <input type="file" id="fileInput" class="file-input" accept="image/*,.pdf" onchange="handleFileSelect(event)">
+            
+            <div class="input-wrapper">
+                <textarea 
+                    class="message-input" 
+                    id="messageInput" 
+                    placeholder="Type your message..."
+                    rows="1"
+                    onkeydown="handleKeyPress(event)"
+                    oninput="autoResize(this)"
+                ></textarea>
+            </div>
+            
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                ➤
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatArea = document.getElementById('chatArea');
+        const messageInput = document.getElementById('messageInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const suggestedReplies = document.getElementById('suggestedReplies');
+        let messageCount = 0;
+
+        // Auto-resize textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
+        }
+
+        // Handle Enter key
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Get current time
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        }
+
+        // Send message
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate agent response
+            setTimeout(() => {
+                hideTypingIndicator();
+                respondToMessage(message);
+            }, 1500 + Math.random() * 1000);
+        }
+
+        // Add message to chat
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const avatar = type === 'user' ? '👤' : '👨‍💼';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <div class="message-text">${text}</div>
+                    </div>
+                    <div class="message-time">${getCurrentTime()}</div>
+                </div>
+            `;
+            
+            chatArea.appendChild(messageDiv);
+            scrollToBottom();
+            messageCount++;
+
+            // Show rating card after 5 messages
+            if (messageCount === 5) {
+                setTimeout(showRatingCard, 2000);
+            }
+        }
+
+        // Respond to user message
+        function respondToMessage(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            let response = '';
+
+            if (lowerMessage.includes('transaction') || lowerMessage.includes('failed')) {
+                response = "I understand you're having trouble with a transaction. Let me look that up for you. Please provide the transaction reference number (starts with TXN) or the exact amount and date of the transaction.";
+                showSuggestedReplies(['TXN202411081234', 'I don\'t have the reference', 'It was ₦5,000 today']);
+            } else if (lowerMessage.includes('pin') || lowerMessage.includes('password')) {
+                response = "No problem! I can help you reset your PIN. For security reasons, I'll send you a verification code to your registered phone number. Would you like me to proceed?";
+                showSuggestedReplies(['Yes, send the code', 'No, not now']);
+            } else if (lowerMessage.includes('add money') || lowerMessage.includes('fund')) {
+                response = "To add money to your wallet, you can use:\n\n💳 Debit Card\n🏦 Bank Transfer\n📱 USSD Code\n\nWhich method would you prefer?";
+                showSuggestedReplies(['Debit Card', 'Bank Transfer', 'USSD']);
+            } else if (lowerMessage.includes('kyc') || lowerMessage.includes('verification')) {
+                response = "I can help you check your KYC verification status. Let me pull up your account details... Your KYC is currently at Level 2 (Verified). You have full access to all features! 🎉";
+            } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                response = "Hello! How can I assist you today? 😊";
+                showSuggestedReplies(['Transaction issue', 'Reset PIN', 'Add money']);
+            } else {
+                response = "Thank you for that information. Let me check our system and get back to you with the best solution. Is there anything else you'd like to add?";
+                showSuggestedReplies(['No, that\'s all', 'Yes, I have more info']);
+            }
+
+            addMessage(response, 'agent');
+        }
+
+        // Quick messages
+        function sendQuickMessage(message) {
+            messageInput.value = message;
+            sendMessage();
+        }
+
+        // Suggested replies
+        function sendSuggestion(message) {
+            hideSuggestedReplies();
+            messageInput.value = message;
+            sendMessage();
+        }
+
+        function showSuggestedReplies(suggestions) {
+            suggestedReplies.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const chip = document.createElement('div');
+                chip.className = 'suggestion-chip';
+                chip.textContent = suggestion;
+                chip.onclick = () => sendSuggestion(suggestion);
+                suggestedReplies.appendChild(chip);
+            });
+            suggestedReplies.classList.add('show');
+        }
+
+        function hideSuggestedReplies() {
+            suggestedReplies.classList.remove('show');
+        }
+
+        // Typing indicator
+        function showTypingIndicator() {
+            typingIndicator.classList.add('show');
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.classList.remove('show');
+        }
+
+        // File handling
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const attachmentPreview = document.getElementById('attachmentPreview');
+                attachmentPreview.innerHTML = `
+                    <div class="attachment-item">
+                        <span>📎 ${file.name}</span>
+                        <button class="remove-attachment" onclick="removeAttachment()">×</button>
+                    </div>
+                `;
+                attachmentPreview.classList.add('show');
+            }
+        }
+
+        function removeAttachment() {
+            document.getElementById('fileInput').value = '';
+            document.getElementById('attachmentPreview').classList.remove('show');
+        }
+
+        // Rating card
+        function showRatingCard() {
+            const ratingCard = document.createElement('div');
+            ratingCard.className = 'rating-card';
+            ratingCard.id = 'ratingCard';
+            ratingCard.innerHTML = `
+                <h3>How was your experience?</h3>
+                <p>Rate your conversation with our support agent</p>
+                <div class="rating-stars">
+                    <span class="star" onclick="selectRating(1)">⭐</span>
+                    <span class="star" onclick="selectRating(2)">⭐</span>
+                    <span class="star" onclick="selectRating(3)">⭐</span>
+                    <span class="star" onclick="selectRating(4)">⭐</span>
+                    <span class="star" onclick="selectRating(5)">⭐</span>
+                </div>
+                <button class="submit-rating-btn" onclick="submitRating()">Submit Rating</button>
+            `;
+            chatArea.appendChild(ratingCard);
+            scrollToBottom();
+        }
+
+        let selectedRating = 0;
+
+        function selectRating(rating) {
+            selectedRating = rating;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function submitRating() {
+            if (selectedRating === 0) {
+                alert('Please select a rating');
+                return;
+            }
+            
+            const ratingCard = document.getElementById('ratingCard');
+            ratingCard.innerHTML = `
+                <h3>Thank you for your feedback! 🎉</h3>
+                <p>We appreciate your ${selectedRating}-star rating</p>
+            `;
+            
+            setTimeout(() => {
+                ratingCard.remove();
+            }, 3000);
+        }
+
+        // Scroll to bottom
+        function scrollToBottom() {
+            setTimeout(() => {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }, 100);
+        }
+
+        // Initial scroll
+        scrollToBottom();
+    </script>
+</body>
+</html>
