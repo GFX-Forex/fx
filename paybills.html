@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Bills - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .header-title p {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .wallet-balance {
+            text-align: right;
+        }
+
+        .wallet-label {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .wallet-amount {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* SERVICE CATEGORIES */
+        .categories {
+            padding: 20px;
+            background: white;
+        }
+
+        .categories-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .category-card {
+            aspect-ratio: 1;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-card:active {
+            transform: scale(0.95);
+        }
+
+        .category-card.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .category-icon {
+            font-size: 32px;
+        }
+
+        .category-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .category-card.selected .category-name {
+            color: #3b82f6;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 0 20px 20px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        /* FORM ELEMENTS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .select-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            color: #6b7280;
+            pointer-events: none;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 14px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .verify-btn:active {
+            transform: scale(0.98);
+        }
+
+        .verify-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* CUSTOMER INFO */
+        .customer-info {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .customer-info.show {
+            display: block;
+        }
+
+        .customer-info h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: #047857;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        /* AMOUNT INPUT */
+        .amount-display {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 24px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .amount-label {
+            font-size: 12px;
+            color: #1e40af;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .amount-input {
+            background: none;
+            border: none;
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e3a8a;
+            text-align: center;
+            width: 100%;
+        }
+
+        .amount-input:focus {
+            outline: none;
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .quick-amt {
+            padding: 12px 8px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-amt:active {
+            transform: scale(0.95);
+        }
+
+        .quick-amt.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        /* PACKAGES */
+        .packages {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .package-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .package-card:active {
+            transform: scale(0.98);
+        }
+
+        .package-card.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .package-info h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .package-info p {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .package-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .package-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            position: relative;
+            margin-left: 12px;
+        }
+
+        .package-card.selected .package-radio {
+            border-color: #3b82f6;
+            background: #3b82f6;
+        }
+
+        .package-card.selected .package-radio::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* SUMMARY */
+        .summary-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .summary-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid #fcd34d;
+            font-weight: 700;
+        }
+
+        .summary-label {
+            color: #78350f;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            color: #92400e;
+            font-weight: 600;
+        }
+
+        /* PROCEED BUTTON */
+        .proceed-btn {
+            width: 100%;
+            padding: 18px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .proceed-btn:active {
+            transform: scale(0.98);
+        }
+
+        .proceed-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 480px) {
+            .quick-amounts {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <div class="header-title">
+                <h1>Pay Bills</h1>
+                <p>Electricity, TV, Internet & more</p>
+            </div>
+            <div class="wallet-balance">
+                <div class="wallet-label">Balance</div>
+                <div class="wallet-amount">₦125,450</div>
+            </div>
+        </div>
+
+        <!-- SERVICE CATEGORIES -->
+        <div class="categories">
+            <div class="categories-title">Select Service</div>
+            <div class="categories-grid">
+                <div class="category-card" data-service="electricity">
+                    <div class="category-icon">⚡</div>
+                    <div class="category-name">Electricity</div>
+                </div>
+                <div class="category-card" data-service="tv">
+                    <div class="category-icon">📺</div>
+                    <div class="category-name">Cable TV</div>
+                </div>
+                <div class="category-card" data-service="internet">
+                    <div class="category-icon">🌐</div>
+                    <div class="category-name">Internet</div>
+                </div>
+                <div class="category-card" data-service="betting">
+                    <div class="category-icon">🎲</div>
+                    <div class="category-name">Betting</div>
+                </div>
+                <div class="category-card" data-service="education">
+                    <div class="category-icon">🎓</div>
+                    <div class="category-name">Education</div>
+                </div>
+                <div class="category-card" data-service="insurance">
+                    <div class="category-icon">🛡️</div>
+                    <div class="category-name">Insurance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- ELECTRICITY FORM -->
+            <div class="form-section" id="electricity-form">
+                <div class="form-group">
+                    <label class="label">Select Provider</label>
+                    <div class="select-wrapper">
+                        <select class="select-field" id="electricityProvider">
+                            <option value="">Choose provider</option>
+                            <option value="AEDC">Abuja Electricity (AEDC)</option>
+                            <option value="EKEDC">Eko Electricity (EKEDC)</option>
+                            <option value="IKEDC">Ikeja Electric (IKEDC)</option>
+                            <option value="PHED">Port Harcourt (PHED)</option>
+                            <option value="IBEDC">Ibadan Electricity (IBEDC)</option>
+                            <option value="KEDCO">Kano Electricity (KEDCO)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Meter Number</label>
+                    <input type="text" class="input-field" id="meterNumber" placeholder="Enter meter number" maxlength="13">
+                    <button class="verify-btn" id="verifyMeterBtn" disabled>Verify Meter Number</button>
+                </div>
+
+                <div class="customer-info" id="customerInfo">
+                    <h4>✓ Customer Details Verified</h4>
+                    <div class="info-row">
+                        <span class="info-label">Customer Name:</span>
+                        <span class="info-value">Emmanuel Adeola</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Meter Type:</span>
+                        <span class="info-value">Prepaid</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Address:</span>
+                        <span class="info-value">Lekki Phase 1, Lagos</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Enter Amount</label>
+                    <div class="amount-display">
+                        <div class="amount-label">Amount to Pay</div>
+                        <input type="text" class="amount-input" id="electricityAmount" placeholder="₦0" value="₦">
+                    </div>
+                    <div class="quick-amounts">
+                        <button class="quick-amt" data-amount="2000">₦2,000</button>
+                        <button class="quick-amt" data-amount="5000">₦5,000</button>
+                        <button class="quick-amt" data-amount="10000">₦10,000</button>
+                        <button class="quick-amt" data-amount="20000">₦20,000</button>
+                    </div>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-title">Transaction Summary</div>
+                    <div class="summary-row">
+                        <span class="summary-label">Provider:</span>
+                        <span class="summary-value" id="elecSummaryProvider">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Meter Number:</span>
+                        <span class="summary-value" id="elecSummaryMeter">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Amount:</span>
+                        <span class="summary-value" id="elecSummaryAmount">₦0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">You Pay:</span>
+                        <span class="summary-value" id="elecSummaryTotal">₦0</span>
+                    </div>
+                </div>
+
+                <button class="proceed-btn" id="elecProceedBtn" disabled>Proceed to Payment</button>
+            </div>
+
+            <!-- TV FORM -->
+            <div class="form-section" id="tv-form">
+                <div class="form-group">
+                    <label class="label">Select Provider</label>
+                    <div class="select-wrapper">
+                        <select class="select-field" id="tvProvider">
+                            <option value="">Choose provider</option>
+                            <option value="DSTV">DSTV</option>
+                            <option value="GOTV">GOTV</option>
+                            <option value="Startimes">Startimes</option>
+                            <option value="Showmax">Showmax</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Smart Card / IUC Number</label>
+                    <input type="text" class="input-field" id="smartCard" placeholder="Enter card number" maxlength="11">
+                    <button class="verify-btn" id="verifyCardBtn" disabled>Verify Card Number</button>
+                </div>
+
+                <div class="customer-info" id="tvCustomerInfo">
+                    <h4>✓ Customer Details Verified</h4>
+                    <div class="info-row">
+                        <span class="info-label">Customer Name:</span>
+                        <span class="info-value">Emmanuel Adeola</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Package:</span>
+                        <span class="info-value">DSTV Compact</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">Active</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Select Package</label>
+                    <div class="packages" id="tvPackages">
+                        <div class="package-card" data-package="DSTV Padi" data-price="2500">
+                            <div class="package-info">
+                                <h3>DSTV Padi</h3>
+                                <p>40+ channels • 1 month</p>
+                            </div>
+                            <div class="package-price">₦2,500</div>
+                            <div class="package-radio"></div>
+                        </div>
+                        <div class="package-card" data-package="DSTV Yanga" data-price="3500">
+                            <div class="package-info">
+                                <h3>DSTV Yanga</h3>
+                                <p>50+ channels • 1 month</p>
+                            </div>
+                            <div class="package-price">₦3,500</div>
+                            <div class="package-radio"></div>
+                        </div>
+                        <div class="package-card" data-package="DSTV Compact" data-price="6800">
+                            <div class="package-info">
+                                <h3>DSTV Compact</h3>
+                                <p>90+ channels • 1 month</p>
+                            </div>
+                            <div class="package-price">₦6,800</div>
+                            <div class="package-radio"></div>
+                        </div>
+                        <div class="package-card" data-package="DSTV Compact Plus" data-price="10500">
+                            <div class="package-info">
+                                <h3>DSTV Compact Plus</h3>
+                                <p>120+ channels • 1 month</p>
+                            </div>
+                            <div class="package-price">₦10,500</div>
+                            <div class="package-radio"></div>
+                        </div>
+                        <div class="package-card" data-package="DSTV Premium" data-price="21000">
+                            <div class="package-info">
+                                <h3>DSTV Premium</h3>
+                                <p>All channels • 1 month</p>
+                            </div>
+                            <div class="package-price">₦21,000</div>
+                            <div class="package-radio"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-title">Transaction Summary</div>
+                    <div class="summary-row">
+                        <span class="summary-label">Provider:</span>
+                        <span class="summary-value" id="tvSummaryProvider">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Card Number:</span>
+                        <span class="summary-value" id="tvSummaryCard">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Package:</span>
+                        <span class="summary-value" id="tvSummaryPackage">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">You Pay:</span>
+                        <span class="summary-value" id="tvSummaryTotal">₦0</span>
+                    </div>
+                </div>
+
+                <button class="proceed-btn" id="tvProceedBtn" disabled>Proceed to Payment</button>
+            </div>
+
+            <!-- INTERNET FORM -->
+            <div class="form-section" id="internet-form">
+                <div class="form-group">
+                    <label class="label">Select Provider</label>
+                    <div class="select-wrapper">
+                        <select class="select-field">
+                            <option value="">Choose provider</option>
+                            <option value="Spectranet">Spectranet</option>
+                            <option value="Smile">Smile</option>
+                            <option value="Swift">Swift</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="customer-info show">
+                    <h4>ℹ️ Coming Soon</h4>
+                    <p style="color: #047857; font-size: 13px;">Internet bill payment will be available soon!</p>
+                </div>
+            </div>
+
+            <!-- BETTING FORM -->
+            <div class="form-section" id="betting-form">
+                <div class="form-group">
+                    <label class="label">Select Platform</label>
+                    <div class="select-wrapper">
+                        <select class="select-field">
+                            <option value="">Choose platform</option>
+                            <option value="Bet9ja">Bet9ja</option>
+                            <option value="1xBet">1xBet</option>
+                            <option value="SportyBet">SportyBet</option>
+                            <option value="Betway">Betway</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="customer-info show">
+                    <h4>ℹ️ Coming Soon</h4>
+                    <p style="color: #047857; font-size: 13px;">Betting wallet funding will be available soon!</p>
+                </div>
+            </div>
+
+            <!-- EDUCATION FORM -->
+            <div class="form-section" id="education-form">
+                <div class="form-group">
+                    <label class="label">Select Service</label>
+                    <div class="select-wrapper">
+                        <select class="select-field">
+                            <option value="">Choose service</option>
+                            <option value="WAEC">WAEC Result Checker</option>
+                            <option value="NECO">NECO Result Checker</option>
+                            <option value="JAMB">JAMB E-PIN</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="customer-info show">
+                    <h4>ℹ️ Coming Soon</h4>
+                    <p style="color: #047857; font-size: 13px;">Education services will be available soon!</p>
+                </div>
+            </div>
+
+            <!-- INSURANCE FORM -->
+            <div class="form-section" id="insurance-form">
+                <div class="form-group">
+                    <label class="label">Select Provider</label>
+                    <div class="select-wrapper">
+                        <select class="select-field">
+                            <option value="">Choose provider</option>
+                            <option value="AXA">AXA Mansard</option>
+                            <option value="Leadway">Leadway</option>
+                            <option value="Custodian">Custodian</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="customer-info show">
+                    <h4>ℹ️ Coming Soon</h4>
+                    <p style="color: #047857; font-size: 13px;">Insurance payment will be available soon!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Category selection
+        const categories = document.querySelectorAll('.category-card');
+        const formSections = document.querySelectorAll('.form-section');
+
+        categories.forEach(cat => {
+            cat.addEventListener('click', function() {
+                categories.forEach(c => c.classList.remove('selected'));
+                formSections.forEach(f => f.classList.remove('active'));
+                this.classList.add('selected');
+                document.getElementById(this.dataset.service + '-form').classList.add('active');
+            });
+        });
+
+        // ELECTRICITY LOGIC
+        let elecData = { provider: '', meter: '', amount: 0, verified: false };
+
+        const elecProvider = document.getElementById('electricityProvider');
+        const meterNumber = document.getElementById('meterNumber');
+        const verifyMeterBtn = document.getElementById('verifyMeterBtn');
+        const customerInfo = document.getElementById('customerInfo');
+        const elecAmount = document.getElementById('electricityAmount');
+        const elecQuickBtns = document.querySelectorAll('#electricity-form .quick-amt');
+
+        elecProvider.addEventListener('change', function() {
+            elecData.provider = this.value;
+            document.getElementById('elecSummaryProvider').textContent = this.options[this.selectedIndex].text;
+        });
+
+        meterNumber.addEventListener('input', function() {
+            elecData.meter = this.value;
+            document.getElementById('elecSummaryMeter').textContent = this.value || '-';
+            verifyMeterBtn.disabled = this.value.length < 10;
+        });
+
+        verifyMeterBtn.addEventListener('click', function() {
+            this.textContent = 'Verifying...';
+            this.disabled = true;
+            setTimeout(() => {
+                customerInfo.classList.add('show');
+                this.textContent = '✓ Verified';
+                elecData.verified = true;
+                validateElec();
+            }, 1500);
+        });
+
+        elecAmount.addEventListener('input', function() {
+            let val = this.value.replace(/[^0-9]/g, '');
+            elecData.amount = parseInt(val) || 0;
+            this.value = elecData.amount ? '₦' + elecData.amount.toLocaleString() : '₦';
+            document.getElementById('elecSummaryAmount').textContent = '₦' + elecData.amount.toLocaleString();
+            document.getElementById('elecSummaryTotal').textContent = '₦' + elecData.amount.toLocaleString();
+            validateElec();
+        });
+
+        elecQuickBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                elecQuickBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                elecData.amount = parseInt(this.dataset.amount);
+                elecAmount.value = '₦' + elecData.amount.toLocaleString();
+                document.getElementById('elecSummaryAmount').textContent = '₦' + elecData.amount.toLocaleString();
+                document.getElementById('elecSummaryTotal').textContent = '₦' + elecData.amount.toLocaleString();
+                validateElec();
+            });
+        });
+
+        function validateElec() {
+            document.getElementById('elecProceedBtn').disabled = !(elecData.provider && elecData.verified && elecData.amount >= 1000);
+        }
+
+        document.getElementById('elecProceedBtn').addEventListener('click', function() {
+            alert(`✓ Electricity Bill Payment\n\nProvider: ${elecData.provider}\nMeter: ${elecData.meter}\nAmount: ₦${elecData.amount.toLocaleString()}\n\nProcessing payment...`);
+        });
+
+        // TV LOGIC
+        let tvData = { provider: '', card: '', package: '', price: 0, verified: false };
+
+        const tvProvider = document.getElementById('tvProvider');
+        const smartCard = document.getElementById('smartCard');
+        const verifyCardBtn = document.getElementById('verifyCardBtn');
+        const tvCustomerInfo = document.getElementById('tvCustomerInfo');
+        const packageCards = document.querySelectorAll('.package-card');
+
+        tvProvider.addEventListener('change', function() {
+            tvData.provider = this.value;
+            document.getElementById('tvSummaryProvider').textContent = this.options[this.selectedIndex].text;
+        });
+
+        smartCard.addEventListener('input', function() {
+            tvData.card = this.value;
+            document.getElementById('tvSummaryCard').textContent = this.value || '-';
+            verifyCardBtn.disabled = this.value.length < 10;
+        });
+
+        verifyCardBtn.addEventListener('click', function() {
+            this.textContent = 'Verifying...';
+            this.disabled = true;
+            setTimeout(() => {
+                tvCustomerInfo.classList.add('show');
+                this.textContent = '✓ Verified';
+                tvData.verified = true;
+                validateTV();
+            }, 1500);
+        });
+
+        packageCards.forEach(card => {
+            card.addEventListener('click', function() {
+                packageCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                tvData.package = this.dataset.package;
+                tvData.price = parseInt(this.dataset.price);
+                document.getElementById('tvSummaryPackage').textContent = tvData.package;
+                document.getElementById('tvSummaryTotal').textContent = '₦' + tvData.price.toLocaleString();
+                validateTV();
+            });
+        });
+
+        function validateTV() {
+            document.getElementById('tvProceedBtn').disabled = !(tvData.provider && tvData.verified && tvData.package);
+        }
+
+        document.getElementById('tvProceedBtn').addEventListener('click', function() {
+            alert(`✓ Cable TV Subscription\n\nProvider: ${tvData.provider}\nCard: ${tvData.card}\nPackage: ${tvData.package}\nAmount: ₦${tvData.price.toLocaleString()}\n\nProcessing payment...`);
+        });
+        
+        </script>
+        </body>
+        </html>
