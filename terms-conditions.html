@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .header-subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Content */
+        .content {
+            padding: 24px 20px;
+        }
+
+        .update-banner {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .update-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 6px;
+        }
+
+        .update-text {
+            font-size: 12px;
+            color: #1e3a8a;
+            line-height: 1.5;
+        }
+
+        .toc-nav {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .toc-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+        }
+
+        .toc-link {
+            font-size: 13px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .toc-link:hover {
+            background: white;
+            transform: translateX(4px);
+        }
+
+        .section {
+            margin-bottom: 32px;
+            scroll-margin-top: 80px;
+        }
+
+        .section-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+
+        .section-content p {
+            margin-bottom: 14px;
+        }
+
+        .section-content strong {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        .subsection {
+            margin-top: 16px;
+            padding-left: 16px;
+            border-left: 3px solid #e5e7eb;
+        }
+
+        .subsection-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin: 12px 0;
+        }
+
+        .bullet-list li {
+            padding-left: 24px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .bullet-list li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .highlight-box p {
+            font-size: 13px;
+            color: #78350f;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            color: #065f46;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .contact-info {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .contact-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        .accept-section {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 16px 20px;
+            border-top: 1px solid #e5e7eb;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .accept-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-top: 2px;
+            accent-color: #3b82f6;
+        }
+
+        .checkbox-label {
+            font-size: 13px;
+            color: #374151;
+            font-weight: 600;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .accept-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .accept-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .accept-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .accept-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 24px 20px;
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 500;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 16px;
+            }
+
+            .section-content {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <div class="header-content">
+                <h1 class="header-title">Terms & Conditions</h1>
+                <p class="header-subtitle">Please read carefully before using PayUtility</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Update Banner -->
+            <div class="update-banner">
+                <div class="update-title">📅 Last Updated: November 9, 2025</div>
+                <div class="update-text">These Terms & Conditions govern your use of PayUtility services. By creating an account, you agree to be bound by these terms.</div>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-nav">
+                <div class="toc-title">📋 Quick Navigation</div>
+                <ul class="toc-list">
+                    <li><a href="#section1" class="toc-link">1. Acceptance of Terms</a></li>
+                    <li><a href="#section2" class="toc-link">2. Account Registration</a></li>
+                    <li><a href="#section3" class="toc-link">3. Services Provided</a></li>
+                    <li><a href="#section4" class="toc-link">4. User Responsibilities</a></li>
+                    <li><a href="#section5" class="toc-link">5. Payment & Fees</a></li>
+                    <li><a href="#section6" class="toc-link">6. Security & Privacy</a></li>
+                    <li><a href="#section7" class="toc-link">7. Prohibited Activities</a></li>
+                    <li><a href="#section8" class="toc-link">8. Liability & Disputes</a></li>
+                    <li><a href="#section9" class="toc-link">9. Termination</a></li>
+                    <li><a href="#section10" class="toc-link">10. Changes to Terms</a></li>
+                </ul>
+            </div>
+
+            <!-- Section 1 -->
+            <div class="section" id="section1">
+                <h2 class="section-title">
+                    <span class="section-number">1</span>
+                    Acceptance of Terms
+                </h2>
+                <div class="section-content">
+                    <p>Welcome to <strong>PayUtility</strong>. By accessing or using our platform, mobile application, or any related services (collectively, the "Services"), you agree to comply with and be bound by these Terms and Conditions.</p>
+                    
+                    <p>If you do not agree with any part of these terms, you must not use our Services. Your continued use of PayUtility constitutes your acceptance of these terms and any future modifications.</p>
+
+                    <div class="info-box">
+                        <p>💡 <strong>Important:</strong> These terms form a legally binding agreement between you and PayUtility. Please read them carefully.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="section" id="section2">
+                <h2 class="section-title">
+                    <span class="section-number">2</span>
+                    Account Registration
+                </h2>
+                <div class="section-content">
+                    <p>To access certain features of PayUtility, you must create an account. You agree to:</p>
+                    
+                    <ul class="bullet-list">
+                        <li>Provide accurate, current, and complete information during registration</li>
+                        <li>Maintain and promptly update your account information</li>
+                        <li>Be at least 18 years of age or have parental/guardian consent</li>
+                        <li>Keep your password secure and confidential</li>
+                        <li>Notify us immediately of any unauthorized account access</li>
+                        <li>Be responsible for all activities that occur under your account</li>
+                    </ul>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">2.1 Verification Requirements</h3>
+                        <p>To comply with regulatory requirements and ensure platform security, we may require you to complete identity verification (KYC - Know Your Customer). This may include:</p>
+                        <ul class="bullet-list">
+                            <li>Valid government-issued identification (NIN, Driver's License, Passport, or Voter's Card)</li>
+                            <li>Bank Verification Number (BVN)</li>
+                            <li>Proof of address</li>
+                            <li>Selfie verification</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <p>⚠️ <strong>Note:</strong> Failure to complete verification may result in limited access to certain features or account suspension.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="section" id="section3">
+                <h2 class="section-title">
+                    <span class="section-number">3</span>
+                    Services Provided
+                </h2>
+                <div class="section-content">
+                    <p>PayUtility provides a comprehensive digital payment platform that enables you to:</p>
+                    
+                    <ul class="bullet-list">
+                        <li><strong>Bill Payments:</strong> Pay for airtime, data, electricity, cable TV, internet, and other utilities</li>
+                        <li><strong>Money Transfers:</strong> Send and receive money to bank accounts and other PayUtility users</li>
+                        <li><strong>Wallet Services:</strong> Fund and manage your digital wallet</li>
+                        <li><strong>Virtual Cards:</strong> Create and manage virtual payment cards</li>
+                        <li><strong>Savings & Loans:</strong> Access savings plans and quick loan facilities</li>
+                        <li><strong>Betting:</strong> Fund betting accounts and wallets</li>
+                        <li><strong>Education:</strong> Pay for examination pins and educational services</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <p>✓ All transactions are processed securely through our encrypted payment infrastructure and trusted payment partners.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="section" id="section4">
+                <h2 class="section-title">
+                    <span class="section-number">4</span>
+                    User Responsibilities
+                </h2>
+                <div class="section-content">
+                    <p>As a PayUtility user, you are responsible for:</p>
+                    
+                    <ul class="bullet-list">
+                        <li>Ensuring you have the legal right to use the payment methods you provide</li>
+                        <li>Verifying all transaction details before confirming payments</li>
+                        <li>Maintaining sufficient funds in your wallet for transactions</li>
+                        <li>Protecting your account credentials and PIN</li>
+                        <li>Using the Services only for lawful purposes</li>
+                        <li>Complying with all applicable local, state, and federal laws</li>
+                        <li>Reporting any suspicious activities or security breaches immediately</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <p>⚠️ <strong>Important:</strong> You are solely responsible for any losses resulting from unauthorized use of your account due to failure to maintain security of your credentials.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="section" id="section5">
+                <h2 class="section-title">
+                    <span class="section-number">5</span>
+                    Payment & Fees
+                </h2>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h3 class="subsection-title">5.1 Transaction Fees</h3>
+                        <p>PayUtility may charge service fees for certain transactions. All applicable fees will be clearly displayed before you complete a transaction. Fees may vary based on:</p>
+                        <ul class="bullet-list">
+                            <li>Transaction type and amount</li>
+                            <li>Payment method used</li>
+                            <li>Service provider requirements</li>
+                            <li>Promotional offers or discounts</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">5.2 Refunds & Reversals</h3>
+                        <p>Refund eligibility depends on the nature of the transaction and service provider policies. Generally:</p>
+                        <ul class="bullet-list">
+                            <li>Failed transactions are automatically reversed within 24-48 hours</li>
+                            <li>Disputed transactions must be reported within 7 days</li>
+                            <li>Service-related issues should be directed to the respective service provider</li>
+                            <li>Refunds may take 5-14 business days to process</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">5.3 Wallet Funding</h3>
+                        <p>You can fund your PayUtility wallet using:</p>
+                        <ul class="bullet-list">
+                            <li>Debit/Credit Cards (Visa, Mastercard, Verve)</li>
+                            <li>Bank Transfers</li>
+                            <li>USSD Banking</li>
+                            <li>Other approved payment methods</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <p>💰 <strong>Cashback & Rewards:</strong> Eligible transactions may earn cashback or reward points. Terms apply and rewards may expire.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6 -->
+            <div class="section" id="section6">
+                <h2 class="section-title">
+                    <span class="section-number">6</span>
+                    Security & Privacy
+                </h2>
+                <div class="section-content">
+                    <p>We take your security and privacy seriously. PayUtility implements industry-standard security measures including:</p>
+                    
+                    <ul class="bullet-list">
+                        <li>256-bit SSL encryption for all data transmission</li>
+                        <li>Two-factor authentication (2FA) for account access</li>
+                        <li>Regular security audits and vulnerability assessments</li>
+                        <li>Secure storage of sensitive information</li>
+                        <li>Fraud detection and prevention systems</li>
+                    </ul>
+
+                    <p>For detailed information about how we collect, use, and protect your data, please review our <a href="#privacy" class="contact-link">Privacy Policy</a>.</p>
+
+                    <div class="highlight-box">
+                        <p>🔒 <strong>Security Tip:</strong> Never share your password, PIN, or OTP with anyone, including PayUtility staff. We will never ask for these details.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 7 -->
+            <div class="section" id="section7">
+                <h2 class="section-title">
+                    <span class="section-number">7</span>
+                    Prohibited Activities
+                </h2>
+                <div class="section-content">
+                    <p>You agree NOT to use PayUtility for any of the following activities:</p>
+                    
+                    <ul class="bullet-list">
+                        <li>Fraudulent transactions or money laundering</li>
+                        <li>Illegal activities or purchase of illegal goods/services</li>
+                        <li>Violation of any applicable laws or regulations</li>
+                        <li>Harassment, abuse, or threats toward other users or staff</li>
+                        <li>Attempting to bypass security measures or hack the system</li>
+                        <li>Creating multiple accounts to exploit promotions</li>
+                        <li>Providing false or misleading information</li>
+                        <li>Using automated tools or bots without authorization</li>
+                        <li>Reselling or redistributing our Services without permission</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <p>⚠️ <strong>Violation Consequences:</strong> Engaging in prohibited activities may result in immediate account suspension, legal action, and cooperation with law enforcement authorities.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 8 -->
+            <div class="section" id="section8">
+                <h2 class="section-title">
+                    <span class="section-number">8</span>
+                    Liability & Disputes
+                </h2>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h3 class="subsection-title">8.1 Limitation of Liability</h3>
+                        <p>PayUtility acts as an intermediary platform connecting you with service providers. We are not liable for:</p>
+                        <ul class="bullet-list">
+                            <li>Service interruptions by third-party providers</li>
+                            <li>Delays in transaction processing by banks or payment processors</li>
+                            <li>Quality or availability of services purchased through our platform</li>
+                            <li>Losses resulting from your failure to secure your account</li>
+                            <li>Technical issues beyond our reasonable control</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">8.2 Dispute Resolution</h3>
+                        <p>In the event of a dispute:</p>
+                        <ul class="bullet-list">
+                            <li>Contact our customer support immediately</li>
+                            <li>Provide all relevant transaction details and evidence</li>
+                            <li>Allow up to 14 business days for investigation</li>
+                            <li>Cooperate with our dispute resolution process</li>
+                        </ul>
+                        <p>If disputes cannot be resolved through our support channels, both parties agree to pursue mediation before legal action.</p>
+                    </div>
+
+                    <div class="info-box">
+                        <p>📞 <strong>Support:</strong> Our customer support team is available 24/7 to assist with any issues or concerns.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 9 -->
+            <div class="section" id="section9">
+                <h2 class="section-title">
+                    <span class="section-number">9</span>
+                    Termination
+                </h2>
+                <div class="section-content">
+                    <p>Either party may terminate this agreement:</p>
+                    
+                    <div class="subsection">
+                        <h3 class="subsection-title">9.1 Your Right to Terminate</h3>
+                        <p>You may close your account at any time through the app settings or by contacting customer support. Upon termination:</p>
+                        <ul class="bullet-list">
+                            <li>Withdraw any remaining balance from your wallet</li>
+                            <li>Complete any pending transactions</li>
+                            <li>Cancel any active subscriptions or services</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">9.2 Our Right to Terminate</h3>
+                        <p>We reserve the right to suspend or terminate your account if:</p>
+                        <ul class="bullet-list">
+                            <li>You violate these Terms & Conditions</li>
+                            <li>Fraudulent or suspicious activity is detected</li>
+                            <li>You fail to complete required verification</li>
+                            <li>Your account remains inactive for an extended period</li>
+                            <li>Required by law or regulatory authorities</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <p>⚠️ Upon account termination, you forfeit any pending rewards or bonuses unless otherwise required by law.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 10 -->
+            <div class="section" id="section10">
+                <h2 class="section-title">
+                    <span class="section-number">10</span>
+                    Changes to Terms
+                </h2>
+                <div class="section-content">
+                    <p>PayUtility reserves the right to modify these Terms & Conditions at any time. When we make changes:</p>
+                    
+                    <ul class="bullet-list">
+                        <li>We will update the "Last Updated" date at the top of this page</li>
+                        <li>Significant changes will be communicated via email or in-app notification</li>
+                        <li>Continued use of our Services after changes constitutes acceptance</li>
+                        <li>You may terminate your account if you disagree with the changes</li>
+                    </ul>
+
+                    <p>We encourage you to review these terms periodically to stay informed of any updates.</p>
+
+                    <div class="info-box">
+                        <p>📧 <strong>Stay Informed:</strong> Enable notifications to receive updates about important changes to our terms and policies.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="contact-card">
+                <div class="contact-title">📞 Need Help or Have Questions?</div>
+                <div class="contact-info">Email: <a href="mailto:support@payutility.com" class="contact-link">support@payutility.com</a></div>
+                <div class="contact-info">Phone: <a href="tel:+2348012345678" class="contact-link">+234 801 234 5678</a></div>
+                <div class="contact-info">WhatsApp: <a href="https://wa.me/2348012345678" class="contact-link">+234 801 234 5678</a></div>
+                <div class="contact-info" style="margin-top: 12px;">Business Hours: 24/7 Customer Support</div>
+            </div>
+        </div>
+
+        <!-- Accept Section -->
+        <div class="accept-section">
+            <div class="accept-checkbox">
+                <input type="checkbox" class="checkbox" id="acceptTerms">
+                <label class="checkbox-label" for="acceptTerms">
+                    I have read, understood, and agree to PayUtility's Terms & Conditions
+                </label>
+            </div>
+            <button class="accept-btn" id="acceptBtn" disabled>Accept & Continue</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            © 2025 PayUtility. All rights reserved. | <a href="#privacy" class="contact-link">Privacy Policy</a>
+        </div>
+    </div>
+
+    <script>
+        // Enable accept button when checkbox is checked
+        const acceptCheckbox = document.getElementById('acceptTerms');
+        const acceptBtn = document.getElementById('acceptBtn');
+
+        acceptCheckbox.addEventListener('change', function() {
+            acceptBtn.disabled = !this.checked;
+        });
+
+        acceptBtn.addEventListener('click', function() {
+            if (acceptCheckbox.checked) {
+                alert('✓ Terms Accepted!\n\nThank you for accepting our Terms & Conditions.\n\nYou can now continue using PayUtility services.');
+                // In production: window.location.href = 'signup.html' or close modal
+            }
+        });
+
+        // Smooth scroll for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
