@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .download-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* SUMMARY CARDS */
+        .summary-section {
+            padding: 16px 20px;
+            background: white;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background: #f3f4f6;
+            padding: 14px 12px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .summary-card.income {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        }
+
+        .summary-card.expense {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+
+        .summary-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+
+        .summary-card.income .summary-label {
+            color: #166534;
+        }
+
+        .summary-card.expense .summary-label {
+            color: #991b1b;
+        }
+
+        .summary-amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .summary-card.income .summary-amount {
+            color: #059669;
+        }
+
+        .summary-card.expense .summary-amount {
+            color: #dc2626;
+        }
+
+        /* FILTER SECTION */
+        .filter-section {
+            padding: 0 20px 16px;
+            background: white;
+        }
+
+        .filter-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .filter-toggle-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-icon {
+            font-size: 20px;
+        }
+
+        .filter-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .filter-badge {
+            background: #3b82f6;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .filter-arrow {
+            font-size: 14px;
+            color: #6b7280;
+            transition: transform 0.3s;
+        }
+
+        .filter-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .filter-panel {
+            display: none;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .filter-panel.open {
+            display: block;
+        }
+
+        .filter-group {
+            margin-bottom: 16px;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .filter-select,
+        .filter-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #1f2937;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            border-color: #3b82f6;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .filter-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .filter-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.clear {
+            background: white;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .filter-btn.apply {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .filter-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* SEARCH BAR */
+        .search-bar {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #9ca3af;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 14px 14px 44px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #1f2937;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .search-input:focus {
+            background: #e5e7eb;
+        }
+
+        /* TRANSACTIONS */
+        .transactions-section {
+            padding: 0 20px 20px;
+            background: white;
+        }
+
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .transactions-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .sort-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .date-divider {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b7280;
+            margin: 20px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-item:active {
+            transform: scale(0.98);
+        }
+
+        .transaction-icon {
+            width: 44px;
+            height: 44px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .transaction-icon.success {
+            background: #dcfce7;
+        }
+
+        .transaction-icon.failed {
+            background: #fee2e2;
+        }
+
+        .transaction-icon.pending {
+            background: #fef3c7;
+        }
+
+        .transaction-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .transaction-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .transaction-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .transaction-status.success {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .transaction-status.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .transaction-status.failed {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .transaction-amount {
+            font-size: 15px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .transaction-amount.debit {
+            color: #dc2626;
+        }
+
+        .transaction-amount.credit {
+            color: #059669;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        /* LOADING SPINNER */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <div class="header-title">
+                    <h1>Transaction History</h1>
+                    <p id="dateRangeText">All transactions</p>
+                </div>
+                <button class="download-btn" onclick="downloadTransactions()">📥</button>
+            </div>
+        </div>
+
+        <!-- SUMMARY CARDS -->
+        <div class="summary-section">
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Total</div>
+                    <div class="summary-amount" id="totalCount">0</div>
+                </div>
+                <div class="summary-card income">
+                    <div class="summary-label">Income</div>
+                    <div class="summary-amount" id="totalIncome">₦0</div>
+                </div>
+                <div class="summary-card expense">
+                    <div class="summary-label">Expenses</div>
+                    <div class="summary-amount" id="totalExpense">₦0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTER SECTION -->
+        <div class="filter-section">
+            <div class="filter-toggle" onclick="toggleFilters()">
+                <div class="filter-toggle-left">
+                    <span class="filter-icon">🔍</span>
+                    <span class="filter-text">Filters</span>
+                    <span class="filter-badge" id="filterCount">0</span>
+                </div>
+                <span class="filter-arrow" id="filterArrow">▼</span>
+            </div>
+
+            <div class="filter-panel" id="filterPanel">
+                <div class="filter-group">
+                    <label class="filter-label">Date Range</label>
+                    <select class="filter-select" id="dateRange">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="7days">Last 7 Days</option>
+                        <option value="30days">Last 30 Days</option>
+                        <option value="90days">Last 90 Days</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Transaction Type</label>
+                    <select class="filter-select" id="transactionType">
+                        <option value="all">All Types</option>
+                        <option value="credit">Credit (Income)</option>
+                        <option value="debit">Debit (Expenses)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="success">Successful</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Category</label>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="airtime">Airtime</option>
+                        <option value="data">Data</option>
+                        <option value="electricity">Electricity</option>
+                        <option value="cable">Cable TV</option>
+                        <option value="transfer">Transfer</option>
+                        <option value="funding">Wallet Funding</option>
+                        <option value="withdrawal">Withdrawal</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Amount Range (₦)</label>
+                    <div class="filter-row">
+                        <input type="number" class="filter-input" id="minAmount" placeholder="Min">
+                        <input type="number" class="filter-input" id="maxAmount" placeholder="Max">
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="filter-btn clear" onclick="clearFilters()">Clear All</button>
+                    <button class="filter-btn apply" onclick="applyFilters()">Apply Filters</button>
+                </div>
+            </div>
+
+            <!-- SEARCH BAR -->
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput" 
+                    placeholder="Search transactions..."
+                    oninput="filterTransactions()"
+                >
+            </div>
+        </div>
+
+        <!-- TRANSACTIONS -->
+        <div class="transactions-section">
+            <div class="transactions-header">
+                <div class="transactions-count" id="resultsCount">0 transactions</div>
+                <button class="sort-btn" onclick="toggleSort()">
+                    <span>⇅</span>
+                    <span id="sortText">Newest First</span>
+                </button>
+            </div>
+
+            <div id="transactionsList">
+                <!-- Transactions will be rendered here -->
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample transaction data
+        const allTransactions = [
+            { id: 'TXN001', date: '2024-11-09', time: '10:30 AM', description: 'MTN Airtime Purchase', amount: -500, type: 'debit', status: 'success', category: 'airtime' },
+            { id: 'TXN002', date: '2024-11-09', time: '09:15 AM', description: 'Wallet Funding - Card', amount: 20000, type: 'credit', status: 'success', category: 'funding' },
+            { id: 'TXN003', date: '2024-11-08', time: '06:45 PM', description: 'DSTV Subscription', amount: -6800, type: 'debit', status: 'success', category: 'cable' },
+            { id: 'TXN004', date: '2024-11-08', time: '02:20 PM', description: 'EKEDC - Electricity', amount: -5000, type: 'debit', status: 'success', category: 'electricity' },
+            { id: 'TXN005', date: '2024-11-07', time: '04:30 PM', description: 'Bank Transfer', amount: -15000, type: 'debit', status: 'pending', category: 'transfer' },
+            { id: 'TXN006', date: '2024-11-07', time: '11:20 AM', description: 'Glo Data Bundle - 10GB', amount: -3500, type: 'debit', status: 'success', category: 'data' },
+            { id: 'TXN007', date: '2024-11-06', time: '08:45 AM', description: 'Airtel Airtime', amount: -1000, type: 'debit', status: 'success', category: 'airtime' },
+            { id: 'TXN008', date: '2024-11-06', time: '07:15 AM', description: 'Wallet Funding - Transfer', amount: 50000, type: 'credit', status: 'success', category: 'funding' },
+            { id: 'TXN009', date: '2024-11-05', time: '09:30 PM', description: 'GOTV Payment', amount: -3900, type: 'debit', status: 'success', category: 'cable' },
+            { id: 'TXN010', date: '2024-11-05', time: '03:20 PM', description: 'MTN Data - 5GB', amount: -2000, type: 'debit', status: 'success', category: 'data' },
+            { id: 'TXN011', date: '2024-11-04', time: '06:00 PM', description: 'IKEDC Electricity', amount: -8000, type: 'debit', status: 'success', category: 'electricity' },
+            { id: 'TXN012', date: '2024-11-04', time: '11:45 AM', description: 'Failed Transfer', amount: -5000, type: 'debit', status: 'failed', category: 'transfer' },
+            { id: 'TXN013', date: '2024-11-03', time: '02:30 PM', description: '9mobile Airtime', amount: -500, type: 'debit', status: 'success', category: 'airtime' },
+            { id: 'TXN014', date: '2024-11-03', time: '10:15 AM', description: 'Bank Withdrawal', amount: -25000, type: 'debit', status: 'success', category: 'withdrawal' },
+            { id: 'TXN015', date: '2024-11-02', time: '05:20 PM', description: 'Startimes Subscription', amount: -2500, type: 'debit', status: 'success', category: 'cable' },
+            { id: 'TXN016', date: '2024-11-02', time: '09:00 AM', description: 'Refund - Failed Transaction', amount: 5000, type: 'credit', status: 'success', category: 'other' },
+            { id: 'TXN017', date: '2024-11-01', time: '07:45 PM', description: 'Glo Airtime Purchase', amount: -2000, type: 'debit', status: 'success', category: 'airtime' },
+            { id: 'TXN018', date: '2024-11-01', time: '01:30 PM', description: 'Wallet Funding - Card', amount: 100000, type: 'credit', status: 'success', category: 'funding' },
+        ];
+
+        let filteredTransactions = [...allTransactions];
+        let sortOrder = 'newest';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            filterTransactions();
+        });
+
+        // Toggle filter panel
+        function toggleFilters() {
+            const panel = document.getElementById('filterPanel');
+            const arrow = document.getElementById('filterArrow');
+            panel.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        // Apply filters
+        function applyFilters() {
+            filterTransactions();
+            toggleFilters();
+        }
+
+        // Clear filters
+        function clearFilters() {
+            document.getElementById('dateRange').value = 'all';
+            document.getElementById('transactionType').value = 'all';
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('minAmount').value = '';
+            document.getElementById('maxAmount').value = '';
+            document.getElementById('searchInput').value = '';
+            filterTransactions();
+        }
+
+        // Filter transactions
+        function filterTransactions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const dateRange = document.getElementById('dateRange').value;
+            const transactionType = document.getElementById('transactionType').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const minAmount = parseFloat(document.getElementById('minAmount').value) || 0;
+            const maxAmount = parseFloat(document.getElementById('maxAmount').value) || Infinity;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            filteredTransactions = allTransactions.filter(transaction => {
+                // Search filter
+                const matchesSearch = transaction.description.toLowerCase().includes(searchTerm) ||
+                                    transaction.id.toLowerCase().includes(searchTerm);
+
+                // Date filter
+                const transactionDate = new Date(transaction.date);
+                transactionDate.setHours(0, 0, 0, 0);
+                let matchesDate = true;
+
+                if (dateRange === 'today') {
+                    matchesDate = transactionDate.getTime() === today.getTime();
+                } else if (dateRange === 'yesterday') {
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    matchesDate = transactionDate.getTime() === yesterday.getTime();
+                } else if (dateRange === '7days') {
+                    const weekAgo = new Date(today);
+                    weekAgo.setDate(weekAgo.getDate() - 7);
+                    matchesDate = transactionDate >= weekAgo;
+                } else if (dateRange === '30days') {
+                    const monthAgo = new Date(today);
+                    monthAgo.setDate(monthAgo.getDate() - 30);
+                    matchesDate = transactionDate >= monthAgo;
+                } else if (dateRange === '90days') {
+                    const threeMonthsAgo = new Date(today);
+                    threeMonthsAgo.setDate(threeMonthsAgo.getDate() - 90);
+                    matchesDate = transactionDate >= threeMonthsAgo;
+                }
+
+                // Type filter
+                const matchesType = transactionType === 'all' || transaction.type === transactionType;
+
+                // Status filter
+                const matchesStatus = statusFilter === 'all' || transaction.status === statusFilter;
+
+                // Category filter
+                const matchesCategory = categoryFilter === 'all' || transaction.category === categoryFilter;
+
+                // Amount filter
+                const amount = Math.abs(transaction.amount);
+                const matchesAmount = amount >= minAmount && amount <= maxAmount;
+
+                return matchesSearch && matchesDate && matchesType && matchesStatus && matchesCategory && matchesAmount;
+            });
+
+            // Update filter count
+            let activeFilters = 0;
+            if (dateRange !== 'all') activeFilters++;
+            if (transactionType !== 'all') activeFilters++;
+            if (statusFilter !== 'all') activeFilters++;
+            if (categoryFilter !== 'all') activeFilters++;
+            if (minAmount > 0 || maxAmount < Infinity) activeFilters++;
+            if (searchTerm) activeFilters++;
+
+            document.getElementById('filterCount').textContent = activeFilters;
+
+            renderTransactions();
+            updateSummary();
+        }
+
+        // Toggle sort order
+        function toggleSort() {
+            sortOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+            document.getElementById('sortText').textContent = sortOrder === 'newest' ? 'Newest First' : 'Oldest First';
+            renderTransactions();
+        }
+
+        // Render transactions
+        function renderTransactions() {
+            const container = document.getElementById('transactionsList');
+            
+            // Sort transactions
+            const sorted = [...filteredTransactions].sort((a, b) => {
+                const dateA = new Date(a.date + ' ' + a.time);
+                const dateB = new Date(b.date + ' ' + b.time);
+                return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+            });
+
+            if (sorted.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <div class="empty-title">No Transactions Found</div>
+                        <div class="empty-text">Try adjusting your filters or search terms</div>
+                    </div>
+                `;
+                document.getElementById('resultsCount').textContent = '0 transactions';
+                return;
+            }
+
+            // Group by date
+            const grouped = {};
+            sorted.forEach(transaction => {
+                const date = transaction.date;
+                if (!grouped[date]) {
+                    grouped[date] = [];
+                }
+                grouped[date].push(transaction);
+            });
+
+            // Render grouped transactions
+            let html = '';
+            Object.keys(grouped).forEach(date => {
+                const dateObj = new Date(date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+
+                let dateLabel;
+                if (dateObj.getTime() === today.getTime()) {
+                    dateLabel = 'Today';
+                } else if (dateObj.getTime() === yesterday.getTime()) {
+                    dateLabel = 'Yesterday';
+                } else {
+                    dateLabel = dateObj.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: dateObj.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+                    });
+                }
+
+                html += `<div class="date-divider">${dateLabel}</div>`;
+
+                grouped[date].forEach(transaction => {
+                    const iconEmoji = getIconEmoji(transaction.category, transaction.type);
+                    const statusClass = transaction.status;
+                    const amountClass = transaction.type;
+                    const amountSign = transaction.type === 'credit' ? '+' : '-';
+
+                    html += `
+                        <div class="transaction-item" onclick="viewTransaction('${transaction.id}')">
+                            <div class="transaction-icon ${statusClass}">${iconEmoji}</div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">${transaction.description}</div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-date">${transaction.time}</span>
+                                    <span class="transaction-status ${statusClass}">${transaction.status}</span>
+                                </div>
+                            </div>
+                            <div class="transaction-amount ${amountClass}">
+                                ${amountSign}₦${Math.abs(transaction.amount).toLocaleString()}
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
+            container.innerHTML = html;
+            document.getElementById('resultsCount').textContent = `${sorted.length} transaction${sorted.length !== 1 ? 's' : ''}`;
+        }
+
+        // Get icon emoji based on category
+        function getIconEmoji(category, type) {
+            const icons = {
+                airtime: '📱',
+                data: '📶',
+                electricity: '⚡',
+                cable: '📺',
+                transfer: '💸',
+                funding: '💰',
+                withdrawal: '🏧',
+                other: '📄'
+            };
+            return icons[category] || (type === 'credit' ? '✓' : '💳');
+        }
+
+        // Update summary
+        function updateSummary() {
+            const totalCount = filteredTransactions.length;
+            const totalIncome = filteredTransactions
+                .filter(t => t.type === 'credit')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const totalExpense = filteredTransactions
+                .filter(t => t.type === 'debit')
+                .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('totalIncome').textContent = `₦${totalIncome.toLocaleString()}`;
+            document.getElementById('totalExpense').textContent = `₦${totalExpense.toLocaleString()}`;
+
+            // Update date range text
+            const dateRange = document.getElementById('dateRange').value;
+            const dateRangeTexts = {
+                all: 'All transactions',
+                today: 'Today\'s transactions',
+                yesterday: 'Yesterday\'s transactions',
+                '7days': 'Last 7 days',
+                '30days': 'Last 30 days',
+                '90days': 'Last 90 days'
+            };
+            document.getElementById('dateRangeText').textContent = dateRangeTexts[dateRange] || 'All transactions';
+        }
+
+        // View transaction details
+        function viewTransaction(id) {
+            alert(`Transaction details for ${id} would open here`);
+        }
+
+        // Download transactions
+        function downloadTransactions() {
+            alert(`Downloading ${filteredTransactions.length} transactions as CSV`);
+        }
+
+        // Bottom navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
