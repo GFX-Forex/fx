@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile & Settings - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 20px;
+            color: white;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e40af;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .avatar-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            border: 3px solid #1e40af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .kyc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(16, 185, 129, 0.2);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #dcfce7;
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        /* Menu Items */
+        .menu-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #f3f4f6;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:active {
+            background: #f9fafb;
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .menu-info {
+            flex: 1;
+        }
+
+        .menu-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .menu-subtitle {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .menu-arrow {
+            color: #9ca3af;
+            font-size: 18px;
+        }
+
+        .menu-toggle {
+            width: 48px;
+            height: 28px;
+            background: #e5e7eb;
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle.active {
+            background: #3b82f6;
+        }
+
+        .menu-toggle::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-toggle.active::before {
+            left: 23px;
+        }
+
+        /* Danger Item */
+        .menu-item.danger .menu-icon {
+            background: #fee2e2;
+        }
+
+        .menu-item.danger .menu-title {
+            color: #ef4444;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #f3f4f6;
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .modal-content {
+            padding: 20px 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .modal-actions {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Version Info */
+        .version-info {
+            text-align: center;
+            padding: 20px;
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .version-info p {
+            margin-bottom: 4px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f4f6;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <div class="header-title">
+                    <h1>Profile & Settings</h1>
+                    <p>Manage your account</p>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="avatar-wrapper">
+                    <div class="avatar">EA</div>
+                    <div class="avatar-badge">✓</div>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name">Emmanuel Adeola</div>
+                    <div class="profile-email">emmanuel@email.com</div>
+                    <div class="kyc-badge">
+                        <span>✓</span> Verified Account
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Account Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">₦125K</div>
+                    <div class="stat-label">Balance</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">247</div>
+                    <div class="stat-label">Transactions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value">1,850</div>
+                    <div class="stat-label">Points</div>
+                </div>
+            </div>
+
+            <!-- Account Section -->
+            <div class="section">
+                <h3 class="section-title">Account</h3>
+                <div class="menu-list">
+                    <div class="menu-item" onclick="openEditProfile()">
+                        <div class="menu-icon">👤</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Edit Profile</div>
+                            <div class="menu-subtitle">Update your personal information</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item" onclick="openChangePassword()">
+                        <div class="menu-icon">🔒</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Change Password</div>
+                            <div class="menu-subtitle">Update your password</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item" onclick="openChangePin()">
+                        <div class="menu-icon">🔢</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Transaction PIN</div>
+                            <div class="menu-subtitle">Change or reset your PIN</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item" onclick="alert('Opening KYC verification...')">
+                        <div class="menu-icon">🪪</div>
+                        <div class="menu-info">
+                            <div class="menu-title">KYC Verification</div>
+                            <div class="menu-subtitle">Level 2 • Verified</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Section -->
+            <div class="section">
+                <h3 class="section-title">Security</h3>
+                <div class="menu-list">
+                    <div class="menu-item">
+                        <div class="menu-icon">👆</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Biometric Login</div>
+                            <div class="menu-subtitle">Use fingerprint or face ID</div>
+                        </div>
+                        <div class="menu-toggle active" onclick="toggleBiometric(this)"></div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-icon">📱</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Two-Factor Auth (2FA)</div>
+                            <div class="menu-subtitle">Extra security layer</div>
+                        </div>
+                        <div class="menu-toggle" onclick="toggle2FA(this)"></div>
+                    </div>
+
+                    <div class="menu-item" onclick="alert('Managing devices...')">
+                        <div class="menu-icon">💻</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Manage Devices</div>
+                            <div class="menu-subtitle">3 devices connected</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preferences Section -->
+            <div class="section">
+                <h3 class="section-title">Preferences</h3>
+                <div class="menu-list">
+                    <div class="menu-item">
+                        <div class="menu-icon">🔔</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Notifications</div>
+                            <div class="menu-subtitle">Push, email, and SMS alerts</div>
+                        </div>
+                        <div class="menu-toggle active" onclick="toggleNotifications(this)"></div>
+                    </div>
+
+                    <div class="menu-item" onclick="alert('Opening language settings...')">
+                        <div class="menu-icon">🌐</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Language</div>
+                            <div class="menu-subtitle">English (US)</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item" onclick="alert('Opening currency settings...')">
+                        <div class="menu-icon">💱</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Currency</div>
+                            <div class="menu-subtitle">Nigerian Naira (₦)</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div class="section">
+                <h3 class="section-title">Support</h3>
+                <div class="menu-list">
+                    <div class="menu-item" onclick="alert('Opening help center...')">
+                        <div class="menu-icon">❓</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Help Center</div>
+                            <div class="menu-subtitle">FAQs and guides</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item" onclick="alert('Opening live chat...')">
+                        <div class="menu-icon">💬</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Contact Support</div>
+                            <div class="menu-subtitle">Chat with us 24/7</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item" onclick="alert('Opening feedback form...')">
+                        <div class="menu-icon">⭐</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Rate Our App</div>
+                            <div class="menu-subtitle">Share your experience</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legal Section -->
+            <div class="section">
+                <h3 class="section-title">Legal</h3>
+                <div class="menu-list">
+                    <div class="menu-item" onclick="alert('Opening terms of service...')">
+                        <div class="menu-icon">📄</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Terms of Service</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item" onclick="alert('Opening privacy policy...')">
+                        <div class="menu-icon">🔐</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Privacy Policy</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="section">
+                <div class="menu-list">
+                    <div class="menu-item danger" onclick="confirmLogout()">
+                        <div class="menu-icon">🚪</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Logout</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+
+                    <div class="menu-item danger" onclick="confirmDeleteAccount()">
+                        <div class="menu-icon">🗑️</div>
+                        <div class="menu-info">
+                            <div class="menu-title">Delete Account</div>
+                        </div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Version Info -->
+            <div class="version-info">
+                <p>PayUtility App</p>
+                <p>Version 2.4.1 (Build 2411)</p>
+                <p>© 2024 PayUtility. All rights reserved.</p>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="editProfileModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+            </div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="label">Full Name</label>
+                    <input type="text" class="input-field" value="Emmanuel Adeola">
+                </div>
+                <div class="form-group">
+                    <label class="label">Email</label>
+                    <input type="email" class="input-field" value="emmanuel@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="label">Phone Number</label>
+                    <input type="tel" class="input-field" value="+234 801 234 5678">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('editProfileModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal-overlay" id="changePasswordModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Change Password</h3>
+            </div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="label">Current Password</label>
+                    <input type="password" class="input-field" placeholder="Enter current password">
+                </div>
+                <div class="form-group">
+                    <label class="label">New Password</label>
+                    <input type="password" class="input-field" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label class="label">Confirm New Password</label>
+                    <input type="password" class="input-field" placeholder="Confirm new password">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('changePasswordModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change PIN Modal -->
+    <div class="modal-overlay" id="changePinModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Change Transaction PIN</h3>
+            </div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="label">Current PIN</label>
+                    <input type="password" class="input-field" maxlength="4" placeholder="****" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label class="label">New PIN</label>
+                    <input type="password" class="input-field" maxlength="4" placeholder="****" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label class="label">Confirm New PIN</label>
+                    <input type="password" class="input-field" maxlength="4" placeholder="****" inputmode="numeric">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('changePinModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="changePin()">Update PIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Logout</h3>
+            </div>
+            <div class="modal-content">
+                <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">Are you sure you want to logout? You'll need to login again to access your account.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('logoutModal')">Cancel</button>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal-overlay" id="deleteAccountModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Account</h3>
+            </div>
+            <div class="modal-content">
+                <p style="color: #ef4444; font-size: 14px; font-weight: 600; margin-bottom: 12px;">⚠️ This action cannot be undone!</p>
+                <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin-bottom: 16px;">Deleting your account will permanently remove all your data, transaction history, and wallet balance.</p>
+                <div class="form-group">
+                    <label class="label">Type "DELETE" to confirm</label>
+                    <input type="text" class="input-field" id="deleteConfirm" placeholder="Type DELETE">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('deleteAccountModal')">Cancel</button>
+                <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Modal Functions
+    function openEditProfile() {
+        document.getElementById('editProfileModal').classList.add('active');
+    }
+
+    function openChangePassword() {
+        document.getElementById('changePasswordModal').classList.add('active');
+    }
+
+    function openChangePin() {
+        document.getElementById('changePinModal').classList.add('active');
+    }
+
+    function confirmLogout() {
+        document.getElementById('logoutModal').classList.add('active');
+    }
+
+    function confirmDeleteAccount() {
+        document.getElementById('deleteAccountModal').classList.add('active');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+    });
+
+    // Toggle Functions
+    function toggleNotifications(element) {
+        element.classList.toggle('active');
+        const status = element.classList.contains('active') ? 'enabled' : 'disabled';
+        alert(`Notifications ${status}`);
+    }
+
+    function Biometric(element) {
+        element.classList.toggle('active');
+        const status = element.classList.contains('active') ? 'enabled' : 'disabled';
+        alert(`Biometric login ${status}`);
+    }
+
+    function toggle2FA(element) {
+        element.classList.toggle('active');
+        const status = element.classList.contains('active') ? 'enabled' : 'disabled';
+        alert(`Two-Factor Authentication ${status}\n\n${status === 'enabled' ? 'You will receive an OTP for each login' : 'OTP verification disabled'}`);
+    }
+
+    function toggle(element) {
+        element.classList.toggle('active');
+        const status = element.classList.contains('active') ? 'enabled' : 'disabled';
+        alert(`Setting ${status}`);
+    }
+
+    // Action Functions
+    function saveProfile() {
+        const btn = event.target;
+        btn.innerHTML = '<span class="loading"></span>';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            alert('✓ Profile updated successfully!');
+            btn.textContent = 'Save Changes';
+            btn.disabled = false;
+            closeModal('editProfileModal');
+        }, 1500);
+    }
+
+    function changePassword() {
+        const btn = event.target;
+        btn.innerHTML = '<span class="loading"></span>';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            alert('✓ Password changed successfully!\n\nYou can now login with your new password.');
+            btn.textContent = 'Update Password';
+            btn.disabled = false;
+            closeModal('changePasswordModal');
+        }, 1500);
+    }
+
+    function changePin() {
+        const btn = event.target;
+        btn.innerHTML = '<span class="loading"></span>';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            alert('✓ Transaction PIN changed successfully!');
+            btn.textContent = 'Update PIN';
+            btn.disabled = false;
+            closeModal('changePinModal');
+        }, 1500);
+    }
+
+    function logout() {
+        const btn = event.target;
+        btn.innerHTML = '<span class="loading"></span>';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            alert('Logged out successfully!\n\nRedirecting to login page...');
+        }, 1000);
+    }
+
+    function deleteAccount() {
+        const confirmText = document.getElementById('deleteConfirm').value;
+        
+        if (confirmText !== 'DELETE') {
+            alert('❌ Please type DELETE to confirm account deletion');
+            return;
+        }
+
+        const btn = event.target;
+        btn.innerHTML = '<span class="loading"></span>';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            alert('Account deleted successfully.\n\nWe\'re sorry to see you go. Your data has been permanently removed.');
+        }, 2000);
+    }
+
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            navItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Prevent default form submission on Enter key
+    document.querySelectorAll('.input-field').forEach(input => {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+</body>
+</html>
