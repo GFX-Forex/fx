@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - PayUtility</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px 24px;
+            color: white;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-title p {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .refresh-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .refresh-btn:active {
+            transform: rotate(360deg);
+        }
+
+        /* TIME SELECTOR */
+        .time-selector {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .time-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-btn.active {
+            background: white;
+            color: #1e40af;
+        }
+
+        /* STATS GRID */
+        .stats-section {
+            padding: 16px 20px;
+            background: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .stat-card:active {
+            transform: scale(0.98);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .stat-change.positive {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .stat-change.negative {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .stat-title {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1f2937;
+            letter-spacing: -0.5px;
+        }
+
+        /* CHART SECTION */
+        .chart-section {
+            padding: 0 20px 20px;
+            background: white;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .chart-card {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 220px;
+            margin-top: 12px;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* TOP SERVICES */
+        .service-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px;
+            background: #f9fafb;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .service-row:active {
+            transform: translateX(5px);
+            background: #f3f4f6;
+        }
+
+        .service-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .service-number {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .service-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 3px;
+        }
+
+        .service-info p {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .service-right {
+            text-align: right;
+        }
+
+        .service-amount {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 3px;
+        }
+
+        .service-trend {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 11px;
+            font-weight: 600;
+            justify-content: flex-end;
+        }
+
+        .service-trend.up {
+            color: #059669;
+        }
+
+        .service-trend.down {
+            color: #dc2626;
+        }
+
+        /* QUICK STATS */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quick-stat {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .quick-stat-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .quick-stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .quick-stat-label {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-value {
+            animation: countUp 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="window.history.back()">←</button>
+                <div class="header-title">
+                    <h1>Analytics Dashboard</h1>
+                    <p>Real-time performance insights</p>
+                </div>
+                <button class="refresh-btn" id="refreshBtn">🔄</button>
+            </div>
+
+            <div class="time-selector">
+                <button class="time-btn" data-range="24h">24H</button>
+                <button class="time-btn active" data-range="7d">7D</button>
+                <button class="time-btn" data-range="30d">30D</button>
+                <button class="time-btn" data-range="1y">1Y</button>
+            </div>
+        </div>
+
+        <!-- STATS GRID -->
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-change positive">↑ 23.5%</div>
+                    </div>
+                    <div class="stat-title">Total Revenue</div>
+                    <div class="stat-value" id="revenue">₦0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-change positive">↑ 15.3%</div>
+                    </div>
+                    <div class="stat-title">Active Users</div>
+                    <div class="stat-value" id="users">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-change positive">↑ 8.7%</div>
+                    </div>
+                    <div class="stat-title">Transactions</div>
+                    <div class="stat-value" id="transactions">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">✓</div>
+                        <div class="stat-change positive">↑ 2.1%</div>
+                    </div>
+                    <div class="stat-title">Success Rate</div>
+                    <div class="stat-value" id="successRate">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVENUE CHART -->
+        <div class="chart-section">
+            <div class="section-header">
+                <h2 class="section-title">Revenue Trend</h2>
+            </div>
+            <div class="chart-card">
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICE DISTRIBUTION -->
+        <div class="chart-section">
+            <div class="section-header">
+                <h2 class="section-title">Service Distribution</h2>
+            </div>
+            <div class="chart-card">
+                <div class="chart-container">
+                    <canvas id="serviceChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #3b82f6;"></div>
+                        Airtime
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #8b5cf6;"></div>
+                        Data
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #ec4899;"></div>
+                        Electricity
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #f59e0b;"></div>
+                        Cable TV
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #10b981;"></div>
+                        Others
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOP SERVICES -->
+        <div class="chart-section">
+            <div class="section-header">
+                <h2 class="section-title">Top Performing Services</h2>
+            </div>
+            <div class="service-list">
+                <div class="service-row">
+                    <div class="service-left">
+                        <div class="service-number">#1</div>
+                        <div class="service-info">
+                            <h4>MTN Airtime</h4>
+                            <p>1,247 transactions</p>
+                        </div>
+                    </div>
+                    <div class="service-right">
+                        <div class="service-amount">₦234,500</div>
+                        <div class="service-trend up">↑ 12.5%</div>
+                    </div>
+                </div>
+
+                <div class="service-row">
+                    <div class="service-left">
+                        <div class="service-number">#2</div>
+                        <div class="service-info">
+                            <h4>DSTV Premium</h4>
+                            <p>89 transactions</p>
+                        </div>
+                    </div>
+                    <div class="service-right">
+                        <div class="service-amount">₦189,200</div>
+                        <div class="service-trend down">↓ 3.2%</div>
+                    </div>
+                </div>
+
+                <div class="service-row">
+                    <div class="service-left">
+                        <div class="service-number">#3</div>
+                        <div class="service-info">
+                            <h4>Glo Data 10GB</h4>
+                            <p>892 transactions</p>
+                        </div>
+                    </div>
+                    <div class="service-right">
+                        <div class="service-amount">₦156,780</div>
+                        <div class="service-trend up">↑ 8.9%</div>
+                    </div>
+                </div>
+
+                <div class="service-row">
+                    <div class="service-left">
+                        <div class="service-number">#4</div>
+                        <div class="service-info">
+                            <h4>EKEDC Token</h4>
+                            <p>234 transactions</p>
+                        </div>
+                    </div>
+                    <div class="service-right">
+                        <div class="service-amount">₦145,600</div>
+                        <div class="service-trend up">↑ 15.3%</div>
+                    </div>
+                </div>
+
+                <div class="service-row">
+                    <div class="service-left">
+                        <div class="service-number">#5</div>
+                        <div class="service-info">
+                            <h4>Bank Transfer</h4>
+                            <p>156 transactions</p>
+                        </div>
+                    </div>
+                    <div class="service-right">
+                        <div class="service-amount">₦98,450</div>
+                        <div class="service-trend down">↓ 5.1%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK STATS -->
+        <div class="chart-section">
+            <div class="section-header">
+                <h2 class="section-title">Quick Stats</h2>
+            </div>
+            <div class="quick-stats">
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">⚡</div>
+                    <div class="quick-stat-value">1.2s</div>
+                    <div class="quick-stat-label">Avg. Response Time</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">💸</div>
+                    <div class="quick-stat-value">₦62k</div>
+                    <div class="quick-stat-label">Avg. Transaction</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">🎯</div>
+                    <div class="quick-stat-value">4.8</div>
+                    <div class="quick-stat-label">User Rating</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">📱</div>
+                    <div class="quick-stat-value">89%</div>
+                    <div class="quick-stat-label">Mobile Users</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Analytics</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animated counter
+        function animateValue(element, start, end, duration, prefix = '', suffix = '') {
+            let current = start;
+            const range = end - start;
+            const increment = range / (duration / 16);
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = prefix + Math.floor(current).toLocaleString() + suffix;
+            }, 16);
+        }
+
+        // Animate stats on load
+        window.addEventListener('load', () => {
+            animateValue(document.getElementById('revenue'), 0, 2847650, 2000, '₦');
+            animateValue(document.getElementById('users'), 0, 12847, 2000);
+            animateValue(document.getElementById('transactions'), 0, 45623, 2000);
+            animateValue(document.getElementById('successRate'), 0, 98.7, 2000, '', '%');
+        });
+
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [125000, 198000, 245000, 289000, 412000, 523000, 387000],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '₦' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₦' + (value / 1000) + 'k';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Service Distribution Chart
+        const serviceCtx = document.getElementById('serviceChart').getContext('2d');
+        const serviceChart = new Chart(serviceCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Airtime', 'Data', 'Electricity', 'Cable TV', 'Others'],
+                datasets: [{
+                    data: [32, 28, 18, 12, 10],
+                    backgroundColor: [
+                        '#3b82f6',
+                        '#8b5cf6',
+                        '#ec4899',
+                        '#f59e0b',
+                        '#10b981'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Time selector
+        const timeBtns = document.querySelectorAll('.time-btn');
+        timeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                timeBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Refresh button
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            this.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                this.style.transform = 'rotate(0deg)';
+                location.reload();
+            }, 600);
+        });
+
+        // Bottom navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
