@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -50%;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+            animation: pulse 10s ease-in-out infinite reverse;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+            animation: fadeIn 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin-bottom: 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.3), transparent);
+            border-radius: 26px;
+            z-index: -1;
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .app-name {
+            font-size: 36px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+
+        .app-tagline {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            margin-bottom: 48px;
+            line-height: 1.5;
+        }
+
+        .features {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 60px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .feature-icon {
+            font-size: 20px;
+        }
+
+        .welcome-actions {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: white;
+            color: #1e40af;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Auth Container */
+        .auth-container {
+            display: none;
+            background: white;
+            min-height: 100vh;
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .auth-container.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .auth-header {
+            padding: 20px 20px 32px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .auth-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .auth-form {
+            padding: 32px 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #9ca3af;
+            z-index: 1;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .input-field.error {
+            border-color: #ef4444;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #9ca3af;
+            z-index: 1;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: #6b7280;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #ef4444;
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #f59e0b;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: #10b981;
+        }
+
+        .hint-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-top: 2px;
+            accent-color: #3b82f6;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .checkbox-label a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .checkbox-label a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 24px;
+        }
+
+        .forgot-password a {
+            font-size: 13px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider span {
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 600;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 14px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            border-color: #3b82f6;
+            background: #f9fafb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .social-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .auth-footer a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message, .success-message {
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-message.show, .success-message.show {
+            display: flex;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            color: #dc2626;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            color: #047857;
+        }
+
+        /* Phone Number Input */
+        .phone-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .country-code {
+            width: 85px;
+            padding: 16px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+            background: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .phone-input {
+            flex: 1;
+            padding: 16px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-screen {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                width: 85px;
+                height: 85px;
+                font-size: 42px;
+            }
+
+            .app-name {
+                font-size: 30px;
+            }
+
+            .features {
+                gap: 16px;
+            }
+
+            .feature-item {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div class="container" id="welcomeScreen">
+        <div class="welcome-screen">
+            <div class="logo">💳</div>
+            <h1 class="app-name">PayUtility</h1>
+            <p class="app-tagline">Your trusted all-in-one payment platform<br>for bills, transfers & more</p>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    Instant Payments
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔒</span>
+                    Secure & Safe
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💰</span>
+                    Best Rates
+                </div>
+            </div>
+
+            <div class="welcome-actions">
+                <button class="btn btn-primary" onclick="showLogin()">
+                    Login to Account
+                </button>
+                <button class="btn btn-secondary" onclick="showSignup()">
+                    Create New Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="auth-container" id="loginContainer">
+        <div class="auth-header">
+            <button class="back-btn" onclick="showWelcome()">←</button>
+            <div class="header-content">
+                <h2 class="auth-title">Welcome Back!</h2>
+                <p class="auth-subtitle">Login to continue your seamless payment experience</p>
+            </div>
+        </div>
+
+        <form class="auth-form" id="loginForm">
+            <div class="error-message" id="loginError">
+                ❌ <span id="loginErrorText">Invalid email or password. Please try again.</span>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Email Address or Phone Number</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📧</span>
+                    <input type="text" class="input-field" placeholder="Enter email or phone" id="loginEmail" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" class="input-field" placeholder="Enter your password" id="loginPassword" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">👁️</button>
+                </div>
+            </div>
+
+            <div class="forgot-password">
+                <a href="forgot-password.html" onclick="alert('Password Reset\n\nA reset link will be sent to your registered email/phone.')">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="submit-btn">Login</button>
+
+            <div class="divider">
+                <span>OR CONTINUE WITH</span>
+            </div>
+
+            <div class="social-login">
+                <button type="button" class="social-btn" onclick="socialLogin('google')">
+                    🔍 Google
+                </button>
+                <button type="button" class="social-btn" onclick="socialLogin('apple')">
+                    🍎 Apple
+                </button>
+            </div>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account? <a href="#signup" onclick="showSignup()">Sign Up</a>
+        </div>
+    </div>
+
+    <!-- Signup Container -->
+    <div class="auth-container" id="signupContainer">
+        <div class="auth-header">
+            <button class="back-btn" onclick="showWelcome()">←</button>
+            <div class="header-content">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Join thousands of users enjoying seamless payments</p>
+            </div>
+        </div>
+
+        <form class="auth-form" id="signupForm">
+            <div class="success-message" id="signupSuccess">
+                ✓ <span>Account created successfully! Redirecting...</span>
+            </div>
+
+            <div class="error-message" id="signupError">
+                ❌ <span id="signupErrorText">Please fill all required fields.</span>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Name <span class="required">*</span></label>
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" class="input-field" placeholder="First name" id="signupFirstName" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" class="input-field" placeholder="Last name" id="signupLastName" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Email Address <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📧</span>
+                    <input type="email" class="input-field" placeholder="Enter email address" id="signupEmail" required>
+                </div>
+                <p class="hint-text">We'll send a verification link to this email</p>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Phone Number <span class="required">*</span></label>
+                <div class="phone-input-wrapper">
+                    <div class="country-code">
+                        🇳🇬 +234
+                    </div>
+                    <input type="tel" class="input-field phone-input" placeholder="8012345678" id="signupPhone" maxlength="10" required>
+                </div>
+                <p class="hint-text">Enter your 10-digit phone number</p>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Password <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" class="input-field" placeholder="Create strong password" id="signupPassword" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('signupPassword')">👁️</button>
+                </div>
+                <div class="password-strength" id="passwordStrength">
+                    <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                </div>
+                <p class="hint-text">Minimum 8 characters with uppercase, lowercase & number</p>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Confirm Password <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" class="input-field" placeholder="Re-enter password" id="signupConfirmPassword" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</button>
+                </div>
+            </div>
+
+            <div class="checkbox-wrapper">
+                <input type="checkbox" class="checkbox" id="termsCheckbox" required>
+                <label class="checkbox-label" for="termsCheckbox">
+                    I agree to PayUtility's <a href="terms-conditions.html">Terms & Conditions</a> and <a href="privacy-policy.html">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Account</button>
+
+            <div class="divider">
+                <span>OR SIGN UP WITH</span>
+            </div>
+
+            <div class="social-login">
+                <button type="button" class="social-btn" onclick="socialLogin('google')">
+                    🔍 Google
+                </button>
+                <button type="button" class="social-btn" onclick="socialLogin('apple')">
+                    🍎 Apple
+                </button>
+            </div>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="#login" onclick="showLogin()">Login</a>
+        </div>
+    </div>
+
+    <script>
+        // Screen navigation
+        function showWelcome() {
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            document.getElementById('loginContainer').classList.remove('active');
+            document.getElementById('signupContainer').classList.remove('active');
+            resetForms();
+        }
+
+        function showLogin() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('signupContainer').classList.remove('active');
+            document.getElementById('loginContainer').classList.add('active');
+            resetForms();
+        }
+
+        function showSignup() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('loginContainer').classList.remove('active');
+            document.getElementById('signupContainer').classList.add('active');
+            resetForms();
+        }
+
+        function resetForms() {
+            document.getElementById('loginForm').reset();
+            document.getElementById('signupForm').reset();
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('signupError').classList.remove('show');
+            document.getElementById('signupSuccess').classList.remove('show');
+            document.getElementById('passwordStrength').classList.remove('show');
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const btn = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        // Password strength checker
+        document.getElementById('signupPassword').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthContainer = document.getElementById('passwordStrength');
+            
+            if (password.length === 0) {
+                strengthContainer.classList.remove('show');
+                return;
+            }
+            
+            strengthContainer.classList.add('show');
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            strengthBar.className = 'password-strength-bar';
+            if (strength <= 1) {
+                strengthBar.classList.add('weak');
+            } else if (strength <= 3) {
+                strengthBar.classList.add('medium');
+            } else {
+                strengthBar.classList.add('strong');
+            }
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            // Validation
+            if (!email || !password) {
+                showLoginError('Please fill all required fields.');
+                return;
+            }
+
+            // Simulate API call
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                // Success - redirect to dashboard
+                alert('✓ Login Successful!\n\nWelcome back to PayUtility.\nRedirecting to dashboard...');
+                 window.location.href = 'dashboard.html';
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+
+        function showLoginError(message) {
+            const errorEl = document.getElementById('loginError');
+            document.getElementById('loginErrorText').textContent = message;
+            errorEl.classList.add('show');
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 3000);
+        }
+
+        // Signup form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('signupFirstName').value.trim();
+            const lastName = document.getElementById('signupLastName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const termsAccepted = document.getElementById('termsCheckbox').checked;
+
+            // Validation
+            if (!firstName || !lastName) {
+                showSignupError('Please enter your first and last name.');
+                return;
+            }
+
+            if (firstName.length < 2 || lastName.length < 2) {
+                showSignupError('Names must be at least 2 characters long.');
+                return;
+            }
+
+            if (!email) {
+                showSignupError('Please enter your email address.');
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showSignupError('Please enter a valid email address.');
+                return;
+            }
+
+            if (!phone) {
+                showSignupError('Please enter your phone number.');
+                return;
+            }
+
+            if (phone.length !== 10) {
+                showSignupError('Phone number must be 10 digits.');
+                return;
+            }
+
+            if (!password) {
+                showSignupError('Please create a password.');
+                return;
+            }
+
+            if (password.length < 8) {
+                showSignupError('Password must be at least 8 characters long.');
+                return;
+            }
+
+            if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+                showSignupError('Password must contain both uppercase and lowercase letters.');
+                return;
+            }
+
+            if (!/[0-9]/.test(password)) {
+                showSignupError('Password must contain at least one number.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showSignupError('Passwords do not match.');
+                return;
+            }
+
+            if (!termsAccepted) {
+                showSignupError('Please accept the Terms & Conditions to continue.');
+                return;
+            }
+
+            // Simulate API call
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Creating Account...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                // Success
+                document.getElementById('signupSuccess').classList.add('show');
+                setTimeout(() => {
+                    alert('✓ Account Created Successfully!\n\nWelcome to PayUtility, ' + firstName + '!\n\nA verification email has been sent to ' + email + '.\n\nRedirecting to dashboard...');
+                    // window.location.href = 'dashboard.html';
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            }, 1500);
+        });
+
+        function showSignupError(message) {
+            const errorEl = document.getElementById('signupError');
+            document.getElementById('signupErrorText').textContent = message;
+            errorEl.classList.add('show');
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 3000);
+        }
+
+        // Social login
+        function socialLogin(provider) {
+            const providerName = provider.charAt(0).toUpperCase() + provider.slice(1);
+            alert(`${providerName} Login\n\nThis would initiate OAuth ${providerName} login.\n\nIn production, this connects to ${providerName}'s authentication service.`);
+        }
+
+        // Phone number formatting - only numbers
+        document.getElementById('signupPhone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Name validation - only letters and spaces
+        document.getElementById('signupFirstName').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+
+        document.getElementById('signupLastName').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+
+        // Real-time email validation
+        document.getElementById('signupEmail').addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                this.classList.add('error');
+            } else {
+                this.classList.remove('error');
+            }
+        });
+
+        // Real-time password match validation
+        document.getElementById('signupConfirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('signupPassword').value;
+            if (this.value && this.value !== password) {
+                this.classList.add('error');
+            } else {
+                this.classList.remove('error');
+            }
+        });
+    </script>
+</body>
+</html>
