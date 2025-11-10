@@ -487,6 +487,44 @@
                 grid-template-columns: repeat(4, 1fr);
             }
         }
+
+
+
+
+        .bottom-nav ion-icon {
+    font-size: 24px;
+    color: #9ca3af; /* inactive grey */
+    transition: color .3s ease;
+}
+
+.nav-item.active ion-icon {
+    color: #3b82f6; /* active blue (matches your header) */
+}
+
+.nav-item .nav-label {
+    color: #9ca3af;
+}
+
+.nav-item.active .nav-label {
+    color: #3b82f6;
+}
+
+
+
+
+
+
+
+.quick-link-icon ion-icon {
+    font-size: 24px;       /* size of the icon */
+    color: #1e40af;        /* primary deep blue */
+    transition: color 0.2s;
+}
+
+.quick-link:hover ion-icon {
+    color: #3b82f6;        /* lighter blue on hover */
+}
+
     </style>
 </head>
 <body>
@@ -555,44 +593,50 @@
             </div>
 
             <div class="services-grid">
-                <div class="service-item" onclick="location.href='airtime-data.html'">
-                    <div class="service-icon">📱</div>
-                    <div class="service-name">Airtime</div>
-                </div>
-                <div class="service-item" onclick="location.href='paybills.html'">
-                    <div class="service-icon">⚡</div>
-                    <div class="service-name">Pay Bills</div>
-                </div>
+    <div class="service-item" onclick="location.href='airtime-data.html'">
+        <div class="service-icon"><ion-icon name="phone-portrait-outline"></ion-icon></div>
+        <div class="service-name">Airtime</div>
+    </div>
 
-                
-                <div class="service-item" onclick="location.href='virtual-cards.html'">
-                    <div class="service-icon">💳</div>
-                    <div class="service-name">Cards</div>
-                </div>
-                
-                <div class="service-item" onclick="location.href='referral-rewards.html'">
-                    <div class="service-icon">⭐</div>
-                    <div class="service-name">Rewards</div>
-                </div>
-            </div>
+    <div class="service-item" onclick="location.href='paybills.html'">
+        <div class="service-icon"><ion-icon name="flash-outline"></ion-icon></div>
+        <div class="service-name">Pay Bills</div>
+    </div>
+
+    <div class="service-item" onclick="location.href='virtual-cards.html'">
+        <div class="service-icon"><ion-icon name="card-outline"></ion-icon></div>
+        <div class="service-name">Cards</div>
+    </div>
+
+    <div class="service-item" onclick="location.href='referral-rewards.html'">
+        <div class="service-icon"><ion-icon name="star-outline"></ion-icon></div>
+        <div class="service-name">Rewards</div>
+    </div>
+</div>
+
 
             <!-- QUICK LINKS -->
             <div class="quick-links">
-                <div class="quick-link" onclick="location.href='loan-application.html'">
-                    <div class="quick-link-icon">💰</div>
-                    <div class="quick-link-text">
-                        <h4>Quick Loans</h4>
-                        <p>Get instant credit</p>
-                    </div>
-                </div>
-                <div class="quick-link" onclick="location.href='savings-investments.html'">
-                    <div class="quick-link-icon">🏦</div>
-                    <div class="quick-link-text">
-                        <h4>Savings</h4>
-                        <p>Save & earn interest</p>
-                    </div>
-                </div>
-            </div>
+             <div class="quick-link" onclick="location.href='loan-application.html'">
+                 <div class="quick-link-icon">
+                     <ion-icon name="cash-outline"></ion-icon>
+                 </div>
+                 <div class="quick-link-text">
+                     <h4>Quick Loans</h4>
+                     <p>Get instant credit</p>
+                 </div>
+             </div>
+         
+             <div class="quick-link" onclick="location.href='savings-investments.html'">
+                 <div class="quick-link-icon">
+                     <ion-icon name="business-outline"></ion-icon>
+                 </div>
+                 <div class="quick-link-text">
+                     <h4>Savings</h4>
+                     <p>Save & earn interest</p>
+                 </div>
+             </div>
+         </div>
         </div>
 
         <!-- REFERRAL BANNER -->
@@ -666,25 +710,31 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION -->
-        <div class="bottom-nav">
-            <div class="nav-item active">
-                <div class="nav-icon">🏠</div>
-                <div class="nav-label">Home</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">💳</div>
-                <div class="nav-label">Services</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">📜</div>
-                <div class="nav-label">History</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">👤</div>
-                <div class="nav-label">Account</div>
-            </div>
-        </div>
+    
+<!-- BOTTOM NAVIGATION -->
+<div class="bottom-nav">
+    <div class="nav-item active">
+        <i data-lucide="home" class="nav-icon"></i>
+        <div class="nav-label">Home</div>
+    </div>
+
+    <div class="nav-item">
+        <i data-lucide="credit-card" class="nav-icon"></i>
+        <div class="nav-label">Services</div>
+    </div>
+
+    <div class="nav-item">
+        <i data-lucide="history" class="nav-icon"></i>
+        <div class="nav-label">History</div>
+    </div>
+
+    <div class="nav-item">
+        <i data-lucide="user" class="nav-icon"></i>
+        <div class="nav-label">Account</div>
+    </div>
+</div>
+
+
     </div>
 
     <script>
@@ -713,5 +763,14 @@
         const hour = new Date().getHours();
         const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
     </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
 </body>
 </html>
