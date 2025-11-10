@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px 24px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .header-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .header-icon:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .balance-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .balance-info {
+            flex: 1;
+        }
+
+        .balance-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .eye-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .eye-icon:active {
+            transform: scale(0.95);
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .transfer-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .transfer-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab:active {
+            transform: scale(0.97);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .view-all {
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-all:active {
+            transform: scale(0.95);
+        }
+
+        .beneficiaries-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+            scrollbar-width: none;
+        }
+
+        .beneficiaries-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .beneficiary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            min-width: 70px;
+        }
+
+        .beneficiary-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+
+        .beneficiary-item:active .beneficiary-avatar {
+            transform: scale(0.95);
+        }
+
+        .beneficiary-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            text-align: center;
+            max-width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .add-beneficiary {
+            width: 60px;
+            height: 60px;
+            background: #f3f4f6;
+            border: 2px dashed #9ca3af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #6b7280;
+        }
+
+        .transfer-form {
+            background: white;
+            border: 2px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .input-field.large {
+            font-size: 28px;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+            transition: all 0.2s;
+        }
+
+        .select-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: white;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #9ca3af;
+        }
+
+        .input-with-icon .input-field {
+            padding-left: 48px;
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-amount {
+            padding: 10px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #4b5563;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-amount:active {
+            transform: scale(0.95);
+            border-color: #3b82f6;
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 12px;
+            background: #f3f4f6;
+            color: #6b7280;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+
+        .verify-btn:active {
+            transform: scale(0.98);
+        }
+
+        .verified-info {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #dcfce7;
+            border-radius: 10px;
+            margin-top: 12px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .verified-info.show {
+            display: flex;
+        }
+
+        .verified-icon {
+            width: 36px;
+            height: 36px;
+            background: #059669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .verified-details {
+            flex: 1;
+        }
+
+        .verified-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 2px;
+        }
+
+        .verified-bank {
+            font-size: 12px;
+            color: #047857;
+            font-weight: 500;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            font-size: 12px;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+
+        .transfer-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            margin-top: 20px;
+        }
+
+        .transfer-btn:active {
+            transform: scale(0.98);
+        }
+
+        .transfer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: #f9fafb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .transaction-item:active {
+            transform: scale(0.98);
+            background: #f3f4f6;
+        }
+
+        .transaction-icon {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .transaction-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .transaction-amount {
+            font-size: 15px;
+            font-weight: 800;
+            color: #dc2626;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+            transition: all 0.2s;
+        }
+
+        .nav-item:active {
+            transform: scale(0.95);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-content {
+            padding: 20px 24px;
+        }
+
+        .modal-actions {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .confirm-details {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .confirm-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .confirm-row:last-child {
+            border-bottom: none;
+        }
+
+        .confirm-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .confirm-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            text-align: right;
+        }
+
+        .confirm-value.highlight {
+            font-size: 20px;
+            color: #3b82f6;
+        }
+
+        .pin-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .pin-digit {
+            width: 50px;
+            height: 56px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            background: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .pin-digit:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            display: none;
+            animation: slideUp 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <div class="header-title">
+                    <h1>Transfer</h1>
+                    <p>Send money instantly</p>
+                </div>
+                <button class="header-icon" onclick="showTransferHistory()">📜</button>
+            </div>
+
+            <div class="balance-card">
+                <div class="balance-info">
+                    <div class="balance-label">Available Balance</div>
+                    <div class="balance-amount" id="balanceAmount">₦125,450</div>
+                </div>
+                <button class="eye-icon" id="toggleBalance" onclick="toggleBalance()">👁️</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="transfer-tabs">
+                <button class="tab active" onclick="switchTab('payutility')">
+                    <span>⚡</span> PayUtility
+                </button>
+                <button class="tab" onclick="switchTab('bank')">
+                    <span>🏦</span> Bank Transfer
+                </button>
+                <button class="tab" onclick="switchTab('card')">
+                    <span>💳</span> Card
+                </button>
+            </div>
+
+            <div class="section active" id="payutility-section">
+                <div class="section-title">
+                    <span>Recent</span>
+                    <span class="view-all" onclick="viewAllBeneficiaries()">View All →</span>
+                </div>
+
+                <div class="beneficiaries-scroll">
+                    <div class="beneficiary-item" onclick="selectBeneficiary('Blessing', '08012345678')">
+                        <div class="beneficiary-avatar">BO</div>
+                        <div class="beneficiary-name">Blessing</div>
+                    </div>
+                    <div class="beneficiary-item" onclick="selectBeneficiary('David', '08087654321')">
+                        <div class="beneficiary-avatar">DE</div>
+                        <div class="beneficiary-name">David</div>
+                    </div>
+                    <div class="beneficiary-item" onclick="selectBeneficiary('Faith', '08123456789')">
+                        <div class="beneficiary-avatar">FO</div>
+                        <div class="beneficiary-name">Faith</div>
+                    </div>
+                    <div class="beneficiary-item" onclick="selectBeneficiary('Ibrahim', '07098765432')">
+                        <div class="beneficiary-avatar">IM</div>
+                        <div class="beneficiary-name">Ibrahim</div>
+                    </div>
+                    <div class="beneficiary-item">
+                        <div class="add-beneficiary">➕</div>
+                        <div class="beneficiary-name">Add New</div>
+                    </div>
+                </div>
+
+                <div class="transfer-form">
+                    <div class="form-group">
+                        <label class="label">PayUtility ID / Phone Number</label>
+                        <div class="input-with-icon">
+                            <span class="input-icon">👤</span>
+                            <input type="text" class="input-field" id="payutilityId" placeholder="@username or phone number">
+                        </div>
+                        <button class="verify-btn" onclick="verifyPayUtilityUser()">Verify User</button>
+                        <div class="verified-info" id="verifiedInfo">
+                            <div class="verified-icon">✓</div>
+                            <div class="verified-details">
+                                <div class="verified-name" id="verifiedName"></div>
+                                <div class="verified-bank" id="verifiedPhone"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Amount</label>
+                        <input type="number" class="input-field large" id="payutilityAmount" placeholder="₦0" min="100">
+                        <div class="quick-amounts">
+                            <div class="quick-amount" onclick="setAmount('payutility', 1000)">₦1,000</div>
+                            <div class="quick-amount" onclick="setAmount('payutility', 5000)">₦5,000</div>
+                            <div class="quick-amount" onclick="setAmount('payutility', 10000)">₦10,000</div>
+                            <div class="quick-amount" onclick="setAmount('payutility', 20000)">₦20,000</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Description (Optional)</label>
+                        <input type="text" class="input-field" id="payutilityDescription" placeholder="What's this for?">
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>⚡ Instant:</strong> PayUtility transfers are instant and free!</p>
+                    </div>
+
+                    <button class="transfer-btn" onclick="initiateTransfer('payutility')">Continue to Transfer</button>
+                </div>
+            </div>
+
+            <div class="section" id="bank-section">
+                <div class="transfer-form">
+                    <div class="form-group">
+                        <label class="label">Select Bank</label>
+                        <select class="select-field" id="bankName">
+                            <option value="">Choose bank</option>
+                            <option value="GTBank">GTBank</option>
+                            <option value="Access Bank">Access Bank</option>
+                            <option value="Zenith Bank">Zenith Bank</option>
+                            <option value="UBA">UBA</option>
+                            <option value="First Bank">First Bank</option>
+                            <option value="Fidelity Bank">Fidelity Bank</option>
+                            <option value="Union Bank">Union Bank</option>
+                            <option value="Stanbic IBTC">Stanbic IBTC</option>
+                            <option value="Sterling Bank">Sterling Bank</option>
+                            <option value="Wema Bank">Wema Bank</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Account Number</label>
+                        <input type="text" class="input-field" id="bankAccount" placeholder="0123456789" maxlength="10">
+                        <button class="verify-btn" onclick="verifyBankAccount()">Verify Account</button>
+                        <div class="verified-info" id="bankVerifiedInfo">
+                            <div class="verified-icon">✓</div>
+                            <div class="verified-details">
+                                <div class="verified-name" id="bankVerifiedName"></div>
+                                <div class="verified-bank" id="bankVerifiedBank"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Amount</label>
+                        <input type="number" class="input-field large" id="bankAmount" placeholder="₦0" min="100">
+                        <div class="quick-amounts">
+                            <div class="quick-amount" onclick="setAmount('bank', 1000)">₦1,000</div>
+                            <div class="quick-amount" onclick="setAmount('bank', 5000)">₦5,000</div>
+                            <div class="quick-amount" onclick="setAmount('bank', 10000)">₦10,000</div>
+                            <div class="quick-amount" onclick="setAmount('bank', 50000)">₦50,000</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Narration (Optional)</label>
+                        <input type="text" class="input-field" id="bankNarration" placeholder="Payment description">
+                    </div>
+
+                    <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+                        <p style="color: #78350f;"><strong>ℹ️ Fee:</strong> Bank transfers attract a ₦50 fee.</p>
+                    </div>
+
+                    <button class="transfer-btn" onclick="initiateTransfer('bank')">Continue to Transfer</button>
+                </div>
+            </div>
+
+            <div class="section" id="card-section">
+                <div class="transfer-form">
+                    <div class="form-group">
+                        <label class="label">Card Number</label>
+                        <input type="text" class="input-field" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Amount</label>
+                        <input type="number" class="input-field large" id="cardAmount" placeholder="₦0" min="100">
+                        <div class="quick-amounts">
+                            <div class="quick-amount" onclick="setAmount('card', 1000)">₦1,000</div>
+                            <div class="quick-amount" onclick="setAmount('card', 5000)">₦5,000</div>
+                            <div class="quick-amount" onclick="setAmount('card', 10000)">₦10,000</div>
+                            <div class="quick-amount" onclick="setAmount('card', 20000)">₦20,000</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>💳 Note:</strong> Card transfers are processed within 24 hours.</p>
+                    </div>
+
+                    <button class="transfer-btn" onclick="initiateTransfer('card')">Continue to Transfer</button>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 32px;">
+                <span>Recent Transfers</span>
+            </div>
+
+            <div class="transactions-list">
+                <div class="transaction-item" onclick="repeatTransfer('Blessing Okoro', '5000')">
+                    <div class="transaction-icon">👤</div>
+                    <div class="transaction-details">
+                        <div class="transaction-name">Blessing Okoro</div>
+                        <div class="transaction-date">Today, 2:30 PM</div>
+                    </div>
+                    <div class="transaction-amount">-₦5,000</div>
+                </div>
+
+                <div class="transaction-item" onclick="repeatTransfer('David Eze', '10000')">
+                    <div class="transaction-icon">👤</div>
+                    <div class="transaction-details">
+                        <div class="transaction-name">David Eze</div>
+                        <div class="transaction-date">Yesterday</div>
+                    </div>
+                    <div class="transaction-amount">-₦10,000</div>
+                </div>
+
+                <div class="transaction-item" onclick="repeatTransfer('GTBank Transfer', '25000')">
+                    <div class="transaction-icon">🏦</div>
+                    <div class="transaction-details">
+                        <div class="transaction-name">GTBank - 0123456789</div>
+                        <div class="transaction-date">2 days ago</div>
+                    </div>
+                    <div class="transaction-amount">-₦25,050</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Transfer</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span>✓</span> Confirm Transfer
+                </h3>
+            </div>
+            <div class="modal-content">
+                <div class="confirm-details">
+                    <div class="confirm-row">
+                        <span class="confirm-label">Amount</span>
+                        <span class="confirm-value highlight" id="confirmAmount">₦0</span>
+                    </div>
+                    <div class="confirm-row">
+                        <span class="confirm-label">Recipient</span>
+                        <span class="confirm-value" id="confirmRecipient">-</span>
+                    </div>
+                    <div class="confirm-row">
+                        <span class="confirm-label">Bank/Platform</span>
+                        <span class="confirm-value" id="confirmBank">-</span>
+                    </div>
+                    <div class="confirm-row">
+                        <span class="confirm-label">Fee</span>
+                        <span class="confirm-value" id="confirmFee">₦0</span>
+                    </div>
+                    <div class="confirm-row">
+                        <span class="confirm-label">Total</span>
+                        <span class="confirm-value" id="confirmTotal">₦0</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>🔒 Secure:</strong> Enter your PIN to authorize this transaction.</p>
+                </div>
+
+                <label class="label">Enter PIN</label>
+                <div class="pin-input-container">
+                    <input type="password" class="pin-digit" maxlength="1" id="pin1" oninput="movePinFocus(1)">
+                    <input type="password" class="pin-digit" maxlength="1" id="pin2" oninput="movePinFocus(2)">
+                    <input type="password" class="pin-digit" maxlength="1" id="pin3" oninput="movePinFocus(3)">
+                    <input type="password" class="pin-digit" maxlength="1" id="pin4" oninput="movePinFocus(4)">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('confirmModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="processTransfer()">Transfer Now</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-content" style="text-align: center; padding: 40px 24px;">
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px;">
+                    ✓
+                </div>
+                <h2 style="font-size: 24px; font-weight: 800; color: #1f2937; margin-bottom: 12px;">Transfer Successful!</h2>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Your transfer of</p>
+                <p style="font-size: 32px; font-weight: 900; color: #059669; margin-bottom: 8px;" id="successAmount">₦0</p>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 24px;">to <strong id="successRecipient">-</strong> was successful</p>
+                
+                <div style="background: #f9fafb; padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="font-size: 12px; color: #6b7280;">Reference</span>
+                        <span style="font-size: 12px; font-weight: 700; color: #1f2937;" id="successRef">TRF123456789</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-size: 12px; color: #6b7280;">Date</span>
+                        <span style="font-size: 12px; font-weight: 700; color: #1f2937;" id="successDate">-</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="shareReceipt()">📤 Share Receipt</button>
+                <button class="btn btn-cancel" style="width: 100%;" onclick="closeModal('successModal')">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let currentTransferType = 'payutility';
+        let transferData = {};
+        let balanceVisible = true;
+
+        function toggleBalance() {
+            balanceVisible = !balanceVisible;
+            const balanceEl = document.getElementById('balanceAmount');
+            const toggleBtn = document.getElementById('toggleBalance');
+            
+            if (balanceVisible) {
+                balanceEl.textContent = '₦125,450';
+                toggleBtn.textContent = '👁️';
+            } else {
+                balanceEl.textContent = '••••••';
+                toggleBtn.textContent = '👁️‍🗨️';
+            }
+        }
+
+        function switchTab(tab) {
+            currentTransferType = tab;
+            
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            event.target.closest('.tab').classList.add('active');
+            document.getElementById(`${tab}-section`).classList.add('active');
+        }
+
+        function selectBeneficiary(name, phone) {
+            document.getElementById('payutilityId').value = phone;
+            showToast(`Selected ${name}`);
+            verifyPayUtilityUser();
+        }
+
+        function verifyPayUtilityUser() {
+            const userId = document.getElementById('payutilityId').value;
+            
+            if (!userId) {
+                showToast('Please enter PayUtility ID or phone number');
+                return;
+            }
+
+            const btn = event.target;
+            btn.textContent = 'Verifying...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const names = ['Blessing Okoro', 'David Eze', 'Faith Okafor', 'Ibrahim Musa'];
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                
+                document.getElementById('verifiedName').textContent = randomName;
+                document.getElementById('verifiedPhone').textContent = userId;
+                document.getElementById('verifiedInfo').classList.add('show');
+                
+                btn.textContent = 'Verified ✓';
+                btn.style.background = '#dcfce7';
+                btn.style.color = '#059669';
+                
+                transferData.recipientName = randomName;
+                transferData.recipientId = userId;
+                
+                showToast('User verified successfully!');
+            }, 1500);
+        }
+
+        function verifyBankAccount() {
+            const bankName = document.getElementById('bankName').value;
+            const accountNumber = document.getElementById('bankAccount').value;
+            
+            if (!bankName) {
+                showToast('Please select a bank');
+                return;
+            }
+            
+            if (!accountNumber || accountNumber.length !== 10) {
+                showToast('Please enter a valid 10-digit account number');
+                return;
+            }
+
+            const btn = event.target;
+            btn.textContent = 'Verifying...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const names = ['Adebayo Oluwaseun', 'Chioma Ibrahim', 'Mohammed Yusuf'];
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                
+                document.getElementById('bankVerifiedName').textContent = randomName;
+                document.getElementById('bankVerifiedBank').textContent = bankName;
+                document.getElementById('bankVerifiedInfo').classList.add('show');
+                
+                btn.textContent = 'Verified ✓';
+                btn.style.background = '#dcfce7';
+                btn.style.color = '#059669';
+                
+                transferData.recipientName = randomName;
+                transferData.accountNumber = accountNumber;
+                transferData.bankName = bankName;
+                
+                showToast('Account verified successfully!');
+            }, 1500);
+        }
+
+        function setAmount(type, amount) {
+            const amountField = document.getElementById(`${type}Amount`);
+            amountField.value = amount;
+            amountField.focus();
+        }
+
+        function initiateTransfer(type) {
+            let amount, fee = 0;
+            
+            if (type === 'payutility') {
+                amount = parseFloat(document.getElementById('payutilityAmount').value);
+                const description = document.getElementById('payutilityDescription').value;
+                
+                if (!transferData.recipientName) {
+                    showToast('Please verify the recipient first');
+                    return;
+                }
+                
+                transferData.description = description;
+                transferData.platform = 'PayUtility';
+                fee = 0;
+            } else if (type === 'bank') {
+                amount = parseFloat(document.getElementById('bankAmount').value);
+                const narration = document.getElementById('bankNarration').value;
+                
+                if (!transferData.recipientName) {
+                    showToast('Please verify the account first');
+                    return;
+                }
+                
+                transferData.narration = narration;
+                transferData.platform = transferData.bankName;
+                fee = 50;
+            } else if (type === 'card') {
+                amount = parseFloat(document.getElementById('cardAmount').value);
+                const cardNumber = document.getElementById('cardNumber').value;
+                
+                if (!cardNumber || cardNumber.length < 16) {
+                    showToast('Please enter a valid card number');
+                    return;
+                }
+                
+                transferData.recipientName = 'Card Holder';
+                transferData.platform = 'Card Transfer';
+                fee = 0;
+            }
+            
+            if (!amount || amount < 100) {
+                showToast('Minimum transfer amount is ₦100');
+                return;
+            }
+            
+            if (amount > 125450) {
+                showToast('Insufficient balance');
+                return;
+            }
+            
+            transferData.amount = amount;
+            transferData.fee = fee;
+            transferData.total = amount + fee;
+            transferData.type = type;
+            
+            document.getElementById('confirmAmount').textContent = `₦${amount.toLocaleString()}`;
+            document.getElementById('confirmRecipient').textContent = transferData.recipientName;
+            document.getElementById('confirmBank').textContent = transferData.platform;
+            document.getElementById('confirmFee').textContent = `₦${fee.toLocaleString()}`;
+            document.getElementById('confirmTotal').textContent = `₦${transferData.total.toLocaleString()}`;
+            
+            document.getElementById('confirmModal').classList.add('active');
+            
+            setTimeout(() => {
+                document.getElementById('pin1').focus();
+            }, 300);
+        }
+
+        function movePinFocus(current) {
+            if (current < 4) {
+                const nextInput = document.getElementById(`pin${current + 1}`);
+                if (event.target.value) {
+                    nextInput.focus();
+                }
+            }
+        }
+
+        function processTransfer() {
+            const pin = document.getElementById('pin1').value + 
+                        document.getElementById('pin2').value + 
+                        document.getElementById('pin3').value + 
+                        document.getElementById('pin4').value;
+            
+            if (pin.length !== 4) {
+                showToast('Please enter your 4-digit PIN');
+                return;
+            }
+
+            const btn = event.target;
+            btn.textContent = 'Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                closeModal('confirmModal');
+                
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById(`pin${i}`).value = '';
+                }
+                
+                const now = new Date();
+                const ref = 'TRF' + Date.now();
+                
+                document.getElementById('successAmount').textContent = `₦${transferData.amount.toLocaleString()}`;
+                document.getElementById('successRecipient').textContent = transferData.recipientName;
+                document.getElementById('successRef').textContent = ref;
+                document.getElementById('successDate').textContent = now.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                
+                document.getElementById('successModal').classList.add('active');
+                
+                btn.textContent = 'Transfer Now';
+                btn.disabled = false;
+                
+                if (transferData.type === 'payutility') {
+                    document.getElementById('payutilityAmount').value = '';
+                    document.getElementById('payutilityDescription').value = '';
+                } else if (transferData.type === 'bank') {
+                    document.getElementById('bankAmount').value = '';
+                    document.getElementById('bankNarration').value = '';
+                } else if (transferData.type === 'card') {
+                    document.getElementById('cardAmount').value = '';
+                    document.getElementById('cardNumber').value = '';
+                }
+            }, 2000);
+        }
+
+        function shareReceipt() {
+            const receipt = `PayUtility Transfer Receipt\n\nAmount: ₦${transferData.amount.toLocaleString()}\nRecipient: ${transferData.recipientName}\nPlatform: ${transferData.platform}\nReference: ${document.getElementById('successRef').textContent}\nDate: ${document.getElementById('successDate').textContent}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Transfer Receipt',
+                    text: receipt
+                }).catch(() => {
+                    copyToClipboard(receipt);
+                    showToast('Receipt copied to clipboard!');
+                });
+            } else {
+                copyToClipboard(receipt);
+                showToast('Receipt copied to clipboard!');
+            }
+        }
+
+        function repeatTransfer(name, amount) {
+            showToast(`Repeat transfer to ${name}`);
+        }
+
+        function viewAllBeneficiaries() {
+            showToast('All beneficiaries');
+        }
+
+        function showTransferHistory() {
+            showToast('Transfer history');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.left = '-999999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+
+        console.log('PayUtility Transfer page initialized successfully! 💸');
+    </script>
+</body>
+</html>
