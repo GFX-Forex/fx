@@ -730,7 +730,7 @@
             </div>
 
             <div class="forgot-password">
-                <a href="forgot-password.html" onclick="alert('Password Reset\n\nA reset link will be sent to your registered email/phone.')">Forgot Password?</a>
+                <a href="#forgot" onclick="alert('Password Reset\n\nA reset link will be sent to your registered email/phone.')">Forgot Password?</a>
             </div>
 
             <button type="submit" class="submit-btn">Login</button>
@@ -832,7 +832,7 @@
             <div class="checkbox-wrapper">
                 <input type="checkbox" class="checkbox" id="termsCheckbox" required>
                 <label class="checkbox-label" for="termsCheckbox">
-                    I agree to PayUtility's <a href="terms-conditions.html">Terms & Conditions</a> and <a href="privacy-policy.html">Privacy Policy</a>
+                    I agree to PayUtility's <a href="#terms">Terms & Conditions</a> and <a href="#privacy">Privacy Policy</a>
                 </label>
             </div>
 
@@ -954,7 +954,7 @@
             setTimeout(() => {
                 // Success - redirect to dashboard
                 alert('✓ Login Successful!\n\nWelcome back to PayUtility.\nRedirecting to dashboard...');
-                 window.location.href = 'dashboard.html';
+                // window.location.href = 'dashboard.html';
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             }, 1500);
