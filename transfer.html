@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transfer to Bank Account</title>
-    <style>
+     <style>
         * {
             margin: 0;
             padding: 0;
@@ -58,7 +58,7 @@
         .history-btn {
             font-size: 14px;
             font-weight: 600;
-            color: #00d09c;
+            color: #3b82f6;
             background: none;
             border: none;
             cursor: pointer;
@@ -70,12 +70,12 @@
             border-radius: 12px;
             overflow: hidden;
             height: 100px;
-            background: linear-gradient(135deg, #00d09c 0%, #00b386 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
         }
 
         /* Free Transfers Badge */
         .free-transfers {
-            background: #f0f4ff;
+            background: #eff6ff;
             padding: 12px 16px;
             margin: 16px;
             border-radius: 8px;
@@ -87,7 +87,7 @@
         .free-transfers-icon {
             width: 24px;
             height: 24px;
-            background: #5865f2;
+            background: #3b82f6;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -98,7 +98,7 @@
 
         .free-transfers-text {
             font-size: 14px;
-            color: #5865f2;
+            color: #1e40af;
             font-weight: 600;
         }
 
@@ -146,7 +146,7 @@
 
         .input-field:focus {
             outline: none;
-            border-color: #00d09c;
+            border-color: #3b82f6;
         }
 
         .input-field::placeholder {
@@ -187,7 +187,7 @@
         .account-resolved {
             display: none;
             padding: 12px 16px;
-            background: #e8f9f4;
+            background: #eff6ff;
             border-radius: 8px;
             margin-top: 12px;
             align-items: center;
@@ -201,7 +201,7 @@
         .resolved-icon {
             width: 20px;
             height: 20px;
-            background: #00d09c;
+            background: #3b82f6;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -268,13 +268,13 @@
         }
 
         .quick-amount:active {
-            background: #e8f9f4;
-            color: #00d09c;
+            background: #eff6ff;
+            color: #3b82f6;
         }
 
         .quick-amount.selected {
-            background: #e8f9f4;
-            color: #00d09c;
+            background: #eff6ff;
+            color: #3b82f6;
         }
 
         /* Remark Section */
@@ -302,15 +302,15 @@
         }
 
         .remark-tab.active {
-            background: #e8f9f4;
-            color: #00d09c;
+            background: #eff6ff;
+            color: #3b82f6;
         }
 
         /* Next/Confirm Button */
         .next-btn {
             width: 100%;
             padding: 16px;
-            background: #00d09c;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -323,7 +323,7 @@
 
         .next-btn:active {
             transform: scale(0.98);
-            background: #00b386;
+            background: #1e40af;
         }
 
         .next-btn:disabled {
@@ -354,8 +354,8 @@
         }
 
         .recents-tab.active {
-            color: #00d09c;
-            border-bottom-color: #00d09c;
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
         }
 
         .recents-list {
@@ -376,7 +376,7 @@
         .recent-icon {
             width: 40px;
             height: 40px;
-            background: #f0f4ff;
+            background: #dbeafe;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -386,7 +386,7 @@
         }
 
         .recent-icon.purple {
-            background: #f3e8ff;
+            background: #e0e7ff;
         }
 
         .recent-details {
@@ -484,7 +484,7 @@
         }
 
         .summary-value.highlight {
-            color: #00d09c;
+            color: #3b82f6;
             font-size: 16px;
         }
 
@@ -517,8 +517,8 @@
         }
 
         .payment-option.selected {
-            background: #e8f9f4;
-            border: 1px solid #00d09c;
+            background: #eff6ff;
+            border: 1px solid #3b82f6;
         }
 
         .payment-left {
@@ -558,7 +558,7 @@
         }
 
         .payment-option.selected .radio {
-            border-color: #00d09c;
+            border-color: #3b82f6;
         }
 
         .payment-option.selected .radio::after {
@@ -567,7 +567,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #00d09c;
+            color: #3b82f6;
             font-size: 12px;
             font-weight: 700;
         }
@@ -575,7 +575,7 @@
         .pay-btn {
             width: 100%;
             padding: 16px;
-            background: #00d09c;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -645,14 +645,14 @@
         }
 
         .pin-box.filled {
-            border-color: #00d09c;
+            border-color: #3b82f6;
             background: white;
         }
 
         .pin-box.active {
-            border-color: #00d09c;
+            border-color: #3b82f6;
             background: white;
-            box-shadow: 0 0 0 3px rgba(0, 208, 156, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .forgot-pin {
@@ -669,7 +669,7 @@
             justify-content: center;
             gap: 6px;
             font-size: 13px;
-            color: #00d09c;
+            color: #3b82f6;
             margin-bottom: 20px;
         }
 
@@ -677,7 +677,7 @@
             content: '✓';
             width: 20px;
             height: 20px;
-            background: #00d09c;
+            background: #3b82f6;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -727,7 +727,7 @@
         .success-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #00d09c 0%, #00b386 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -768,7 +768,7 @@
         }
 
         .step.active {
-            background: #00d09c;
+            background: #3b82f6;
             width: 24px;
             border-radius: 4px;
         }
@@ -784,7 +784,7 @@
                 <button class="history-btn" onclick="showHistory()">History</button>
             </div>
 
-            <div class="banner"></div>
+            <!-- <div class="banner"></div> -->
 
             <div class="free-transfers">
                 <div class="free-transfers-icon">⚡</div>
@@ -910,7 +910,7 @@
                 <div class="section-title">Amount</div>
 
                 <div class="amount-display">
-                    <div class="amount-label">Thousands</div>
+                   <!--- <div class="amount-label">Thousands</div>-->
                     <input 
                         type="text" 
                         class="amount-input" 
@@ -1033,7 +1033,7 @@
                 <div class="payment-method">
                     <div class="payment-header">
                         <span class="section-title" style="margin: 0;">Payment Method</span>
-                        <button style="background: none; border: none; color: #00d09c; font-size: 14px; font-weight: 600; cursor: pointer;">All ›</button>
+                        <button style="background: none; border: none; color: #3b82f6; font-size: 14px; font-weight: 600; cursor: pointer;">All ›</button>
                     </div>
 
                     <div class="payment-option selected">
@@ -1044,20 +1044,20 @@
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="color: #00d09c; font-size: 18px;">✓</span>
+                            <span style="color: #3b82f6; font-size: 18px;">✓</span>
                         </div>
                     </div>
 
-                    <div class="payment-option">
+                   <!-- <div class="payment-option">
                         <div class="payment-left">
                             <div class="radio"></div>
                             <div class="payment-info">
                                 <h4>Wallet (₦0.00)</h4>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="payment-option">
+                    <!--<div class="payment-option">
                         <div class="payment-left">
                             <div class="radio"></div>
                             <div class="payment-info">
@@ -1065,7 +1065,7 @@
                             </div>
                         </div>
                         <div class="payment-amount deduct">-₦2,000.00</div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <button class="pay-btn" onclick="showPinModal()">Pay</button>
