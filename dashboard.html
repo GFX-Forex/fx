@@ -514,16 +514,145 @@
 
 
 
+/* ==========================
+   Lucide Icons — Bottom Nav
+   ========================== */
 
+/* Base icon styling */
+.nav-icon {
+  width: 24px;              /* consistent size */
+  height: 24px;
+  stroke-width: 2;          /* line thickness */
+  color: #6b7280;           /* default gray */
+  transition: all 0.25s ease;
+}
+
+/* Hover effect — subtle lift + color change */
+.nav-item:hover .nav-icon {
+  color: #111827;           /* darker gray */
+  transform: translateY(-2px);
+}
+
+/* Active icon — highlight in blue */
+.nav-item.active .nav-icon {
+  color: #2563eb;           /* blue-600 tone */
+  transform: scale(1.05);
+}
+
+/* Optional: animate on click (quick pulse) */
+.nav-item:active .nav-icon {
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+}
+
+/* Optional: mobile adjustment */
+@media (max-width: 480px) {
+  .nav-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================================
+   🔹 Services Grid Styles
+   Clean fintech layout — icons only
+   ================================ */
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 1rem;
+  background: #ffffff;
+}
+
+/* Icon container */
+.service-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #2563eb10; /* subtle blue tint */
+  margin-bottom: 8px;
+  transition: all 0.25s ease;
+}
+
+/* Ionicon styling */
+.service-icon ion-icon {
+  font-size: 24px;
+  color: #2563eb; /* primary blue */
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+/* Animate the icon on hover */
+.service-item:hover .service-icon ion-icon {
+  transform: scale(1.1);
+  color: #1d4ed8; /* darker blue */
+}
+
+
+
+
+
+
+
+
+
+/* =====================================
+   💰 Quick Links Section — Fintech UI
+   ===================================== */
+
+
+
+/* Each quick link item */
+.quick-link {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  
+  
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+
+/* Icon container */
+.quick-link-icon {
+  
+  background: #2563eb10; /* transparent blue circle */
+  transition: background 0.3s ease;
+}
+
+/* Icon styling */
 .quick-link-icon ion-icon {
-    font-size: 24px;       /* size of the icon */
-    color: #1e40af;        /* primary deep blue */
-    transition: color 0.2s;
+  color: #2563eb;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
-.quick-link:hover ion-icon {
-    color: #3b82f6;        /* lighter blue on hover */
+/* Animate icon on hover */
+.quick-link:hover .quick-link-icon ion-icon {
+  transform: scale(1.1);
+  color: #1d4ed8; /* darker blue */
 }
+
+
+
 
     </style>
 </head>
@@ -633,7 +762,7 @@
                  </div>
                  <div class="quick-link-text">
                      <h4>Savings</h4>
-                     <p>Save & earn interest</p>
+                     <p>Save & earn</p>
                  </div>
              </div>
          </div>
@@ -723,12 +852,12 @@
         <div class="nav-label">Services</div>
     </div>
 
-    <div class="nav-item">
+    <div class="nav-item" onclick="window.location.href='history.html'">
         <i data-lucide="history" class="nav-icon"></i>
         <div class="nav-label">History</div>
     </div>
 
-    <div class="nav-item">
+    <div class="nav-item" onclick="window.location.href='profile-settings.html'">
         <i data-lucide="user" class="nav-icon"></i>
         <div class="nav-label">Account</div>
     </div>
