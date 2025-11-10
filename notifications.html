@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .settings-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* TABS */
+        .tabs-section {
+            padding: 16px 20px;
+            background: white;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 72px;
+            z-index: 40;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .tab-badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .tab:not(.active) .tab-badge {
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+
+        /* ACTION BAR */
+        .action-bar {
+            padding: 12px 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .select-all {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3b82f6;
+            cursor: pointer;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .bulk-action {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .bulk-action.delete {
+            color: #dc2626;
+        }
+
+        /* NOTIFICATIONS */
+        .notifications-section {
+            padding: 0 20px 20px;
+            background: white;
+        }
+
+        .date-divider {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b7280;
+            margin: 20px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .notification-item.unread {
+            background: #eff6ff;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .notification-item:active {
+            transform: scale(0.98);
+        }
+
+        .notification-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: none;
+        }
+
+        .notification-checkbox.visible {
+            display: block;
+        }
+
+        .notification-checkbox.checked {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-color: #3b82f6;
+            position: relative;
+        }
+
+        .notification-checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .notification-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.success {
+            background: #dcfce7;
+        }
+
+        .notification-icon.info {
+            background: #dbeafe;
+        }
+
+        .notification-icon.warning {
+            background: #fef3c7;
+        }
+
+        .notification-icon.promo {
+            background: #fce7f3;
+        }
+
+        .notification-icon.alert {
+            background: #fee2e2;
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            gap: 8px;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: #9ca3af;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .notification-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .notification-btn.primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .notification-btn.secondary {
+            background: white;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .notification-btn:active {
+            transform: scale(0.95);
+        }
+
+        .unread-badge {
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        /* FLOATING ACTION BUTTON */
+        .fab {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 90;
+            transition: all 0.2s;
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 480px) {
+            .fab {
+                right: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <div class="header-left">
+                    <button class="back-btn" onclick="history.back()">←</button>
+                    <div class="header-title">
+                        <h1>Notifications</h1>
+                        <p id="unreadCount">5 unread messages</p>
+                    </div>
+                </div>
+                <button class="settings-btn" onclick="openSettings()">⚙️</button>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs-section">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('all')">
+                    All
+                    <span class="tab-badge">12</span>
+                </button>
+                <button class="tab" onclick="switchTab('transactions')">
+                    Transactions
+                    <span class="tab-badge">5</span>
+                </button>
+                <button class="tab" onclick="switchTab('promos')">
+                    Promos
+                    <span class="tab-badge">3</span>
+                </button>
+                <button class="tab" onclick="switchTab('alerts')">
+                    Alerts
+                    <span class="tab-badge">2</span>
+                </button>
+                <button class="tab" onclick="switchTab('updates')">
+                    Updates
+                    <span class="tab-badge">2</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ACTION BAR -->
+        <div class="action-bar">
+            <div class="select-all" onclick="toggleSelectMode()">Select</div>
+            <div class="bulk-actions" id="bulkActions" style="display: none;">
+                <div class="bulk-action" onclick="markAllRead()">
+                    <span>✓</span> Mark Read
+                </div>
+                <div class="bulk-action delete" onclick="deleteSelected()">
+                    <span>🗑️</span> Delete
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="notifications-section" id="notificationsList">
+            <!-- Today -->
+            <div class="date-divider">Today</div>
+
+            <div class="notification-item unread" data-id="1" data-category="transactions" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon success">✓</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Transaction Successful</div>
+                        <div class="notification-time">2m ago</div>
+                    </div>
+                    <div class="notification-message">
+                        Your DSTV subscription payment of ₦6,800 was successful. Reference: TXN123456
+                    </div>
+                </div>
+                <div class="unread-badge"></div>
+            </div>
+
+            <div class="notification-item unread" data-id="2" data-category="promos" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon promo">🎁</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Special Offer for You!</div>
+                        <div class="notification-time">1h ago</div>
+                    </div>
+                    <div class="notification-message">
+                        Get ₦500 cashback on your next airtime purchase above ₦1000. Offer valid till midnight!
+                    </div>
+                    <div class="notification-actions">
+                        <button class="notification-btn primary" onclick="event.stopPropagation(); redeemOffer(2)">Redeem Now</button>
+                        <button class="notification-btn secondary" onclick="event.stopPropagation(); dismissNotification(2)">Dismiss</button>
+                    </div>
+                </div>
+                <div class="unread-badge"></div>
+            </div>
+
+            <div class="notification-item" data-id="3" data-category="transactions" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon success">✓</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Wallet Funded Successfully</div>
+                        <div class="notification-time">3h ago</div>
+                    </div>
+                    <div class="notification-message">
+                        Your wallet has been credited with ₦20,000 via card payment.
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item unread" data-id="4" data-category="alerts" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon warning">⚠️</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Low Balance Alert</div>
+                        <div class="notification-time">5h ago</div>
+                    </div>
+                    <div class="notification-message">
+                        Your wallet balance is running low. Current balance: ₦1,250. Fund your wallet to continue enjoying our services.
+                    </div>
+                    <div class="notification-actions">
+                        <button class="notification-btn primary" onclick="event.stopPropagation(); fundWallet()">Fund Wallet</button>
+                    </div>
+                </div>
+                <div class="unread-badge"></div>
+            </div>
+
+            <!-- Yesterday -->
+            <div class="date-divider">Yesterday</div>
+
+            <div class="notification-item" data-id="5" data-category="transactions" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon success">✓</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Electricity Payment Successful</div>
+                        <div class="notification-time">Yesterday, 6:45 PM</div>
+                    </div>
+                    <div class="notification-message">
+                        EKEDC payment of ₦5,000 completed. Token: 1234-5678-9012-3456
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item unread" data-id="6" data-category="promos" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon promo">💰</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Cashback Earned!</div>
+                        <div class="notification-time">Yesterday, 2:30 PM</div>
+                    </div>
+                    <div class="notification-message">
+                        Congratulations! You've earned ₦150 cashback on your recent transaction. Total cashback this month: ₦450
+                    </div>
+                </div>
+                <div class="unread-badge"></div>
+            </div>
+
+            <div class="notification-item" data-id="7" data-category="transactions" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon info">📱</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Airtime Purchase Complete</div>
+                        <div class="notification-time">Yesterday, 10:30 AM</div>
+                    </div>
+                    <div class="notification-message">
+                        MTN airtime of ₦500 sent to 08012345678
+                    </div>
+                </div>
+            </div>
+
+            <!-- This Week -->
+            <div class="date-divider">This Week</div>
+
+            <div class="notification-item" data-id="8" data-category="updates" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon info">🔔</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">New Feature: Virtual Cards</div>
+                        <div class="notification-time">Nov 7, 4:20 PM</div>
+                    </div>
+                    <div class="notification-message">
+                        Create virtual cards instantly for online payments. Safe, secure, and convenient!
+                    </div>
+                    <div class="notification-actions">
+                        <button class="notification-btn primary" onclick="event.stopPropagation(); learnMore()">Learn More</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item" data-id="9" data-category="alerts" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon alert">⏱️</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Pending Transaction</div>
+                        <div class="notification-time">Nov 7, 11:15 AM</div>
+                    </div>
+                    <div class="notification-message">
+                        Your bank transfer of ₦15,000 is being processed. Expected completion: 24 hours
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item" data-id="10" data-category="promos" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon promo">⭐</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Refer & Earn ₦1000</div>
+                        <div class="notification-time">Nov 6, 9:00 AM</div>
+                    </div>
+                    <div class="notification-message">
+                        Invite your friends to PayUtility and earn ₦1000 for each successful referral!
+                    </div>
+                    <div class="notification-actions">
+                        <button class="notification-btn primary" onclick="event.stopPropagation(); shareReferral()">Share Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item" data-id="11" data-category="transactions" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon success">✓</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Data Purchase Successful</div>
+                        <div class="notification-time">Nov 5, 3:45 PM</div>
+                    </div>
+                    <div class="notification-message">
+                        Glo 10GB data bundle purchased successfully for 08087654321
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item" data-id="12" data-category="updates" onclick="openNotification(this)">
+                <div class="notification-checkbox" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+                <div class="notification-icon info">🔒</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div class="notification-title">Security Update</div>
+                        <div class="notification-time">Nov 4, 10:00 AM</div>
+                    </div>
+                    <div class="notification-message">
+                        We've enhanced our security features. Update your app to enjoy improved protection.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FLOATING ACTION BUTTON -->
+        <button class="fab" onclick="markAllRead()">✓</button>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">
+                    🔔
+                    <span class="nav-badge"></span>
+                </div>
+                <div class="nav-label">Alerts</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectMode = false;
+        let selectedNotifications = new Set();
+        let currentTab = 'all';
+
+        // Notification data
+        const notifications = {
+            1: { category: 'transactions', read: false },
+            2: { category: 'promos', read: false },
+            3: { category: 'transactions', read: true },
+            4: { category: 'alerts', read: false },
+            5: { category: 'transactions', read: true },
+            6: { category: 'promos', read: false },
+            7: { category: 'transactions', read: true },
+            8: { category: 'updates', read: true },
+            9: { category: 'alerts', read: true },
+            10: { category: 'promos', read: true },
+            11: { category: 'transactions', read: true },
+            12: { category: 'updates', read: true }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUnreadCount();
+            updateTabCounts();
+        });
+
+        // Switch tabs
+        function switchTab(tab) {
+            currentTab = tab;
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+
+            const items = document.querySelectorAll('.notification-item');
+            items.forEach(item => {
+                if (tab === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    const category = item.getAttribute('data-category');
+                    item.style.display = category === tab ? 'flex' : 'none';
+                }
+            });
+
+            // Show/hide date dividers
+            const dividers = document.querySelectorAll('.date-divider');
+            dividers.forEach(divider => {
+                const nextElement = divider.nextElementSibling;
+                let hasVisibleItems = false;
+                let sibling = nextElement;
+                
+                while (sibling && !sibling.classList.contains('date-divider')) {
+                    if (sibling.style.display !== 'none') {
+                        hasVisibleItems = true;
+                        break;
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+                
+                divider.style.display = hasVisibleItems ? 'block' : 'none';
+            });
+        }
+
+        // Toggle select mode
+        function toggleSelectMode() {
+            selectMode = !selectMode;
+            const checkboxes = document.querySelectorAll('.notification-checkbox');
+            const bulkActions = document.getElementById('bulkActions');
+            const selectAllBtn = document.querySelector('.select-all');
+
+            if (selectMode) {
+                checkboxes.forEach(cb => cb.classList.add('visible'));
+                bulkActions.style.display = 'flex';
+                selectAllBtn.textContent = 'Cancel';
+            } else {
+                checkboxes.forEach(cb => {
+                    cb.classList.remove('visible', 'checked');
+                });
+                bulkActions.style.display = 'none';
+                selectAllBtn.textContent = 'Select';
+                selectedNotifications.clear();
+            }
+        }
+
+        // Toggle checkbox
+        function toggleCheck(checkbox) {
+            const item = checkbox.closest('.notification-item');
+            const id = item.getAttribute('data-id');
+
+            checkbox.classList.toggle('checked');
+            
+            if (checkbox.classList.contains('checked')) {
+                selectedNotifications.add(id);
+            } else {
+                selectedNotifications.delete(id);
+            }
+        }
+
+        // Open notification
+        function openNotification(item) {
+            if (selectMode) return;
+            
+            const id = item.getAttribute('data-id');
+            
+            // Mark as read
+            if (item.classList.contains('unread')) {
+                item.classList.remove('unread');
+                const badge = item.querySelector('.unread-badge');
+                if (badge) badge.remove();
+                notifications[id].read = true;
+                updateUnreadCount();
+                updateTabCounts();
+            }
+
+            alert('Opening notification details...');
+        }
+
+        // Mark all as read
+        function markAllRead() {
+            const unreadItems = document.querySelectorAll('.notification-item.unread');
+            unreadItems.forEach(item => {
+                item.classList.remove('unread');
+                const badge = item.querySelector('.unread-badge');
+                if (badge) badge.remove();
+                const id = item.getAttribute('data-id');
+                notifications[id].read = true;
+            });
+            updateUnreadCount();
+            updateTabCounts();
+        }
+
+        // Delete selected
+        function deleteSelected() {
+            if (selectedNotifications.size === 0) {
+                alert('Please select notifications to delete');
+                return;
+            }
+
+            if (confirm(`Delete ${selectedNotifications.size} notification(s)?`)) {
+                selectedNotifications.forEach(id => {
+                    const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+                    if (item) {
+                        item.style.animation = 'slideOut 0.3s ease-out';
+                        setTimeout(() => {
+                            item.remove();
+                            delete notifications[id];
+                        }, 300);
+                    }
+                });
+                
+                setTimeout(() => {
+                    selectedNotifications.clear();
+                    toggleSelectMode();
+                    updateUnreadCount();
+                    updateTabCounts();
+                }, 400);
+            }
+        }
+
+        // Dismiss notification
+        function dismissNotification(id) {
+            const item = document.querySelector(`.notification-item[data-id="${id}"]`);
+            if (item) {
+                item.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    item.remove();
+                    delete notifications[id];
+                    updateUnreadCount();
+                    updateTabCounts();
+                }, 300);
+            }
+        }
+
+        // Update unread count
+        function updateUnreadCount() {
+            let unreadCount = 0;
+            Object.values(notifications).forEach(notif => {
+                if (!notif.read) unreadCount++;
+            });
+            
+            document.getElementById('unreadCount').textContent = 
+                unreadCount > 0 ? `${unreadCount} unread message${unreadCount !== 1 ? 's' : ''}` : 'All caught up!';
+        }
+
+        // Update tab counts
+        function updateTabCounts() {
+            const counts = {
+                all: 0,
+                transactions: 0,
+                promos: 0,
+                alerts: 0,
+                updates: 0
+            };
+
+            Object.values(notifications).forEach(notif => {
+                counts.all++;
+                counts[notif.category]++;
+            });
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                const tabText = tab.textContent.trim().toLowerCase();
+                const badge = tab.querySelector('.tab-badge');
+                
+                if (tabText.includes('all')) {
+                    badge.textContent = counts.all;
+                } else if (tabText.includes('transactions')) {
+                    badge.textContent = counts.transactions;
+                } else if (tabText.includes('promos')) {
+                    badge.textContent = counts.promos;
+                } else if (tabText.includes('alerts')) {
+                    badge.textContent = counts.alerts;
+                } else if (tabText.includes('updates')) {
+                    badge.textContent = counts.updates;
+                }
+            });
+        }
+
+        // Action buttons
+        function redeemOffer(id) {
+            alert('Redirecting to offer page...');
+            dismissNotification(id);
+        }
+
+        function fundWallet() {
+            alert('Redirecting to fund wallet...');
+        }
+
+        function learnMore() {
+            alert('Opening feature details...');
+        }
+
+        function shareReferral() {
+            alert('Opening share options...');
+        }
+
+        function openSettings() {
+            alert('Opening notification settings...');
+        }
+
+        // Bottom navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+
+    <style>
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</body>
+</html>
