@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Money - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #1f2937;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+        }
+
+        /* Account Number Card */
+        .account-card {
+            background: white;
+            border: 2px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .account-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .account-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .account-info {
+            flex: 1;
+        }
+
+        .account-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .account-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .account-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .account-number {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1f2937;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .account-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn.copy {
+            background: #f0fdf4;
+            color: #059669;
+            border: 2px solid #bbf7d0;
+        }
+
+        .action-btn.copy:active {
+            transform: scale(0.98);
+            background: #dcfce7;
+        }
+
+        .action-btn.share {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        .action-btn.share:active {
+            transform: scale(0.98);
+        }
+
+        /* Divider */
+        .divider {
+            text-align: center;
+            position: relative;
+            margin: 24px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .divider-text {
+            font-size: 13px;
+            color: #9ca3af;
+            font-weight: 600;
+            background: white;
+            padding: 0 16px;
+        }
+
+        /* Options List */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            background: white;
+            border: 2px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-item:active {
+            transform: scale(0.98);
+            border-color: #3b82f6;
+        }
+
+        .option-icon {
+            width: 48px;
+            height: 48px;
+            background: #f9fafb;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .option-description {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .option-arrow {
+            font-size: 20px;
+            color: #9ca3af;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #3b82f6;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            display: none;
+            animation: slideUp 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-content {
+            padding: 20px 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            font-size: 12px;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <h1 class="header-title">Add Money</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Bank Transfer Card -->
+            <div class="account-card">
+                <div class="account-header">
+                    <div class="account-icon">🏦</div>
+                    <div class="account-info">
+                        <div class="account-title">Bank Transfer</div>
+                        <div class="account-subtitle">Add money via mobile or internet banking</div>
+                    </div>
+                </div>
+
+                <div class="account-label">PayUtility Account Number</div>
+                <div class="account-number">816 951 3224</div>
+
+                <div class="account-actions">
+                    <button class="action-btn copy" onclick="copyAccountNumber()">
+                        <span>Copy Number</span>
+                    </button>
+                    <button class="action-btn share" onclick="shareDetails()">
+                        <span>Share Details</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="divider">
+                <span class="divider-text">OR</span>
+            </div>
+
+            <!-- Other Options -->
+            <div class="options-list">
+                <!-- Cash Deposit -->
+                <div class="option-item" onclick="openCashDeposit()">
+                    <div class="option-icon">💵</div>
+                    <div class="option-content">
+                        <div class="option-title">Cash Deposit</div>
+                        <div class="option-description">Fund your account with nearby merchants</div>
+                    </div>
+                    <div class="option-arrow">›</div>
+                </div>
+
+                <!-- Card/Account Top-up -->
+                <div class="option-item" onclick="openCardTopup()">
+                    <div class="option-icon">💳</div>
+                    <div class="option-content">
+                        <div class="option-title">Top-up with Card/Account</div>
+                        <div class="option-description">Add money directly from your bank card or account</div>
+                    </div>
+                    <div class="option-arrow">›</div>
+                </div>
+
+                <!-- Bank USSD -->
+                <div class="option-item" onclick="openBankUSSD()">
+                    <div class="option-icon">📱</div>
+                    <div class="option-content">
+                        <div class="option-title">Bank USSD</div>
+                        <div class="option-description">With other banks' USSD code</div>
+                    </div>
+                    <div class="option-arrow">›</div>
+                </div>
+
+                <!-- Scan QR Code -->
+                <div class="option-item" onclick="openQRScanner()">
+                    <div class="option-icon">⚡</div>
+                    <div class="option-content">
+                        <div class="option-title">Scan my QR Code</div>
+                        <div class="option-description">Show QR code to any PayUtility user</div>
+                    </div>
+                    <div class="option-arrow">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Services</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Top-up Modal -->
+    <div class="modal-overlay" id="cardTopupModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span>💳</span> Top-up with Card
+                </h3>
+            </div>
+            <div class="modal-content">
+                <div class="info-box">
+                    <p><strong>⚡ Instant:</strong> Money will be added to your wallet immediately!</p>
+                </div>
+
+                <form id="cardTopupForm">
+                    <div class="form-group">
+                        <label class="label">Amount</label>
+                        <input type="number" class="input-field" placeholder="₦0" id="topupAmount" min="100" required>
+                        <p style="font-size: 11px; color: #6b7280; margin-top: 6px;">Min: ₦100 | Max: ₦1,000,000</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Payment Method</label>
+                        <select class="select-field" id="paymentMethod" required>
+                            <option value="">Select payment method</option>
+                            <option value="card">Debit Card</option>
+                            <option value="bank">Bank Account</option>
+                            <option value="transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+
+                    <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+                        <p style="color: #78350f;"><strong>ℹ️ Note:</strong> A processing fee of 1.5% applies to card payments.</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('cardTopupModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="processCardTopup()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- USSD Modal -->
+    <div class="modal-overlay" id="ussdModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span>📱</span> Bank USSD
+                </h3>
+            </div>
+            <div class="modal-content">
+                <div class="info-box">
+                    <p><strong>💡 How it works:</strong> Dial the USSD code below with your registered phone number.</p>
+                </div>
+
+                <div style="background: #f9fafb; padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px; font-weight: 600;">Select Your Bank</div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="padding: 12px; background: white; border-radius: 8px; cursor: pointer;" onclick="showUSSDCode('GTBank', '*737*50*816951322*Amount#')">
+                            <div style="font-weight: 700; font-size: 14px; color: #1f2937; margin-bottom: 4px;">GTBank</div>
+                            <div style="font-size: 12px; color: #6b7280;">*737*50*Amount#</div>
+                        </div>
+
+                        <div style="padding: 12px; background: white; border-radius: 8px; cursor: pointer;" onclick="showUSSDCode('Access Bank', '*901*816951322*Amount#')">
+                            <div style="font-weight: 700; font-size: 14px; color: #1f2937; margin-bottom: 4px;">Access Bank</div>
+                            <div style="font-size: 12px; color: #6b7280;">*901*Amount#</div>
+                        </div>
+
+                        <div style="padding: 12px; background: white; border-radius: 8px; cursor: pointer;" onclick="showUSSDCode('Zenith Bank', '*966*Amount*816951322#')">
+                            <div style="font-weight: 700; font-size: 14px; color: #1f2937; margin-bottom: 4px;">Zenith Bank</div>
+                            <div style="font-size: 12px; color: #6b7280;">*966*Amount#</div>
+                        </div>
+
+                        <div style="padding: 12px; background: white; border-radius: 8px; cursor: pointer;" onclick="showUSSDCode('UBA', '*919*816951322*Amount#')">
+                            <div style="font-weight: 700; font-size: 14px; color: #1f2937; margin-bottom: 4px;">UBA</div>
+                            <div style="font-size: 12px; color: #6b7280;">*919*Amount#</div>
+                        </div>
+
+                        <div style="padding: 12px; background: white; border-radius: 8px; cursor: pointer;" onclick="showUSSDCode('First Bank', '*894*816951322*Amount#')">
+                            <div style="font-weight: 700; font-size: 14px; color: #1f2937; margin-bottom: 4px;">First Bank</div>
+                            <div style="font-size: 12px; color: #6b7280;">*894*Amount#</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('ussdModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal-overlay" id="qrModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span>⚡</span> My QR Code
+                </h3>
+            </div>
+            <div class="modal-content">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="width: 200px; height: 200px; margin: 0 auto 20px; background: #f9fafb; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 80px;">
+                        📱
+                    </div>
+                    <div style="font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 8px;">EMMANUEL ADEOLA</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">@emmanuel_payutility</div>
+                    <div style="font-size: 13px; color: #6b7280; font-weight: 600;">Account: 816 951 3224</div>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>ℹ️ How to use:</strong> Show this QR code to anyone who wants to send you money via PayUtility.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('qrModal')">Close</button>
+                <button class="btn btn-primary" onclick="shareQRCode()">Share QR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Copy account number
+        function copyAccountNumber() {
+            const accountNumber = '816 951 3224';
+            copyToClipboard(accountNumber);
+            showToast('✓ Account number copied!');
+        }
+
+        // Share details
+        function shareDetails() {
+            const details = `PayUtility Account Details\n\nAccount Number: 816 951 3224\nAccount Name: EMMANUEL ADEOLA\nBank: PayUtility`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'PayUtility Account Details',
+                    text: details
+                }).catch(() => {
+                    copyToClipboard(details);
+                    showToast('Details copied to clipboard!');
+                });
+            } else {
+                copyToClipboard(details);
+                showToast('Details copied to clipboard!');
+            }
+        }
+
+        // Open cash deposit
+        function openCashDeposit() {
+            showToast('Finding nearby merchants...');
+        }
+
+        // Open card topup
+        function openCardTopup() {
+            document.getElementById('cardTopupModal').classList.add('active');
+        }
+
+        // Open bank USSD
+        function openBankUSSD() {
+            document.getElementById('ussdModal').classList.add('active');
+        }
+
+        // Open QR scanner
+        function openQRScanner() {
+            document.getElementById('qrModal').classList.add('active');
+        }
+
+        // Show USSD code
+        function showUSSDCode(bank, code) {
+            copyToClipboard(code);
+            showToast(`✓ ${bank} USSD code copied!`);
+        }
+
+        // Share QR code
+        function shareQRCode() {
+            showToast('QR code sharing...');
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Process card topup
+        function processCardTopup() {
+            const amount = document.getElementById('topupAmount').value;
+            const method = document.getElementById('paymentMethod').value;
+
+            if (!amount || amount < 100) {
+                showToast('Minimum amount is ₦100');
+                return;
+            }
+
+            if (!method) {
+                showToast('Please select payment method');
+                return;
+            }
+
+            const btn = event.target;
+            btn.textContent = 'Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                showToast(`✓ ₦${parseInt(amount).toLocaleString()} added successfully!`);
+                btn.textContent = 'Continue';
+                btn.disabled = false;
+                closeModal('cardTopupModal');
+                document.getElementById('cardTopupForm').reset();
+            }, 2000);
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.left = '-999999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Show toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        console.log('PayUtility Add Money page initialized successfully! 💰');
+    </script>
+</body>
+</html>
