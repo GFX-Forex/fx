@@ -585,6 +585,144 @@
             margin-top: 20px;
         }
 
+        /* PIN Input Modal */
+        .pin-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+            margin: 0 auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .pin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .pin-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .pin-close {
+            width: 32px;
+            height: 32px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .pin-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .pin-box {
+            width: 56px;
+            height: 56px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            background: #f9f9f9;
+            transition: all 0.2s;
+        }
+
+        .pin-box.filled {
+            border-color: #00d09c;
+            background: white;
+        }
+
+        .pin-box.active {
+            border-color: #00d09c;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 208, 156, 0.1);
+        }
+
+        .forgot-pin {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin: 16px 0;
+            cursor: pointer;
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #00d09c;
+            margin-bottom: 20px;
+        }
+
+        .secure-badge::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: #00d09c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .key {
+            aspect-ratio: 1;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .key:active {
+            background: #f5f5f5;
+            transform: scale(0.95);
+        }
+
+        .key.delete {
+            background: #f5f5f5;
+            font-size: 20px;
+        }
+
+        .key.zero {
+            grid-column: 2;
+        }
+
         /* Success Modal */
         .success-icon {
             width: 80px;
@@ -689,15 +827,24 @@
 
                 <button class="next-btn" id="nextBtn1" onclick="goToStep2()" disabled>Next</button>
 
+                <!-- Bank Transfer Success Rate Monitor -->
+                <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #f9f9f9; border-radius: 12px; margin: 16px 0; cursor: pointer;" onclick="showSuccessRate()">
+                    <div style="width: 40px; height: 40px; background: #e8f9f4; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">📊</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 14px; font-weight: 600; color: #1a1a1a;">Bank Transfer Success Rate Monitor</div>
+                    </div>
+                    <div style="color: #999; font-size: 18px;">›</div>
+                </div>
+
                 <div style="margin-top: 32px;">
                     <div class="recents-header">
-                        <button class="recents-tab active">Recents</button>
-                        <button class="recents-tab">Favourites</button>
+                        <button class="recents-tab active" onclick="switchRecentTab('recents')">Recents</button>
+                        <button class="recents-tab" onclick="switchRecentTab('favourites')">Favourites</button>
                         <div style="flex: 1"></div>
                         <button style="background: none; border: none; color: #00d09c; font-size: 20px; cursor: pointer;">🔍</button>
                     </div>
 
-                    <div class="recents-list">
+                    <div class="recents-list" id="recentsList">
                         <div class="recent-item" onclick="selectRecent('LUCKY WORLD LUXURY LTD', '5634931950', 'MONIE POINT')">
                             <div class="recent-icon">M</div>
                             <div class="recent-details">
@@ -719,6 +866,24 @@
                             <div class="recent-details">
                                 <div class="recent-name">Fedelia SULE</div>
                                 <div class="recent-info">7038646578 PalmPay</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recents-list" id="favouritesList" style="display: none;">
+                        <div class="recent-item" onclick="selectRecent('BLESSING OKORO', '0123456789', 'GTBank')">
+                            <div class="recent-icon" style="background: #fff0e6;">⭐</div>
+                            <div class="recent-details">
+                                <div class="recent-name">BLESSING OKORO</div>
+                                <div class="recent-info">0123456789 GTBank</div>
+                            </div>
+                        </div>
+
+                        <div class="recent-item" onclick="selectRecent('CHUKWUDI JAMES', '9876543210', 'Access Bank')">
+                            <div class="recent-icon" style="background: #fff0e6;">⭐</div>
+                            <div class="recent-details">
+                                <div class="recent-name">CHUKWUDI JAMES</div>
+                                <div class="recent-info">9876543210 Access Bank</div>
                             </div>
                         </div>
                     </div>
@@ -903,7 +1068,42 @@
                     </div>
                 </div>
 
-                <button class="pay-btn" onclick="processPayment()">Pay</button>
+                <button class="pay-btn" onclick="showPinModal()">Pay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIN Modal -->
+    <div class="modal-overlay" id="pinModal">
+        <div class="pin-modal">
+            <div class="pin-header">
+                <div class="pin-title">Enter Payment PIN</div>
+                <button class="pin-close" onclick="closePinModal()">×</button>
+            </div>
+
+            <div class="pin-inputs">
+                <div class="pin-box" id="pinBox1"></div>
+                <div class="pin-box" id="pinBox2"></div>
+                <div class="pin-box" id="pinBox3"></div>
+                <div class="pin-box" id="pinBox4"></div>
+            </div>
+
+            <div class="forgot-pin" onclick="forgotPin()">Forgot Payment PIN?</div>
+
+            <div class="secure-badge">OPay Secure Numeric Keypad</div>
+
+            <div class="keypad">
+                <button class="key" onclick="enterPin('1')">1</button>
+                <button class="key" onclick="enterPin('2')">2</button>
+                <button class="key" onclick="enterPin('3')">3</button>
+                <button class="key" onclick="enterPin('4')">4</button>
+                <button class="key" onclick="enterPin('5')">5</button>
+                <button class="key" onclick="enterPin('6')">6</button>
+                <button class="key" onclick="enterPin('7')">7</button>
+                <button class="key" onclick="enterPin('8')">8</button>
+                <button class="key" onclick="enterPin('9')">9</button>
+                <button class="key zero" onclick="enterPin('0')">0</button>
+                <button class="key delete" onclick="deletePin()">⌫</button>
             </div>
         </div>
     </div>
@@ -950,12 +1150,36 @@
             remark: 'Purchase'
         };
 
+        let pinValue = '';
+
         function goBack() {
             window.history.back();
         }
 
         function showHistory() {
             alert('Transfer history');
+        }
+
+        function showSuccessRate() {
+            alert('Bank Transfer Success Rate Monitor - Coming soon!');
+        }
+
+        function switchRecentTab(tab) {
+            const recentsList = document.getElementById('recentsList');
+            const favouritesList = document.getElementById('favouritesList');
+            const tabs = document.querySelectorAll('.recents-tab');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'recents') {
+                recentsList.style.display = 'flex';
+                favouritesList.style.display = 'none';
+                tabs[0].classList.add('active');
+            } else {
+                recentsList.style.display = 'none';
+                favouritesList.style.display = 'flex';
+                tabs[1].classList.add('active');
+            }
         }
 
         function handleAccountInput() {
@@ -1105,10 +1329,76 @@
             document.getElementById('reminderModal').classList.add('active');
         }
 
+        function showPinModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            document.getElementById('pinModal').classList.add('active');
+            pinValue = '';
+            updatePinBoxes();
+        }
+
+        function closePinModal() {
+            document.getElementById('pinModal').classList.remove('active');
+            
+            // Show processing state
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;';
+            loadingOverlay.innerHTML = '<div style="background: white; padding: 30px 40px; border-radius: 16px; text-align: center;"><div style="font-size: 16px; font-weight: 600; color: #1a1a1a;">Processing...</div></div>';
+            document.body.appendChild(loadingOverlay);
+            document.getElementById('paymentModal').classList.add('active');
+            pinValue = '';
+            updatePinBoxes();
+        }
+
+        function enterPin(digit) {
+            if (pinValue.length < 4) {
+                pinValue += digit;
+                updatePinBoxes();
+                
+                // Auto-submit when 4 digits entered
+                if (pinValue.length === 4) {
+                    setTimeout(() => {
+                        processPayment();
+                    }, 300);
+                }
+            }
+        }
+
+        function deletePin() {
+            if (pinValue.length > 0) {
+                pinValue = pinValue.slice(0, -1);
+                updatePinBoxes();
+            }
+        }
+
+        function updatePinBoxes() {
+            for (let i = 1; i <= 4; i++) {
+                const box = document.getElementById(`pinBox${i}`);
+                if (i <= pinValue.length) {
+                    box.textContent = '●';
+                    box.classList.add('filled');
+                    box.classList.remove('active');
+                } else if (i === pinValue.length + 1) {
+                    box.textContent = '';
+                    box.classList.remove('filled');
+                    box.classList.add('active');
+                } else {
+                    box.textContent = '';
+                    box.classList.remove('filled', 'active');
+                }
+            }
+        }
+
+        function forgotPin() {
+            alert('Forgot PIN - Please contact support or reset your PIN in settings');
+        }
+
         function processPayment() {
-            const btn = event.target;
-            btn.textContent = 'Processing...';
-            btn.disabled = true;
+            if (pinValue.length !== 4) {
+                alert('Please enter your 4-digit PIN');
+                return;
+            }
+
+            document.getElementById('pinModal').classList.remove('active');
             
             setTimeout(() => {
                 document.getElementById('paymentModal').classList.remove('active');
@@ -1133,8 +1423,9 @@
                 
                 document.getElementById('successModal').classList.add('active');
                 
-                btn.textContent = 'Pay';
-                btn.disabled = false;
+                // Reset PIN
+                pinValue = '';
+                updatePinBoxes();
             }, 2000);
         }
 
