@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .header-subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Content */
+        .content {
+            padding: 24px 20px;
+        }
+
+        .update-banner {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-left: 4px solid #10b981;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .update-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 6px;
+        }
+
+        .update-text {
+            font-size: 12px;
+            color: #047857;
+            line-height: 1.5;
+        }
+
+        .privacy-intro {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .intro-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .intro-text {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .toc-nav {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .toc-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+        }
+
+        .toc-link {
+            font-size: 13px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .toc-link:hover {
+            background: white;
+            transform: translateX(4px);
+        }
+
+        .section {
+            margin-bottom: 32px;
+            scroll-margin-top: 80px;
+        }
+
+        .section-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+
+        .section-content p {
+            margin-bottom: 14px;
+        }
+
+        .section-content strong {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        .subsection {
+            margin-top: 16px;
+            padding-left: 16px;
+            border-left: 3px solid #e5e7eb;
+        }
+
+        .subsection-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin: 12px 0;
+        }
+
+        .bullet-list li {
+            padding-left: 24px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .bullet-list li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .data-table {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .data-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            flex: 0 0 40%;
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .data-value {
+            flex: 1;
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .highlight-box p {
+            font-size: 13px;
+            color: #78350f;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            color: #065f46;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .security-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .security-box p {
+            font-size: 13px;
+            color: #1e40af;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .rights-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .rights-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rights-list {
+            list-style: none;
+        }
+
+        .rights-list li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 13px;
+            color: #047857;
+            font-weight: 600;
+        }
+
+        .rights-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 8px;
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .contact-info {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .contact-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 24px 20px;
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 500;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .gdpr-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #10b981;
+            border: 2px solid #10b981;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 16px;
+            }
+
+            .section-content {
+                font-size: 13px;
+            }
+
+            .data-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .data-label {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <div class="header-content">
+                <h1 class="header-title">Privacy Policy</h1>
+                <p class="header-subtitle">How we protect and use your information</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Update Banner -->
+            <div class="update-banner">
+                <div class="update-title">🛡️ Last Updated: November 9, 2025</div>
+                <div class="update-text">This Privacy Policy explains how PayUtility collects, uses, discloses, and safeguards your information when you use our services.</div>
+            </div>
+
+            <!-- Privacy Intro -->
+            <div class="privacy-intro">
+                <div class="intro-title">
+                    🔒 Your Privacy Matters to Us
+                </div>
+                <p class="intro-text">
+                    At PayUtility, we are committed to protecting your privacy and ensuring the security of your personal information. This policy outlines our practices regarding data collection, usage, and protection in compliance with Nigerian Data Protection Regulation (NDPR) and international standards including GDPR.
+                </p>
+                <div class="gdpr-badge">
+                    ✓ NDPR & GDPR Compliant
+                </div>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-nav">
+                <div class="toc-title">📋 Quick Navigation</div>
+                <ul class="toc-list">
+                    <li><a href="#section1" class="toc-link">1. Information We Collect</a></li>
+                    <li><a href="#section2" class="toc-link">2. How We Use Your Information</a></li>
+                    <li><a href="#section3" class="toc-link">3. Information Sharing</a></li>
+                    <li><a href="#section4" class="toc-link">4. Data Security</a></li>
+                    <li><a href="#section5" class="toc-link">5. Your Privacy Rights</a></li>
+                    <li><a href="#section6" class="toc-link">6. Cookies & Tracking</a></li>
+                    <li><a href="#section7" class="toc-link">7. Data Retention</a></li>
+                    <li><a href="#section8" class="toc-link">8. Third-Party Services</a></li>
+                    <li><a href="#section9" class="toc-link">9. Children's Privacy</a></li>
+                    <li><a href="#section10" class="toc-link">10. Changes to This Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Section 1 -->
+            <div class="section" id="section1">
+                <h2 class="section-title">
+                    <span class="section-number">1</span>
+                    Information We Collect
+                </h2>
+                <div class="section-content">
+                    <p>We collect different types of information to provide and improve our services to you:</p>
+                    
+                    <div class="subsection">
+                        <h3 class="subsection-title">1.1 Personal Information</h3>
+                        <p>Information you provide directly when you register or use our services:</p>
+                        <ul class="bullet-list">
+                            <li><strong>Identity Information:</strong> Full name, date of birth, gender, nationality</li>
+                            <li><strong>Contact Information:</strong> Email address, phone number, residential address</li>
+                            <li><strong>Verification Documents:</strong> Government-issued ID (NIN, Driver's License, Passport, Voter's Card), BVN, selfie photographs</li>
+                            <li><strong>Financial Information:</strong> Bank account details, card information, transaction history, wallet balance</li>
+                            <li><strong>Account Credentials:</strong> Username, password (encrypted), security questions</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">1.2 Automatically Collected Information</h3>
+                        <p>Information collected automatically when you use our platform:</p>
+                        <ul class="bullet-list">
+                            <li><strong>Device Information:</strong> Device type, operating system, unique device identifiers, mobile network information</li>
+                            <li><strong>Usage Data:</strong> App features accessed, time spent, interaction patterns, preferences</li>
+                            <li><strong>Location Data:</strong> IP address, approximate geographic location (with your permission)</li>
+                            <li><strong>Transaction Data:</strong> Transaction amounts, dates, merchant information, payment methods used</li>
+                            <li><strong>Log Data:</strong> Access times, error logs, system activity</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">1.3 Information from Third Parties</h3>
+                        <ul class="bullet-list">
+                            <li>Identity verification services (BVN validation, NIN verification)</li>
+                            <li>Payment processors and financial institutions</li>
+                            <li>Credit bureaus and fraud prevention services</li>
+                            <li>Social media platforms (if you choose to connect them)</li>
+                            <li>Service providers for bills and utilities</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <p>💡 <strong>Transparency:</strong> We only collect information necessary to provide our services, comply with legal requirements, and improve user experience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="section" id="section2">
+                <h2 class="section-title">
+                    <span class="section-number">2</span>
+                    How We Use Your Information
+                </h2>
+                <div class="section-content">
+                    <p>We use your information for the following purposes:</p>
+
+                    <div class="data-table">
+                        <div class="data-row">
+                            <div class="data-label">Service Delivery</div>
+                            <div class="data-value">Process transactions, manage your account, provide customer support</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Verification & Security</div>
+                            <div class="data-value">Verify your identity, prevent fraud, detect suspicious activities</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Communication</div>
+                            <div class="data-value">Send transaction confirmations, updates, promotional offers, important notices</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Personalization</div>
+                            <div class="data-value">Customize your experience, recommend relevant services</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Analytics & Improvement</div>
+                            <div class="data-value">Analyze usage patterns, improve features, develop new services</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Legal Compliance</div>
+                            <div class="data-value">Comply with laws, respond to legal requests, enforce our terms</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Marketing</div>
+                            <div class="data-value">Promote services, run campaigns, offer rewards (with your consent)</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <p>⚠️ <strong>Marketing Opt-Out:</strong> You can opt out of promotional communications at any time through app settings or by contacting us.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="section" id="section3">
+                <h2 class="section-title">
+                    <span class="section-number">3</span>
+                    Information Sharing & Disclosure
+                </h2>
+                <div class="section-content">
+                    <p>We do not sell your personal information. We may share your information in the following circumstances:</p>
+                    
+                    <div class="subsection">
+                        <h3 class="subsection-title">3.1 Service Providers</h3>
+                        <p>We share information with trusted third parties who help us operate our services:</p>
+                        <ul class="bullet-list">
+                            <li>Payment processors (Paystack, Flutterwave, Interswitch)</li>
+                            <li>Cloud hosting providers (AWS, Google Cloud)</li>
+                            <li>Identity verification services</li>
+                            <li>Customer support platforms</li>
+                            <li>Analytics and marketing tools</li>
+                            <li>SMS and email service providers</li>
+                        </ul>
+                        <p><em>All service providers are bound by confidentiality agreements and data protection obligations.</em></p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">3.2 Service Partners</h3>
+                        <ul class="bullet-list">
+                            <li>Mobile network operators (MTN, Airtel, Glo, 9mobile)</li>
+                            <li>Electricity distribution companies</li>
+                            <li>Cable TV providers (DSTV, GOTV, Startimes)</li>
+                            <li>Banks and financial institutions</li>
+                            <li>Educational institutions and examination bodies</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">3.3 Legal Requirements</h3>
+                        <p>We may disclose your information when required by law:</p>
+                        <ul class="bullet-list">
+                            <li>Comply with court orders, subpoenas, or legal processes</li>
+                            <li>Respond to government or regulatory requests</li>
+                            <li>Protect our rights, property, or safety</li>
+                            <li>Investigate fraud or security breaches</li>
+                            <li>Enforce our Terms & Conditions</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">3.4 Business Transfers</h3>
+                        <p>In the event of a merger, acquisition, or sale of assets, your information may be transferred to the acquiring entity. You will be notified of any such change.</p>
+                    </div>
+
+                    <div class="security-box">
+                        <p>🔒 <strong>Security Commitment:</strong> All third parties we work with are required to maintain the same level of data protection and security standards that we uphold.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="section" id="section4">
+                <h2 class="section-title">
+                    <span class="section-number">4</span>
+                    Data Security
+                </h2>
+                <div class="section-content">
+                    <p>We implement comprehensive security measures to protect your information:</p>
+                    
+                    <div class="subsection">
+                        <h3 class="subsection-title">4.1 Technical Safeguards</h3>
+                        <ul class="bullet-list">
+                            <li><strong>Encryption:</strong> 256-bit SSL/TLS encryption for data in transit</li>
+                            <li><strong>Data Storage:</strong> AES-256 encryption for data at rest</li>
+                            <li><strong>Access Controls:</strong> Multi-factor authentication, role-based access</li>
+                            <li><strong>Network Security:</strong> Firewalls, intrusion detection systems, DDoS protection</li>
+                            <li><strong>Secure Infrastructure:</strong> SOC 2 compliant cloud hosting</li>
+                            <li><strong>Password Protection:</strong> Bcrypt hashing for password storage</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">4.2 Organizational Safeguards</h3>
+                        <ul class="bullet-list">
+                            <li>Regular security audits and penetration testing</li>
+                            <li>Employee training on data protection and privacy</li>
+                            <li>Strict access controls and background checks for staff</li>
+                            <li>Incident response and disaster recovery plans</li>
+                            <li>Data breach notification procedures</li>
+                            <li>Regular backup and redundancy systems</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">4.3 Your Security Role</h3>
+                        <p>You also play a crucial role in protecting your information:</p>
+                        <ul class="bullet-list">
+                            <li>Use strong, unique passwords</li>
+                            <li>Enable two-factor authentication</li>
+                            <li>Never share your password, PIN, or OTP</li>
+                            <li>Log out after using shared devices</li>
+                            <li>Report suspicious activities immediately</li>
+                            <li>Keep your app updated to the latest version</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <p>⚠️ <strong>Data Breach:</strong> In the unlikely event of a security breach affecting your data, we will notify you within 72 hours as required by law.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="section" id="section5">
+                <h2 class="section-title">
+                    <span class="section-number">5</span>
+                    Your Privacy Rights
+                </h2>
+                <div class="section-content">
+                    <p>Under Nigerian Data Protection Regulation (NDPR) and GDPR, you have the following rights:</p>
+
+                    <div class="rights-card">
+                        <div class="rights-title">🛡️ Your Data Rights</div>
+                        <ul class="rights-list">
+                            <li><strong>Right to Access:</strong> Request a copy of your personal data we hold</li>
+                            <li><strong>Right to Rectification:</strong> Correct inaccurate or incomplete information</li>
+                            <li><strong>Right to Erasure:</strong> Request deletion of your data (subject to legal obligations)</li>
+                            <li><strong>Right to Restriction:</strong> Limit how we use your data in certain circumstances</li>
+                            <li><strong>Right to Data Portability:</strong> Receive your data in a structured, machine-readable format</li>
+                            <li><strong>Right to Object:</strong> Opt out of certain data processing activities</li>
+                            <li><strong>Right to Withdraw Consent:</strong> Revoke consent for data processing at any time</li>
+                            <li><strong>Right to Lodge a Complaint:</strong> File a complaint with data protection authorities</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">How to Exercise Your Rights</h3>
+                        <p>To exercise any of these rights, you can:</p>
+                        <ul class="bullet-list">
+                            <li>Access settings in the PayUtility app</li>
+                            <li>Email us at <a href="mailto:privacy@payutility.com" class="contact-link">privacy@payutility.com</a></li>
+                            <li>Contact our Data Protection Officer</li>
+                            <li>Submit a written request to our office address</li>
+                        </ul>
+                        <p>We will respond to your request within 30 days.</p>
+                    </div>
+
+                    <div class="info-box">
+                        <p>✓ <strong>No Discrimination:</strong> We will not discriminate against you for exercising your privacy rights.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6 -->
+            <div class="section" id="section6">
+                <h2 class="section-title">
+                    <span class="section-number">6</span>
+                    Cookies & Tracking Technologies
+                </h2>
+                <div class="section-content">
+                    <p>We use cookies and similar technologies to enhance your experience and collect analytics data:</p>
+                    
+                    <div class="subsection">
+                        <h3 class="subsection-title">6.1 Types of Cookies We Use</h3>
+                        <ul class="bullet-list">
+                            <li><strong>Essential Cookies:</strong> Required for basic platform functionality, authentication, and security</li>
+                            <li><strong>Performance Cookies:</strong> Help us understand how users interact with our services</li>
+                            <li><strong>Functional Cookies:</strong> Remember your preferences and settings</li>
+                            <li><strong>Analytics Cookies:</strong> Collect data on usage patterns and performance metrics</li>
+                            <li><strong>Marketing Cookies:</strong> Used to deliver personalized advertisements (with your consent)</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">6.2 Third-Party Analytics</h3>
+                        <p>We use the following analytics services:</p>
+                        <ul class="bullet-list">
+                            <li>Google Analytics (website and app usage)</li>
+                            <li>Firebase Analytics (app performance monitoring)</li>
+                            <li>Mixpanel (user behavior tracking)</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">6.3 Managing Cookies</h3>
+                        <p>You can control cookies through:</p>
+                        <ul class="bullet-list">
+                            <li>Browser settings (block, delete, or limit cookies)</li>
+                            <li>App settings (disable analytics and marketing tracking)</li>
+                            <li>Device settings (limit ad tracking, reset advertising ID)</li>
+                        </ul>
+                        <p><em>Note: Disabling essential cookies may affect platform functionality.</em></p>
+                    </div>
+
+                    <div class="info-box">
+                        <p>💡 <strong>Transparency:</strong> We provide clear opt-in options for non-essential cookies and tracking.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 7 -->
+            <div class="section" id="section7">
+                <h2 class="section-title">
+                    <span class="section-number">7</span>
+                    Data Retention
+                </h2>
+                <div class="section-content">
+                    <p>We retain your information for as long as necessary to fulfill the purposes outlined in this policy:</p>
+                    
+                    <div class="data-table">
+                        <div class="data-row">
+                            <div class="data-label">Account Information</div>
+                            <div class="data-value">Retained while your account is active, plus 7 years after closure for compliance</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Transaction Records</div>
+                            <div class="data-value">Minimum 7 years as required by financial regulations</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">KYC Documents</div>
+                            <div class="data-value">7 years after account closure or last transaction</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Marketing Data</div>
+                            <div class="data-value">Until you opt out or withdraw consent</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Support Communications</div>
+                            <div class="data-value">3 years from last interaction</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">Analytics Data</div>
+                            <div class="data-value">Aggregated data retained indefinitely; individual data 2 years</div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Data Deletion Process</h3>
+                        <p>When you request data deletion or close your account:</p>
+                        <ul class="bullet-list">
+                            <li>Personal data is anonymized or deleted within 30 days</li>
+                            <li>Transaction records are archived for legal compliance</li>
+                            <li>Backup systems are purged within 90 days</li>
+                            <li>Some data may be retained if required by law</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <p>⚠️ <strong>Legal Obligations:</strong> We may retain certain information longer if required by law, regulation, or ongoing legal proceedings.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 8 -->
+            <div class="section" id="section8">
+                <h2 class="section-title">
+                    <span class="section-number">8</span>
+                    Third-Party Services & Links
+                </h2>
+                <div class="section-content">
+                    <p>Our platform may contain links to or integrate with third-party services:</p>
+                    
+                    <div class="subsection">
+                        <h3 class="subsection-title">8.1 Third-Party Privacy Policies</h3>
+                        <p>When you interact with third-party services through PayUtility, their own privacy policies apply:</p>
+                        <ul class="bullet-list">
+                            <li>Service providers (electricity, cable TV, etc.)</li>
+                            <li>Social media platforms</li>
+                            <li>Payment gateways</li>
+                            <li>Banking institutions</li>
+                            <li>External websites linked from our app</li>
+                        </ul>
+                        <p>We encourage you to review their privacy policies before providing any information.</p>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">8.2 Our Responsibility</h3>
+                        <ul class="bullet-list">
+                            <li>We carefully select and vet all third-party partners</li>
+                            <li>We require partners to maintain adequate data protection standards</li>
+                            <li>We are not responsible for third-party privacy practices</li>
+                            <li>We do not control third-party data collection or usage</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <p>💡 <strong>Tip:</strong> Always verify you're interacting with legitimate service providers when making payments through PayUtility.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 9 -->
+            <div class="section" id="section9">
+                <h2 class="section-title">
+                    <span class="section-number">9</span>
+                    Children's Privacy
+                </h2>
+                <div class="section-content">
+                    <p>PayUtility is not intended for use by children under the age of 18.</p>
+                    
+                    <ul class="bullet-list">
+                        <li>We do not knowingly collect personal information from children under 18</li>
+                        <li>Users must be at least 18 years old to create an account</li>
+                        <li>If we discover that a child has provided personal information, we will delete it immediately</li>
+                        <li>Parents/guardians who believe their child has provided information should contact us</li>
+                        <li>Users aged 13-17 may use the platform with parental consent and supervision</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <p>⚠️ <strong>Parental Notice:</strong> If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately at <a href="mailto:privacy@payutility.com" class="contact-link">privacy@payutility.com</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 10 -->
+            <div class="section" id="section10">
+                <h2 class="section-title">
+                    <span class="section-number">10</span>
+                    Changes to This Privacy Policy
+                </h2>
+                <div class="section-content">
+                    <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors.</p>
+                    
+                    <div class="subsection">
+                        <h3 class="subsection-title">10.1 How We Notify You</h3>
+                        <ul class="bullet-list">
+                            <li>Update the "Last Updated" date at the top of this policy</li>
+                            <li>Send email notifications for significant changes</li>
+                            <li>Display in-app notifications</li>
+                            <li>Post announcements on our website</li>
+                            <li>Request re-acceptance for material changes</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">10.2 Your Acceptance</h3>
+                        <p>Continued use of PayUtility after changes are posted constitutes acceptance of the updated policy. If you disagree with changes, you may:</p>
+                        <ul class="bullet-list">
+                            <li>Stop using our services</li>
+                            <li>Close your account</li>
+                            <li>Contact us to exercise your data rights</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <p>📧 <strong>Stay Informed:</strong> We recommend reviewing this policy periodically to stay informed about how we protect your information.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-number">11</span>
+                    International Data Transfers
+                </h2>
+                <div class="section-content">
+                    <p>Your information may be transferred to and processed in countries other than Nigeria:</p>
+                    
+                    <ul class="bullet-list">
+                        <li>We use cloud services with servers in multiple locations</li>
+                        <li>Data transfers comply with applicable data protection laws</li>
+                        <li>We implement appropriate safeguards (Standard Contractual Clauses)</li>
+                        <li>Your data receives the same level of protection regardless of location</li>
+                    </ul>
+
+                    <div class="security-box">
+                        <p>🌍 <strong>Cross-Border Protection:</strong> All international transfers are subject to strict data protection agreements and security measures.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Protection Officer -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-number">12</span>
+                    Data Protection Officer
+                </h2>
+                <div class="section-content">
+                    <p>We have appointed a Data Protection Officer (DPO) to oversee our privacy and data protection practices:</p>
+                    
+                    <div class="contact-card">
+                        <div class="contact-title">📧 Contact Our Data Protection Officer</div>
+                        <div class="contact-info">
+                            <strong>Email:</strong> <a href="mailto:dpo@payutility.com" class="contact-link">dpo@payutility.com</a>
+                        </div>
+                        <div class="contact-info">
+                            <strong>Phone:</strong> <a href="tel:+2348012345678" class="contact-link">+234 801 234 5678</a>
+                        </div>
+                        <div class="contact-info">
+                            <strong>Address:</strong> PayUtility Data Protection Office<br>
+                            123 Victoria Island, Lagos, Nigeria
+                        </div>
+                        <div class="contact-info" style="margin-top: 12px;">
+                            <strong>Response Time:</strong> Within 48 hours for urgent matters
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 16px;">For general inquiries or privacy concerns, you can also reach us at:</p>
+                    <ul class="bullet-list">
+                        <li><strong>General Support:</strong> <a href="mailto:support@payutility.com" class="contact-link">support@payutility.com</a></li>
+                        <li><strong>Privacy Inquiries:</strong> <a href="mailto:privacy@payutility.com" class="contact-link">privacy@payutility.com</a></li>
+                        <li><strong>Security Reports:</strong> <a href="mailto:security@payutility.com" class="contact-link">security@payutility.com</a></li>
+                        <li><strong>24/7 Hotline:</strong> +234 801 234 5678</li>
+                        <li><strong>WhatsApp Support:</strong> <a href="https://wa.me/2348012345678" class="contact-link">+234 801 234 5678</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Regulatory Information -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-number">13</span>
+                    Regulatory Compliance
+                </h2>
+                <div class="section-content">
+                    <p>PayUtility complies with the following regulations and standards:</p>
+                    
+                    <div class="data-table">
+                        <div class="data-row">
+                            <div class="data-label">NDPR</div>
+                            <div class="data-value">Nigerian Data Protection Regulation 2019</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">GDPR</div>
+                            <div class="data-value">General Data Protection Regulation (EU)</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">PCI DSS</div>
+                            <div class="data-value">Payment Card Industry Data Security Standard</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">CBN Guidelines</div>
+                            <div class="data-value">Central Bank of Nigeria Cybersecurity Framework</div>
+                        </div>
+                        <div class="data-row">
+                            <div class="data-label">ISO 27001</div>
+                            <div class="data-value">Information Security Management Standard</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <p>✓ <strong>Certification:</strong> We maintain active certifications and undergo regular compliance audits to ensure the highest standards of data protection.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="contact-card">
+                <div class="contact-title">💬 Questions About Your Privacy?</div>
+                <div class="contact-info">We're here to help! Contact us anytime:</div>
+                <div class="contact-info" style="margin-top: 12px;">
+                    <strong>Email:</strong> <a href="mailto:privacy@payutility.com" class="contact-link">privacy@payutility.com</a>
+                </div>
+                <div class="contact-info">
+                    <strong>Phone:</strong> <a href="tel:+2348012345678" class="contact-link">+234 801 234 5678</a>
+                </div>
+                <div class="contact-info">
+                    <strong>Live Chat:</strong> Available 24/7 in the app
+                </div>
+                <div class="contact-info" style="margin-top: 12px;">
+                    <strong>Office Address:</strong><br>
+                    PayUtility Limited<br>
+                    123 Victoria Island, Lagos, Nigeria
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            © 2025 PayUtility. All rights reserved. | 
+            <a href="#terms" class="contact-link">Terms & Conditions</a> | 
+            <a href="#" class="contact-link">Cookie Policy</a>
+            <br><br>
+            <strong>Regulatory Information:</strong><br>
+            Registered with NITDA | Compliant with NDPR & GDPR<br>
+            License No: NITDA/DPR/2025/001234
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Highlight current section in viewport
+        const sections = document.querySelectorAll('.section');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        function highlightTOC() {
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.style.background = '';
+                link.style.color = '#3b82f6';
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.style.background = 'white';
+                    link.style.color = '#1e40af';
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightTOC);
+        highlightTOC(); // Initial call
+
+        // Back button with confirmation if scrolled far
+        document.querySelector('.back-btn').addEventListener('click', function(e) {
+            if (window.pageYOffset > 500) {
+                const confirm = window.confirm('Are you sure you want to leave? You may not have finished reading the privacy policy.');
+                if (!confirm) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
