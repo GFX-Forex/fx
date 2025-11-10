@@ -633,6 +633,111 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+
+
+
+
+
+
+
+
+
+
+        .option-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f1f1;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.option-item:hover {
+  background: #f9fafb;
+}
+
+.option-icon {
+  margin-right: 12px;
+  color: #2563eb; /* blue tone */
+}
+
+.option-content {
+  flex: 1;
+}
+
+.option-title {
+  font-weight: 600;
+  color: #111827;
+}
+
+.option-description {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.option-arrow i {
+  color: #9ca3af;
+}
+
+.lucide-icon {
+  width: 22px;
+  height: 22px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================
+   Lucide Icons — Bottom Nav
+   ========================== */
+
+/* Base icon styling */
+.nav-icon {
+  width: 24px;              /* consistent size */
+  height: 24px;
+  stroke-width: 2;          /* line thickness */
+  color: #6b7280;           /* default gray */
+  transition: all 0.25s ease;
+}
+
+/* Hover effect — subtle lift + color change */
+.nav-item:hover .nav-icon {
+  color: #111827;           /* darker gray */
+  transform: translateY(-2px);
+}
+
+/* Active icon — highlight in blue */
+.nav-item.active .nav-icon {
+  color: #2563eb;           /* blue-600 tone */
+  transform: scale(1.05);
+}
+
+/* Optional: animate on click (quick pulse) */
+.nav-item:active .nav-icon {
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+}
+
+/* Optional: mobile adjustment */
+@media (max-width: 480px) {
+  .nav-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
     </style>
 </head>
 <body>
@@ -674,69 +779,104 @@
             </div>
 
             <!-- Other Options -->
-            <div class="options-list">
-                <!-- Cash Deposit -->
-                <div class="option-item" onclick="openCashDeposit()">
-                    <div class="option-icon">💵</div>
-                    <div class="option-content">
-                        <div class="option-title">Cash Deposit</div>
-                        <div class="option-description">Fund your account with nearby merchants</div>
-                    </div>
-                    <div class="option-arrow">›</div>
-                </div>
+            <!-- Load Lucide (only once on your page) -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
-                <!-- Card/Account Top-up -->
-                <div class="option-item" onclick="openCardTopup()">
-                    <div class="option-icon">💳</div>
-                    <div class="option-content">
-                        <div class="option-title">Top-up with Card/Account</div>
-                        <div class="option-description">Add money directly from your bank card or account</div>
-                    </div>
-                    <div class="option-arrow">›</div>
-                </div>
-
-                <!-- Bank USSD -->
-                <div class="option-item" onclick="openBankUSSD()">
-                    <div class="option-icon">📱</div>
-                    <div class="option-content">
-                        <div class="option-title">Bank USSD</div>
-                        <div class="option-description">With other banks' USSD code</div>
-                    </div>
-                    <div class="option-arrow">›</div>
-                </div>
-
-                <!-- Scan QR Code -->
-                <div class="option-item" onclick="openQRScanner()">
-                    <div class="option-icon">⚡</div>
-                    <div class="option-content">
-                        <div class="option-title">Scan my QR Code</div>
-                        <div class="option-description">Show QR code to any PayUtility user</div>
-                    </div>
-                    <div class="option-arrow">›</div>
-                </div>
-            </div>
+<div class="options-list">
+    <!-- Cash Deposit -->
+    <div class="option-item" onclick="openCashDeposit()">
+        <div class="option-icon">
+            <i data-lucide="wallet" class="lucide-icon"></i>
         </div>
+        <div class="option-content">
+            <div class="option-title">Cash Deposit</div>
+            <div class="option-description">Fund your account with nearby merchants</div>
+        </div>
+        <div class="option-arrow">
+            <i data-lucide="chevron-right"></i>
+        </div>
+    </div>
+
+    <!-- Card/Account Top-up -->
+    <div class="option-item" onclick="openCardTopup()">
+        <div class="option-icon">
+            <i data-lucide="credit-card" class="lucide-icon"></i>
+        </div>
+        <div class="option-content">
+            <div class="option-title">Top-up with Card/Account</div>
+            <div class="option-description">Add money directly from your bank card or account</div>
+        </div>
+        <div class="option-arrow">
+            <i data-lucide="chevron-right"></i>
+        </div>
+    </div>
+
+    <!-- Bank USSD -->
+    <div class="option-item" onclick="openBankUSSD()">
+        <div class="option-icon">
+            <i data-lucide="smartphone" class="lucide-icon"></i>
+        </div>
+        <div class="option-content">
+            <div class="option-title">Bank USSD</div>
+            <div class="option-description">With other banks' USSD code</div>
+        </div>
+        <div class="option-arrow">
+            <i data-lucide="chevron-right"></i>
+        </div>
+    </div>
+
+    <!-- Scan QR Code -->
+    <div class="option-item" onclick="openQRScanner()">
+        <div class="option-icon">
+            <i data-lucide="qr-code" class="lucide-icon"></i>
+        </div>
+        <div class="option-content">
+            <div class="option-title">Scan my QR Code</div>
+            <div class="option-description">Show QR code to any PayUtility user</div>
+        </div>
+        <div class="option-arrow">
+            <i data-lucide="chevron-right"></i>
+        </div>
+      </div>
+       </div>
+       </div>
+      <script>
+     // Initialize Lucide icons
+     lucide.createIcons();
+     </script>
+
+        
 
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
-            <div class="nav-item active">
-                <div class="nav-icon">🏠</div>
-                <div class="nav-label">Home</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">💳</div>
-                <div class="nav-label">Services</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">📊</div>
-                <div class="nav-label">History</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">👤</div>
-                <div class="nav-label">Account</div>
-            </div>
+        <div class="nav-item active">
+            <i data-lucide="home" class="nav-icon"></i>
+            <div class="nav-label">Home</div>
         </div>
-    </div>
+    
+         <div class="nav-item">
+            <i data-lucide="credit-card" class="nav-icon"></i>
+            <div class="nav-label">Services</div>
+         </div>
+    
+         <div class="nav-item" onclick="window.location.href='history.html'">
+            <i data-lucide="history" class="nav-icon"></i>
+            <div class="nav-label">History</div>
+         </div>
+    
+         <div class="nav-item" onclick="window.location.href='profile-settings.html'">
+            <i data-lucide="user" class="nav-icon"></i>
+            <div class="nav-label">Account</div>
+          </div>
+          </div>
+         </div>
+    <!-- Lucide library -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+    lucide.createIcons(); // This renders all icons with data-lucide attributes
+    </script>
+
+    
 
     <!-- Card Top-up Modal -->
     <div class="modal-overlay" id="cardTopupModal">
