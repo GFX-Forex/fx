@@ -397,6 +397,10 @@
             display: block;
         }
 
+        .input-wrapper {
+            position: relative;
+        }
+
         .input-field {
             width: 100%;
             padding: 14px 16px;
@@ -406,12 +410,39 @@
             font-weight: 600;
             color: #1f2937;
             background: #f9fafb;
+            transition: all 0.3s;
         }
 
         .input-field:focus {
             outline: none;
             border-color: #3b82f6;
             background: white;
+        }
+
+        .card-number-input {
+            padding-right: 60px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .card-logo {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 28px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card-logo.show {
+            opacity: 1;
+        }
+
+        .card-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
         .select-field {
@@ -439,6 +470,7 @@
             font-size: 12px;
             color: #1e40af;
             line-height: 1.5;
+            font-weight: 500;
         }
 
         .modal-actions {
@@ -471,6 +503,135 @@
 
         .btn:active {
             transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Payment Method Selection */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .payment-method {
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f9fafb;
+        }
+
+        .payment-method:hover {
+            border-color: #3b82f6;
+        }
+
+        .payment-method.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .payment-method-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .payment-method-info {
+            flex: 1;
+        }
+
+        .payment-method-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .payment-method-desc {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .payment-method-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .payment-method.selected .payment-method-radio {
+            border-color: #3b82f6;
+        }
+
+        .payment-method-radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #3b82f6;
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s;
+        }
+
+        .payment-method.selected .payment-method-radio::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Card Form */
+        .card-form {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .card-form.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -598,23 +759,99 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="label">Payment Method</label>
-                        <select class="select-field" id="paymentMethod" required>
-                            <option value="">Select payment method</option>
-                            <option value="card">Debit Card</option>
-                            <option value="bank">Bank Account</option>
-                            <option value="transfer">Bank Transfer</option>
-                        </select>
+                        <label class="label">Select Payment Method</label>
+                        <div class="payment-methods">
+                            <div class="payment-method selected" data-method="card" onclick="selectPaymentMethod(this)">
+                                <div class="payment-method-icon">💳</div>
+                                <div class="payment-method-info">
+                                    <div class="payment-method-name">Debit Card</div>
+                                    <div class="payment-method-desc">Visa, Mastercard, Verve</div>
+                                </div>
+                                <div class="payment-method-radio"></div>
+                            </div>
+
+                            <div class="payment-method" data-method="bank" onclick="selectPaymentMethod(this)">
+                                <div class="payment-method-icon">🏦</div>
+                                <div class="payment-method-info">
+                                    <div class="payment-method-name">Bank Account</div>
+                                    <div class="payment-method-desc">Direct debit from your account</div>
+                                </div>
+                                <div class="payment-method-radio"></div>
+                            </div>
+
+                            <div class="payment-method" data-method="transfer" onclick="selectPaymentMethod(this)">
+                                <div class="payment-method-icon">🔄</div>
+                                <div class="payment-method-info">
+                                    <div class="payment-method-name">Bank Transfer</div>
+                                    <div class="payment-method-desc">Transfer from any bank</div>
+                                </div>
+                                <div class="payment-method-radio"></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b;">
-                        <p style="color: #78350f;"><strong>ℹ️ Note:</strong> A processing fee of 1.5% applies to card payments.</p>
+                    <!-- Card Payment Form -->
+                    <div class="card-form show" id="cardPaymentForm">
+                        <div class="form-group">
+                            <label class="label">Card Number</label>
+                            <div class="input-wrapper">
+                                <input type="text" class="input-field card-number-input" placeholder="0000 0000 0000 0000" id="cardNumber" maxlength="19" required>
+                                <svg class="card-logo" id="cardLogo" width="40" height="28" viewBox="0 0 40 28"></svg>
+                            </div>
+                        </div>
+
+                        <div class="card-row">
+                            <div class="form-group">
+                                <label class="label">Expiry Date</label>
+                                <input type="text" class="input-field" placeholder="MM/YY" id="cardExpiry" maxlength="5" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="label">CVV</label>
+                                <input type="text" class="input-field" placeholder="123" id="cardCVV" maxlength="3" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="label">Card PIN</label>
+                            <input type="password" class="input-field" placeholder="****" id="cardPIN" maxlength="4" required>
+                        </div>
+
+                        <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+                            <p style="color: #78350f;"><strong>🔒 Secure:</strong> Your card details are encrypted and never stored.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bank Account Form -->
+                    <div class="card-form" id="bankPaymentForm">
+                        <div class="form-group">
+                            <label class="label">Select Bank</label>
+                            <select class="select-field" required>
+                                <option value="">Choose your bank</option>
+                                <option value="gtb">GTBank</option>
+                                <option value="access">Access Bank</option>
+                                <option value="zenith">Zenith Bank</option>
+                                <option value="uba">UBA</option>
+                                <option value="first">First Bank</option>
+                            </select>
+                        </div>
+
+                        <div class="info-box">
+                            <p><strong>ℹ️ Note:</strong> You'll be redirected to your bank's secure page to authorize the payment.</p>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Form -->
+                    <div class="card-form" id="transferPaymentForm">
+                        <div class="info-box">
+                            <p><strong>📱 Instructions:</strong> Transfer the exact amount to the account details shown above and your wallet will be credited automatically.</p>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-actions">
                 <button class="btn btn-cancel" onclick="closeModal('cardTopupModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="processCardTopup()">Continue</button>
+                <button class="btn btn-primary" id="proceedBtn" onclick="processCardTopup()">Continue</button>
             </div>
         </div>
     </div>
@@ -702,6 +939,89 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        let selectedPaymentMethod = 'card';
+
+        // Card logos SVG definitions
+        const cardLogos = {
+            visa: `<svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg"><rect fill="#0066b2" width="750" height="471"/><path d="M278.2 334.2h-52.4l32.7-201.2h52.4l-32.7 201.2zm186.5-197.5c-10.4-4-26.6-8.2-46.9-8.2-51.7 0-88.1 27.5-88.4 66.9-.3 29.1 26 45.4 45.8 55.1 20.3 9.9 27.2 16.3 27.1 25.1-.1 13.5-16.2 19.7-31.1 19.7-20.8 0-31.9-3.1-49-10.5l-6.7-3.2-7.3 45.2c12.3 5.6 35 10.6 58.6 10.8 55 0 90.6-27.2 91-69.2.2-23.1-13.8-40.6-44-55.1-18.3-9.4-29.5-15.7-29.4-25.2 0-8.4 9.5-17.5 29.9-17.5 17.1-.3 29.4 3.6 39 7.7l4.7 2.3 7.1-43.8zM616 133l-40.8.1c-12.7 0-22.1 3.6-27.7 16.8l-78.6 184.4h55l10.9-30.2h67.2c1.6 7.1 6.4 30.2 6.4 30.2h48.5L616 133zm-65.7 130.3c4.3-11.5 20.8-56.3 20.8-56.3-.3.5 4.3-11.7 6.9-19.3l3.6 17.4s10 48.9 12.1 59.2h-43.4zM232.2 133l-51.3 137.9-5.5-27.8c-9.4-32-38.8-66.7-71.8-84l47 174.9 55.4-.1 82.4-201h-56.2z" fill="#fff"/><path d="M131.6 133H45.8l-.7 4.4c65.7 16.8 109.2 57.5 127.2 106.2l-18.4-93.7c-3-12.8-12.3-16.6-22.3-16.9z" fill="#f9a533"/></svg>`,
+            mastercard: `<svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg"><rect fill="#000" width="750" height="471"/><circle fill="#eb001b" cx="269.5" cy="235.5" r="147.5"/><circle fill="#f79e1b" cx="480.5" cy="235.5" r="147.5"/><path fill="#ff5f00" d="M375 113.3c-26.3 20.8-43.4 52.8-43.4 88.7s17.1 67.9 43.4 88.7c26.3-20.8 43.4-52.8 43.4-88.7s-17.1-67.9-43.4-88.7z"/></svg>`,
+            verve: `<svg viewBox="0 0 750 471" xmlns="http://www.w3.org/2000/svg"><rect fill="#00425f" width="750" height="471"/><path fill="#ef3124" d="M375 115l-50 241h50l50-241z"/><path fill="#00a65f" d="M325 115l-50 241h50l50-241z"/><path fill="#f8991d" d="M425 115l-50 241h50l50-241z"/></svg>`
+        };
+
+        // Detect card type
+        function detectCardType(number) {
+            const cleaned = number.replace(/\s/g, '');
+            
+            if (/^4/.test(cleaned)) return 'visa';
+            if (/^5[1-5]/.test(cleaned) || /^2[2-7]/.test(cleaned)) return 'mastercard';
+            if (/^506[01]/.test(cleaned)) return 'verve';
+            
+            return null;
+        }
+
+        // Format card number
+        function formatCardNumber(value) {
+            const cleaned = value.replace(/\s/g, '');
+            const chunks = cleaned.match(/.{1,4}/g);
+            return chunks ? chunks.join(' ') : cleaned;
+        }
+
+        // Card number input handler
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+            e.target.value = formatCardNumber(value);
+            
+            const cardType = detectCardType(value);
+            const cardLogo = document.getElementById('cardLogo');
+            
+            if (cardType && cardLogos[cardType]) {
+                cardLogo.innerHTML = cardLogos[cardType];
+                cardLogo.classList.add('show');
+            } else {
+                cardLogo.classList.remove('show');
+            }
+        });
+
+        // Format expiry date
+        document.getElementById('cardExpiry').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            
+            e.target.value = value;
+        });
+
+        // CVV input - numbers only
+        document.getElementById('cardCVV').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // PIN input - numbers only
+        document.getElementById('cardPIN').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // Select payment method
+        function selectPaymentMethod(element) {
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedPaymentMethod = element.dataset.method;
+            
+            // Hide all forms
+            document.querySelectorAll('.card-form').forEach(f => f.classList.remove('show'));
+            
+            // Show selected form
+            if (selectedPaymentMethod === 'card') {
+                document.getElementById('cardPaymentForm').classList.add('show');
+            } else if (selectedPaymentMethod === 'bank') {
+                document.getElementById('bankPaymentForm').classList.add('show');
+            } else if (selectedPaymentMethod === 'transfer') {
+                document.getElementById('transferPaymentForm').classList.add('show');
+            }
+        }
+
         // Copy account number
         function copyAccountNumber() {
             const accountNumber = '816 951 3224';
@@ -730,6 +1050,9 @@
         // Open cash deposit
         function openCashDeposit() {
             showToast('Finding nearby merchants...');
+            setTimeout(() => {
+                alert('🏪 Nearby Merchants\n\nThis feature will show PayUtility agents near you where you can deposit cash.\n\nComing soon!');
+            }, 1000);
         }
 
         // Open card topup
@@ -751,11 +1074,23 @@
         function showUSSDCode(bank, code) {
             copyToClipboard(code);
             showToast(`✓ ${bank} USSD code copied!`);
+            setTimeout(() => {
+                closeModal('ussdModal');
+            }, 1500);
         }
 
         // Share QR code
         function shareQRCode() {
-            showToast('QR code sharing...');
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My PayUtility QR Code',
+                    text: 'Scan this QR code to send me money via PayUtility\n\nAccount: 816 951 3224\nName: EMMANUEL ADEOLA'
+                }).catch(() => {
+                    showToast('QR code sharing coming soon!');
+                });
+            } else {
+                showToast('QR code sharing coming soon!');
+            }
         }
 
         // Close modal
@@ -766,29 +1101,77 @@
         // Process card topup
         function processCardTopup() {
             const amount = document.getElementById('topupAmount').value;
-            const method = document.getElementById('paymentMethod').value;
 
             if (!amount || amount < 100) {
-                showToast('Minimum amount is ₦100');
+                showToast('⚠️ Minimum amount is ₦100');
                 return;
             }
 
-            if (!method) {
-                showToast('Please select payment method');
+            if (amount > 1000000) {
+                showToast('⚠️ Maximum amount is ₦1,000,000');
                 return;
             }
 
-            const btn = event.target;
-            btn.textContent = 'Processing...';
-            btn.disabled = true;
+            if (selectedPaymentMethod === 'card') {
+                const cardNumber = document.getElementById('cardNumber').value;
+                const cardExpiry = document.getElementById('cardExpiry').value;
+                const cardCVV = document.getElementById('cardCVV').value;
+                const cardPIN = document.getElementById('cardPIN').value;
 
-            setTimeout(() => {
-                showToast(`✓ ₦${parseInt(amount).toLocaleString()} added successfully!`);
-                btn.textContent = 'Continue';
-                btn.disabled = false;
-                closeModal('cardTopupModal');
-                document.getElementById('cardTopupForm').reset();
-            }, 2000);
+                if (!cardNumber || cardNumber.replace(/\s/g, '').length < 16) {
+                    showToast('⚠️ Please enter a valid card number');
+                    return;
+                }
+
+                if (!cardExpiry || cardExpiry.length < 5) {
+                    showToast('⚠️ Please enter card expiry date');
+                    return;
+                }
+
+                if (!cardCVV || cardCVV.length < 3) {
+                    showToast('⚠️ Please enter CVV');
+                    return;
+                }
+
+                if (!cardPIN || cardPIN.length !== 4) {
+                    showToast('⚠️ Please enter 4-digit PIN');
+                    return;
+                }
+
+                const cardType = detectCardType(cardNumber);
+                const cardName = cardType ? cardType.charAt(0).toUpperCase() + cardType.slice(1) : 'Card';
+
+                const btn = document.getElementById('proceedBtn');
+                const originalText = btn.textContent;
+                btn.innerHTML = '<span class="loading-spinner"></span> Processing...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    showToast(`✓ ₦${parseInt(amount).toLocaleString()} added via ${cardName}!`);
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    closeModal('cardTopupModal');
+                    document.getElementById('cardTopupForm').reset();
+                    document.getElementById('cardLogo').classList.remove('show');
+                    
+                    // Success notification
+                    setTimeout(() => {
+                        alert('✓ Payment Successful!\n\n₦' + parseInt(amount).toLocaleString() + ' has been added to your wallet.\n\nTransaction ID: TXN' + Date.now());
+                    }, 500);
+                }, 2500);
+            } else if (selectedPaymentMethod === 'bank') {
+                showToast('🏦 Redirecting to bank...');
+                setTimeout(() => {
+                    alert('🏦 Bank Payment\n\nYou will be redirected to your bank\'s secure page to authorize this payment.\n\nAmount: ₦' + parseInt(amount).toLocaleString());
+                    closeModal('cardTopupModal');
+                }, 1500);
+            } else if (selectedPaymentMethod === 'transfer') {
+                showToast('📱 Transfer details ready');
+                setTimeout(() => {
+                    alert('📱 Bank Transfer\n\nTransfer ₦' + parseInt(amount).toLocaleString() + ' to:\n\nAccount: 816 951 3224\nBank: PayUtility\n\nYour wallet will be credited automatically.');
+                    closeModal('cardTopupModal');
+                }, 1000);
+            }
         }
 
         // Copy to clipboard
@@ -836,7 +1219,24 @@
             });
         });
 
-        console.log('PayUtility Add Money page initialized successfully! 💰');
+        // Validate amount input
+        document.getElementById('topupAmount').addEventListener('input', function(e) {
+            if (this.value < 0) {
+                this.value = 0;
+            }
+        });
+
+        // Auto-format on blur
+        document.getElementById('topupAmount').addEventListener('blur', function() {
+            if (this.value) {
+                const value = parseFloat(this.value);
+                if (!isNaN(value)) {
+                    this.value = Math.floor(value);
+                }
+            }
+        });
+
+        console.log('✅ PayUtility Add Money page initialized successfully!');
     </script>
 </body>
 </html>
