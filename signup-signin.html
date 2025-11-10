@@ -832,7 +832,7 @@
             <div class="checkbox-wrapper">
                 <input type="checkbox" class="checkbox" id="termsCheckbox" required>
                 <label class="checkbox-label" for="termsCheckbox">
-                    I agree to PayUtility's <a href="#terms">Terms & Conditions</a> and <a href="#privacy">Privacy Policy</a>
+                    I agree to PayUtility's <a href="terms-conditions.html">Terms & Conditions</a> and <a href="privacy-policy.html">Privacy Policy</a>
                 </label>
             </div>
 
@@ -954,6 +954,7 @@
             setTimeout(() => {
                 // Success - redirect to dashboard
                 alert('✓ Login Successful!\n\nWelcome back to PayUtility.\nRedirecting to dashboard...');
+                window.location.href = 'dashboard.html';
                 // window.location.href = 'dashboard.html';
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
@@ -1050,15 +1051,26 @@
             submitBtn.disabled = true;
 
             setTimeout(() => {
-                // Success
-                document.getElementById('signupSuccess').classList.add('show');
-                setTimeout(() => {
-                    alert('✓ Account Created Successfully!\n\nWelcome to PayUtility, ' + firstName + '!\n\nA verification email has been sent to ' + email + '.\n\nRedirecting to dashboard...');
-                    // window.location.href = 'dashboard.html';
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }, 2000);
-            }, 1500);
+              document.getElementById('signupSuccess').classList.add('show');
+              setTimeout(() => {
+                  alert(
+                      '✓ Account Created Successfully!\n\n' +
+                      'Welcome to PayUtility, ' + firstName + '!\n\n' +
+                      'A verification email has been sent to ' + email + '.\n\n' +
+                      'Redirecting to login...'
+                  );
+          
+                  // If login is on the same page:
+                  showLogin();
+          
+                  // If login is on another html page, use this instead:
+                  // window.location.href = 'login.html';
+          
+                  submitBtn.textContent = originalText;
+                  submitBtn.disabled = false;
+              }, 2000);
+          }, 1500);
+
         });
 
         function showSignupError(message) {
