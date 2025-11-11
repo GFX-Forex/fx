@@ -143,21 +143,24 @@
             gap: 8px;
         }
 
-        .action-btn.copy {
-            background: #f0fdf4;
-            color: #059669;
-            border: 2px solid #bbf7d0;
-        }
+        /* Copy Button — light green → light blue */
+.action-btn.copy {
+    background: #eff6ff;       /* light blue */
+    color: #1d4ed8;            /* blue-700 */
+    border: 2px solid #bfdbfe; /* blue-200 */
+}
 
-        .action-btn.copy:active {
-            transform: scale(0.98);
-            background: #dcfce7;
-        }
+.action-btn.copy:active {
+    transform: scale(0.98);
+    background: #dbeafe;       /* slightly darker blue */
+}
 
-        .action-btn.share {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-        }
+/* Share Button — gradient green → gradient blue */
+.action-btn.share {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); /* blue gradient */
+    color: white;
+}
+
 
         .action-btn.share:active {
             transform: scale(0.98);
