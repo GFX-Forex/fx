@@ -544,6 +544,52 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+
+
+
+
+
+
+
+        /* ==========================
+   Lucide Icons — Bottom Nav
+   ========================== */
+
+/* Base icon styling */
+.nav-icon {
+  width: 24px;              /* consistent size */
+  height: 24px;
+  stroke-width: 2;          /* line thickness */
+  color: #6b7280;           /* default gray */
+  transition: all 0.25s ease;
+}
+
+/* Hover effect — subtle lift + color change */
+.nav-item:hover .nav-icon {
+  color: #111827;           /* darker gray */
+  transform: translateY(-2px);
+}
+
+/* Active icon — highlight in blue */
+.nav-item.active .nav-icon {
+  color: #2563eb;           /* blue-600 tone */
+  transform: scale(1.05);
+}
+
+/* Optional: animate on click (quick pulse) */
+.nav-item:active .nav-icon {
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+}
+
+/* Optional: mobile adjustment */
+@media (max-width: 480px) {
+  .nav-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
     </style>
 </head>
 <body>
@@ -684,24 +730,33 @@
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <div class="nav-item">
-                <div class="nav-icon">🏠</div>
-                <div class="nav-label">Home</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">💳</div>
-                <div class="nav-label">Services</div>
-            </div>
-            <div class="nav-item active">
-                <div class="nav-icon">📊</div>
-                <div class="nav-label">History</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">👤</div>
-                <div class="nav-label">Account</div>
-            </div>
-        </div>
+    <div class="nav-item active">
+        <i data-lucide="home" class="nav-icon"></i>
+        <div class="nav-label">Home</div>
     </div>
+
+    <div class="nav-item">
+        <i data-lucide="credit-card" class="nav-icon"></i>
+        <div class="nav-label">Services</div>
+    </div>
+
+    <div class="nav-item" onclick="window.location.href='history.html'">
+        <i data-lucide="history" class="nav-icon"></i>
+        <div class="nav-label">History</div>
+    </div>
+
+    <div class="nav-item" onclick="window.location.href='profile-settings.html'">
+        <i data-lucide="user" class="nav-icon"></i>
+        <div class="nav-label">Account</div>
+    </div>
+</div>
+</div>
+
+<!-- Lucide library -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons(); // This renders all icons with data-lucide attributes
+</script>
 
     <script>
         // Sample transaction data
@@ -925,22 +980,25 @@
 
             container.innerHTML = html;
             document.getElementById('resultsCount').textContent = `${sorted.length} transaction${sorted.length !== 1 ? 's' : ''}`;
+            lucide.createIcons(); // ✅ This converts all <i data-lucide="..."> into SVGs
+
         }
 
         // Get icon emoji based on category
         function getIconEmoji(category, type) {
-            const icons = {
-                airtime: '📱',
-                data: '📶',
-                electricity: '⚡',
-                cable: '📺',
-                transfer: '💸',
-                funding: '💰',
-                withdrawal: '🏧',
-                other: '📄'
-            };
-            return icons[category] || (type === 'credit' ? '✓' : '💳');
+        const icons = {
+            airtime: '<i data-lucide="smartphone"></i>',
+            data: '<i data-lucide="wifi"></i>',
+            electricity: '<i data-lucide="zap"></i>',
+            cable: '<i data-lucide="tv"></i>',
+            transfer: '<i data-lucide="dollar-sign"></i>',
+            funding: '<i data-lucide="credit-card"></i>',
+            withdrawal: '<i data-lucide="bank"></i>',
+            other: '<i data-lucide="file-text"></i>'
+        };
+        return icons[category] || (type === 'credit' ? '<i data-lucide="check"></i>' : '<i data-lucide="credit-card"></i>');
         }
+
 
         // Update summary
         function updateSummary() {
