@@ -479,6 +479,55 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
+
+
+
+
+
+
+
+
+
+
+        /* ==========================
+   Lucide Icons — Bottom Nav
+   ========================== */
+
+/* Base icon styling */
+.nav-icon {
+  width: 24px;              /* consistent size */
+  height: 24px;
+  stroke-width: 2;          /* line thickness */
+  color: #6b7280;           /* default gray */
+  transition: all 0.25s ease;
+}
+
+/* Hover effect — subtle lift + color change */
+.nav-item:hover .nav-icon {
+  color: #111827;           /* darker gray */
+  transform: translateY(-2px);
+}
+
+/* Active icon — highlight in blue */
+.nav-item.active .nav-icon {
+  color: #2563eb;           /* blue-600 tone */
+  transform: scale(1.05);
+}
+
+/* Optional: animate on click (quick pulse) */
+.nav-item:active .nav-icon {
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+}
+
+/* Optional: mobile adjustment */
+@media (max-width: 480px) {
+  .nav-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
     </style>
 </head>
 <body>
@@ -512,23 +561,33 @@
         <!-- Content -->
         <div class="content">
             <!-- Account Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-value">₦125K</div>
-                    <div class="stat-label">Balance</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-value">247</div>
-                    <div class="stat-label">Transactions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⭐</div>
-                    <div class="stat-value">1,850</div>
-                    <div class="stat-label">Points</div>
-                </div>
-            </div>
+            <!-- Add this inside your <head> -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- Your stats section -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon"><i data-lucide="wallet"></i></div>
+        <div class="stat-value">₦125K</div>
+        <div class="stat-label">Balance</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i data-lucide="bar-chart-2"></i></div>
+        <div class="stat-value">247</div>
+        <div class="stat-label">Transactions</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i data-lucide="star"></i></div>
+        <div class="stat-value">1,850</div>
+        <div class="stat-label">Points</div>
+    </div>
+</div>
+
+<!-- This runs automatically when page loads -->
+<script>
+  lucide.createIcons();
+</script>
+
 
             <!-- Account Section -->
             <div class="section">
@@ -721,27 +780,36 @@
                 <p>© 2024 PayUtility. All rights reserved.</p>
             </div>
         </div>
+          
+                  <!-- Bottom Navigation -->
+                  <div class="bottom-nav">
+              <div class="nav-item active">
+                  <i data-lucide="home" class="nav-icon"></i>
+                  <div class="nav-label">Home</div>
+              </div>
+          
+              <div class="nav-item">
+                  <i data-lucide="credit-card" class="nav-icon"></i>
+                  <div class="nav-label">Services</div>
+              </div>
+          
+              <div class="nav-item" onclick="window.location.href='history.html'">
+                  <i data-lucide="history" class="nav-icon"></i>
+                  <div class="nav-label">History</div>
+              </div>
+          
+               <div class="nav-item" onclick="window.location.href='profile-settings.html'">
+                  <i data-lucide="user" class="nav-icon"></i>
+                  <div class="nav-label">Account</div>
+               </div>
+              </div>
+          </div>
 
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <div class="nav-item">
-                <div class="nav-icon">🏠</div>
-                <div class="nav-label">Home</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">💳</div>
-                <div class="nav-label">Services</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">📊</div>
-                <div class="nav-label">History</div>
-            </div>
-            <div class="nav-item active">
-                <div class="nav-icon">👤</div>
-                <div class="nav-label">Account</div>
-            </div>
-        </div>
-    </div>
+         <!-- Lucide library -->
+         <script src="https://unpkg.com/lucide@latest"></script>
+         <script>
+           lucide.createIcons(); // This renders all icons with data-lucide attributes
+         </script>
 
     <!-- Edit Profile Modal -->
     <div class="modal-overlay" id="editProfileModal">
