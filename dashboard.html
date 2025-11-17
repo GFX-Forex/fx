@@ -770,6 +770,8 @@
          </div>
         </div>
 
+        
+
         <!-- REFERRAL BANNER -->
         <div class="referral-banner">
             <div class="referral-content">
@@ -864,36 +866,88 @@
         <div class="nav-label">Account</div>
     </div>
 </div>
+</div>
 
 
-    </div>
 
-    <script>
-        // Balance visibility toggle
-        const toggleBtn = document.getElementById('toggleBalance');
+<script>
+    const API_BASE_URL = 'http://localhost:5000/api'; // change if deployed
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = sessionStorage.getItem('token');  // CHANGED
+    if (!token) return window.location.href = 'signup-signin.html';
+
+    let payload;
+    try {
+        payload = JSON.parse(atob(token.split('.')[1]));
+    } catch {
+        sessionStorage.removeItem('token');
+        return window.location.href = 'signup-signin.html';
+    }
+
+    const userId = payload.userId;
+
+    try {
+        // 1️⃣ Fetch user info
+        const userRes = await fetch(`${API_BASE_URL}/auth/${userId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const userData = await userRes.json();
+        if (!userRes.ok) throw new Error(userData.message);
+
+        document.querySelector('.user-details h3').textContent = userData.fullName;
+        document.querySelector('.user-details p').textContent = `ID: ${userData.userId}`;
+
+        // 2️⃣ Fetch wallet info
+        const walletRes = await fetch(`${API_BASE_URL}/wallet/${userId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const walletData = await walletRes.json();
+        if (!walletRes.ok) throw new Error(walletData.message);
+
+        // Update balance
         const balanceEl = document.getElementById('balanceAmount');
+        const balance = walletData.balance?.available || 0;
+        balanceEl.textContent = `₦${balance.toLocaleString()}`;
+
+        // Toggle visibility
+        const toggleBtn = document.getElementById('toggleBalance');
         let visible = true;
-        const actualBalance = '₦125,450.00';
-
-        toggleBtn.addEventListener('click', function() {
+        toggleBtn.addEventListener('click', () => {
             visible = !visible;
-            balanceEl.textContent = visible ? actualBalance : '••••••';
-            this.textContent = visible ? '👁️' : '👁️‍🗨️';
+            balanceEl.textContent = visible ? `₦${balance.toLocaleString()}` : '••••••';
+            toggleBtn.textContent = visible ? '👁️' : '👁️‍🗨️';
         });
 
-        // Bottom navigation
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', function() {
-                navItems.forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+        // 3️⃣ Silent DVA creation
+        const va = walletData.virtualAccount;
+        if (!va || !va.accountNumber) {
+            await fetch(`${API_BASE_URL}/wallet/${userId}/dva`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
-        });
+            console.log('Dedicated Virtual Account created silently.');
+        }
 
-        // Dynamic greeting
-        const hour = new Date().getHours();
-        const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-    </script>
+    } catch (err) {
+        console.error(err);
+
+        // ⛔ Professional handling of expired token
+        if (err.message.includes("Invalid") || err.message.includes("expired")) {
+            sessionStorage.removeItem('token');
+            return window.location.href = 'signup-signin.html?view=login';
+        }
+
+        alert(err.message);
+    }
+});
+
+</script>
+
+
     <script src="https://unpkg.com/lucide@latest"></script>
 <script>
   lucide.createIcons();
