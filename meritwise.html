@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer to Meritwise User</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+            flex: 1;
+            text-align: center;
+        }
+
+        .history-btn {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3b82f6;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Free Transfer Badge */
+        .free-badge {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            padding: 12px 20px;
+            margin: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #86efac;
+        }
+
+        .free-icon {
+            width: 28px;
+            height: 28px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .free-text {
+            flex: 1;
+            font-size: 13px;
+            color: #047857;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        /* Search Method Tabs */
+        .search-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #f9fafb;
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .search-tab {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-tab.active {
+            background: white;
+            color: #3b82f6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Group */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a1a;
+            background: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* User Resolved */
+        .user-resolved {
+            display: none;
+            padding: 16px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 12px;
+            margin-top: 16px;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .user-resolved.show {
+            display: flex;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 3px;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+
+        .verified-badge {
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Amount Section */
+        .amount-section {
+            margin-top: 32px;
+        }
+
+        .amount-display {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .amount-label {
+            font-size: 12px;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .amount-input {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a1a;
+            border: none;
+            text-align: center;
+            width: 100%;
+            background: none;
+            letter-spacing: -1px;
+        }
+
+        .amount-input:focus {
+            outline: none;
+        }
+
+        /* Quick Amounts */
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 24px 0;
+        }
+
+        .quick-amount {
+            padding: 14px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-amount:active {
+            transform: scale(0.95);
+        }
+
+        .quick-amount.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        /* Remark Section */
+        .remark-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #1a1a1a;
+            background: #f9fafb;
+            resize: none;
+            font-family: inherit;
+        }
+
+        .remark-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        /* Next Button */
+        .next-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .next-btn:active {
+            transform: scale(0.98);
+        }
+
+        .next-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Recent Transfers */
+        .recents-section {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .recent-item:hover {
+            background: #f9fafb;
+        }
+
+        .recent-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .recent-details {
+            flex: 1;
+        }
+
+        .recent-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+        }
+
+        .recent-info {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Confirmation Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-end;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .modal-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+        .modal-content {
+            padding: 24px 20px;
+        }
+
+        .summary-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-align: right;
+        }
+
+        .summary-value.highlight {
+            color: #3b82f6;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 14px;
+            background: #f3f4f6;
+            color: #4b5563;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* PIN Modal */
+        .pin-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+            margin: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .pin-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .pin-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .pin-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .pin-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .pin-box {
+            width: 56px;
+            height: 56px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            background: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .pin-box.filled {
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .pin-box.active {
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .forgot-pin {
+            text-align: center;
+            font-size: 13px;
+            color: #3b82f6;
+            margin: 16px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .key {
+            height: 60px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .key:active {
+            background: #e5e7eb;
+            transform: scale(0.95);
+        }
+
+        .key.zero {
+            grid-column: 1 / 3;
+        }
+
+        .key.delete {
+            font-size: 20px;
+        }
+
+        /* Success Modal */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            font-size: 40px;
+            color: white;
+            animation: scaleIn 0.4s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .success-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Step 1: Find User -->
+        <div id="step1">
+            <div class="header">
+                <button class="back-btn" onclick="goBack()">←</button>
+                <div class="header-title">Transfer to Meritwise</div>
+                <button class="history-btn" onclick="showHistory()">History</button>
+            </div>
+
+            <div class="free-badge">
+                <div class="free-icon">₦0</div>
+                <div class="free-text">Free instant transfers • No fees</div>
+            </div>
+
+            <div class="content">
+                <div class="section-title">Find Recipient</div>
+
+                <!-- Search Method Tabs -->
+                <div class="search-tabs">
+                    <button class="search-tab active" onclick="switchSearchMethod('id')">User ID</button>
+                    <button class="search-tab" onclick="switchSearchMethod('phone')">Phone Number</button>
+                </div>
+
+                <!-- User ID Input -->
+                <div class="form-group" id="idInputGroup">
+                    <input 
+                        type="text" 
+                        class="input-field" 
+                        id="userIdInput" 
+                        placeholder="Enter Meritwise User ID"
+                        oninput="handleUserInput()"
+                    >
+                    <div class="input-hint">
+                        💡 Example: PAY234567890
+                    </div>
+                </div>
+
+                <!-- Phone Number Input -->
+                <div class="form-group" id="phoneInputGroup" style="display: none;">
+                    <input 
+                        type="tel" 
+                        class="input-field" 
+                        id="phoneInput" 
+                        placeholder="Enter Phone Number"
+                        maxlength="11"
+                        inputmode="tel"
+                        oninput="handlePhoneInput()"
+                    >
+                    <div class="input-hint">
+                        💡 Example: 08012345678
+                    </div>
+                </div>
+
+                <!-- User Resolved -->
+                <div class="user-resolved" id="userResolved">
+                    <div class="user-avatar" id="userAvatar">EA</div>
+                    <div class="user-details">
+                        <div class="user-name" id="resolvedName">Emmanuel Adeola</div>
+                        <div class="user-id" id="resolvedId">PAY234567890</div>
+                    </div>
+                    <div class="verified-badge">✓</div>
+                </div>
+
+                <button class="next-btn" id="nextBtn" onclick="goToAmount()" disabled>Continue</button>
+
+                <!-- Recent Transfers -->
+                <div class="recents-section">
+                    <div class="section-title">Recent Transfers</div>
+
+                    <div class="recent-item" onclick="selectRecent('Emmanuel Adeola', 'PAY234567890', '08012345678')">
+                        <div class="recent-avatar">EA</div>
+                        <div class="recent-details">
+                            <div class="recent-name">Emmanuel Adeola</div>
+                            <div class="recent-info">PAY234567890</div>
+                        </div>
+                    </div>
+
+                    <div class="recent-item" onclick="selectRecent('Blessing Okoro', 'PAY345678901', '08098765432')">
+                        <div class="recent-avatar">BO</div>
+                        <div class="recent-details">
+                            <div class="recent-name">Blessing Okoro</div>
+                            <div class="recent-info">PAY345678901</div>
+                        </div>
+                    </div>
+
+                    <div class="recent-item" onclick="selectRecent('David Chukwu', 'PAY456789012', '07011223344')">
+                        <div class="recent-avatar">DC</div>
+                        <div class="recent-details">
+                            <div class="recent-name">David Chukwu</div>
+                            <div class="recent-info">PAY456789012</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Enter Amount -->
+        <div id="step2" style="display: none;">
+            <div class="header">
+                <button class="back-btn" onclick="backToStep1()">←</button>
+                <div class="header-title">Enter Amount</div>
+            </div>
+
+            <div class="content">
+                <!-- Recipient Info -->
+                <div class="user-resolved show" style="margin-bottom: 24px;">
+                    <div class="user-avatar" id="step2Avatar">EA</div>
+                    <div class="user-details">
+                        <div class="user-name" id="step2Name">Emmanuel Adeola</div>
+                        <div class="user-id" id="step2Id">PAY234567890</div>
+                    </div>
+                </div>
+
+                <!-- Amount Input -->
+                <div class="amount-section">
+                    <div class="section-title">Amount</div>
+                    <div class="amount-display">
+                        <div class="amount-label">Enter Amount</div>
+                        <input 
+                            type="text" 
+                            class="amount-input" 
+                            id="amountInput" 
+                            placeholder="₦0"
+                            inputmode="decimal"
+                            oninput="formatAmount()"
+                        >
+                    </div>
+
+                    <!-- Quick Amounts -->
+                    <div class="quick-amounts">
+                        <button class="quick-amount" onclick="setQuickAmount(1000)">₦1,000</button>
+                        <button class="quick-amount" onclick="setQuickAmount(2000)">₦2,000</button>
+                        <button class="quick-amount" onclick="setQuickAmount(5000)">₦5,000</button>
+                        <button class="quick-amount" onclick="setQuickAmount(10000)">₦10,000</button>
+                        <button class="quick-amount" onclick="setQuickAmount(20000)">₦20,000</button>
+                        <button class="quick-amount" onclick="setQuickAmount(50000)">₦50,000</button>
+                    </div>
+                </div>
+
+                <!-- Remark -->
+                <div class="form-group">
+                    <div class="section-title">Description (Optional)</div>
+                    <textarea 
+                        class="remark-input" 
+                        id="remarkInput" 
+                        rows="3"
+                        placeholder="What's this for? e.g., Lunch money, Gift, etc."
+                    ></textarea>
+                </div>
+
+                <button class="next-btn" onclick="showConfirmation()">Review Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Confirm Transfer</div>
+                <div class="modal-subtitle">Please review the details carefully</div>
+            </div>
+            <div class="modal-content">
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <span class="summary-label">To</span>
+                        <span class="summary-value" id="confirmName">Emmanuel Adeola</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">User ID</span>
+                        <span class="summary-value" id="confirmId">PAY234567890</span>
+                    </div>
+                    <div class="summary-row" style="border-top: 1px solid #e5e7eb; margin-top: 12px; padding-top: 16px;">
+                        <span class="summary-label">Amount</span>
+                        <span class="summary-value highlight" id="confirmAmount">₦5,000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Fee</span>
+                        <span class="summary-value" style="color: #10b981;">₦0.00</span>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeConfirmation()">Cancel</button>
+                    <button class="btn-primary" onclick="showPinModal()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIN Modal -->
+    <div class="modal-overlay" id="pinModal" style="align-items: center;">
+        <div class="pin-modal">
+            <div class="pin-header">
+                <div class="pin-title">Enter PIN</div>
+                <div class="pin-subtitle">Enter your 4-digit transaction PIN</div>
+            </div>
+
+            <div class="pin-inputs">
+                <div class="pin-box" id="pinBox1"></div>
+                <div class="pin-box" id="pinBox2"></div>
+                <div class="pin-box" id="pinBox3"></div>
+                <div class="pin-box" id="pinBox4"></div>
+            </div>
+
+            <div class="forgot-pin" onclick="forgotPin()">Forgot PIN?</div>
+
+            <div class="keypad">
+                <button class="key" onclick="enterPin('1')">1</button>
+                <button class="key" onclick="enterPin('2')">2</button>
+                <button class="key" onclick="enterPin('3')">3</button>
+                <button class="key" onclick="enterPin('4')">4</button>
+                <button class="key" onclick="enterPin('5')">5</button>
+                <button class="key" onclick="enterPin('6')">6</button>
+                <button class="key" onclick="enterPin('7')">7</button>
+                <button class="key" onclick="enterPin('8')">8</button>
+                <button class="key" onclick="enterPin('9')">9</button>
+                <button class="key zero" onclick="enterPin('0')">0</button>
+                <button class="key delete" onclick="deletePin()">⌫</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-content" style="padding: 40px 20px; text-align: center;">
+                <div class="success-icon">✓</div>
+                <div class="success-title">Transfer Successful!</div>
+                <div class="success-subtitle">Money sent instantly</div>
+
+                <div class="summary-card" style="text-align: left;">
+                    <div class="summary-row">
+                        <span class="summary-label">To</span>
+                        <span class="summary-value" id="successName">Emmanuel Adeola</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Amount</span>
+                        <span class="summary-value highlight" id="successAmount">₦5,000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Reference</span>
+                        <span class="summary-value" id="successRef">TRX123456789</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Date</span>
+                        <span class="summary-value" id="successDate">Nov 17, 2025</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="closeSuccess()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let transferData = {
+            userId: '',
+            userName: '',
+            userPhone: '',
+            amount: 0,
+            remark: ''
+        };
+
+        let pinValue = '';
+        let currentSearchMethod = 'id';
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function showHistory() {
+            alert('Transfer history coming soon!');
+        }
+
+        function switchSearchMethod(method) {
+            currentSearchMethod = method;
+            const tabs = document.querySelectorAll('.search-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (method === 'id') {
+                document.getElementById('idInputGroup').style.display = 'block';
+                document.getElementById('phoneInputGroup').style.display = 'none';
+                document.getElementById('phoneInput').value = '';
+            } else {
+                document.getElementById('idInputGroup').style.display = 'none';
+                document.getElementById('phoneInputGroup').style.display = 'block';
+                document.getElementById('userIdInput').value = '';
+            }
+
+            document.getElementById('userResolved').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function handleUserInput() {
+            const userId = document.getElementById('userIdInput').value.trim().toUpperCase();
+            
+            if (userId.length >= 10) {
+                // Simulate user lookup
+                setTimeout(() => {
+                    verifyUser(userId, 'id');
+                }, 500);
+            } else {
+                document.getElementById('userResolved').classList.remove('show');
+                document.getElementById('nextBtn').disabled = true;
+            }
+        }
+
+        function handlePhoneInput() {
+            const phone = document.getElementById('phoneInput').value.replace(/[^0-9]/g, '');
+            document.getElementById('phoneInput').value = phone;
+            
+            if (phone.length === 11) {
+                // Simulate user lookup
+                setTimeout(() => {
+                    verifyUser(phone, 'phone');
+                }, 500);
+            } else {
+                document.getElementById('userResolved').classList.remove('show');
+                document.getElementById('nextBtn').disabled = true;
+            }
+        }
+
+        function verifyUser(identifier, type) {
+            // Simulate user verification
+            const mockUsers = {
+                'PAY234567890': { name: 'Emmanuel Adeola', userId: 'PAY234567890', phone: '08012345678' },
+                'PAY345678901': { name: 'Blessing Okoro', userId: 'PAY345678901', phone: '08098765432' },
+                '08012345678': { name: 'Emmanuel Adeola', userId: 'PAY234567890', phone: '08012345678' },
+                '08098765432': { name: 'Blessing Okoro', userId: 'PAY345678901', phone: '08098765432' }
+            };
+
+            const user = mockUsers[identifier];
+            
+            if (user) {
+                transferData.userId = user.userId;
+                transferData.userName = user.name;
+                transferData.userPhone = user.phone;
+                
+                // Get initials
+                const initials = user.name.split(' ').map(n => n[0]).join('');
+                
+                document.getElementById('userAvatar').textContent = initials;
+                document.getElementById('resolvedName').textContent = user.name;
+                document.getElementById('resolvedId').textContent = user.userId;
+                
+                document.getElementById('userResolved').classList.add('show');
+                document.getElementById('nextBtn').disabled = false;
+            } else {
+                alert('User not found. Please check the ID or phone number.');
+            }
+        }
+
+        function selectRecent(name, userId, phone) {
+            transferData.userId = userId;
+            transferData.userName = name;
+            transferData.userPhone = phone;
+            
+            const initials = name.split(' ').map(n => n[0]).join('');
+            
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('resolvedName').textContent = name;
+            document.getElementById('resolvedId').textContent = userId;
+            
+            document.getElementById('userResolved').classList.add('show');
+            document.getElementById('nextBtn').disabled = false;
+            
+            // Update input fields
+            if (currentSearchMethod === 'id') {
+                document.getElementById('userIdInput').value = userId;
+            } else {
+                document.getElementById('phoneInput').value = phone;
+            }
+        }
+
+        function goToAmount() {
+            if (!transferData.userId) {
+                alert('Please select a user first');
+                return;
+            }
+            
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            
+            // Update step 2 with user info
+            const initials = transferData.userName.split(' ').map(n => n[0]).join('');
+            document.getElementById('step2Avatar').textContent = initials;
+            document.getElementById('step2Name').textContent = transferData.userName;
+            document.getElementById('step2Id').textContent = transferData.userId;
+        }
+
+        function backToStep1() {
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+            
+            // Clear amount
+            document.getElementById('amountInput').value = '';
+            document.getElementById('remarkInput').value = '';
+        }
+
+        function formatAmount() {
+            const input = document.getElementById('amountInput');
+            let value = input.value.replace(/[^0-9]/g, '');
+            
+            if (value) {
+                transferData.amount = parseInt(value);
+                const formatted = parseInt(value).toLocaleString();
+                input.value = `₦${formatted}`;
+            } else {
+                transferData.amount = 0;
+            }
+        }
+
+        function setQuickAmount(amount) {
+            transferData.amount = amount;
+            document.getElementById('amountInput').value = `₦${amount.toLocaleString()}`;
+            
+            // Highlight selected button
+            document.querySelectorAll('.quick-amount').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        function showConfirmation() {
+            if (!transferData.amount || transferData.amount < 100) {
+                alert('Please enter an amount (minimum ₦100)');
+                return;
+            }
+            
+            transferData.remark = document.getElementById('remarkInput').value;
+            
+            // Update confirmation modal
+            document.getElementById('confirmName').textContent = transferData.userName;
+            document.getElementById('confirmId').textContent = transferData.userId;
+            document.getElementById('confirmAmount').textContent = `₦${transferData.amount.toLocaleString()}`;
+            
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function closeConfirmation() {
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        function showPinModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            document.getElementById('pinModal').classList.add('active');
+            pinValue = '';
+            updatePinBoxes();
+        }
+
+        function closePinModal() {
+            document.getElementById('pinModal').classList.remove('active');
+            pinValue = '';
+            updatePinBoxes();
+        }
+
+        function enterPin(digit) {
+            if (pinValue.length < 4) {
+                pinValue += digit;
+                updatePinBoxes();
+                
+                // Auto-submit when 4 digits entered
+                if (pinValue.length === 4) {
+                    setTimeout(() => {
+                        processTransfer();
+                    }, 300);
+                }
+            }
+        }
+
+        function deletePin() {
+            if (pinValue.length > 0) {
+                pinValue = pinValue.slice(0, -1);
+                updatePinBoxes();
+            }
+        }
+
+        function updatePinBoxes() {
+            for (let i = 1; i <= 4; i++) {
+                const box = document.getElementById(`pinBox${i}`);
+                if (i <= pinValue.length) {
+                    box.textContent = '●';
+                    box.classList.add('filled');
+                    box.classList.remove('active');
+                } else if (i === pinValue.length + 1) {
+                    box.textContent = '';
+                    box.classList.remove('filled');
+                    box.classList.add('active');
+                } else {
+                    box.textContent = '';
+                    box.classList.remove('filled', 'active');
+                }
+            }
+        }
+
+        function forgotPin() {
+            alert('Please contact support or reset your PIN in settings');
+        }
+
+        function processTransfer() {
+            if (pinValue.length !== 4) {
+                alert('Please enter your 4-digit PIN');
+                return;
+            }
+
+            // Show processing
+            document.getElementById('pinModal').classList.remove('active');
+            
+            // Simulate processing
+            setTimeout(() => {
+                // Update success modal
+                const now = new Date();
+                const ref = 'TRX' + Date.now().toString().slice(-9);
+                
+                document.getElementById('successName').textContent = transferData.userName;
+                document.getElementById('successAmount').textContent = `₦${transferData.amount.toLocaleString()}`;
+                document.getElementById('successRef').textContent = ref;
+                document.getElementById('successDate').textContent = now.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }) + ' ' + now.toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                
+                document.getElementById('successModal').classList.add('active');
+                
+                // Reset PIN
+                pinValue = '';
+                updatePinBoxes();
+            }, 2000);
+        }
+
+        function closeSuccess() {
+            document.getElementById('successModal').classList.remove('active');
+            
+            // Reset form
+            document.getElementById('userIdInput').value = '';
+            document.getElementById('phoneInput').value = '';
+            document.getElementById('amountInput').value = '';
+            document.getElementById('remarkInput').value = '';
+            document.getElementById('userResolved').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+            
+            // Back to step 1
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+            
+            // Clear transfer data
+            transferData = {
+                userId: '',
+                userName: '',
+                userPhone: '',
+                amount: 0,
+                remark: ''
+            };
+        }
+
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        console.log('✅ Meritwise Transfer initialized!');
+    </script>
+</body>
+</html>
