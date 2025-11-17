@@ -25,66 +25,65 @@
             min-height: 100vh;
         }
 
-        /* HEADER */
+        /* HEADER - Reduced size */
         .header {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            padding: 16px 20px 24px;
-            color: white;
+            background: white;
+            padding: 12px 20px;
         }
 
         .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .avatar {
-            width: 44px;
-            height: 44px;
-            background: white;
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
-            color: #1e40af;
+            color: white;
         }
 
         .user-details h3 {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             margin-bottom: 2px;
+            color: #1f2937;
         }
 
         .user-details p {
-            font-size: 12px;
-            opacity: 0.9;
+            font-size: 11px;
+            color: #6b7280;
         }
 
         .header-icons {
             display: flex;
-            gap: 16px;
+            gap: 12px;
         }
 
         .icon-btn {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.2);
+            width: 32px;
+            height: 32px;
+            background: #f3f4f6;
             border: none;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
             position: relative;
         }
 
@@ -96,29 +95,34 @@
             height: 8px;
             background: #ef4444;
             border-radius: 50%;
-            border: 2px solid #1e40af;
+            border: 2px solid white;
         }
 
-        /* BALANCE CARD */
+        /* BALANCE CARD - Compact with blue background */
+        .balance-section {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px 20px;
+        }
+
         .balance-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .balance-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .balance-info {
+            color: white;
         }
 
         .balance-label {
-            font-size: 13px;
+            font-size: 12px;
             opacity: 0.9;
             font-weight: 500;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .eye-icon {
@@ -126,66 +130,125 @@
             border: none;
             color: white;
             cursor: pointer;
-            font-size: 18px;
-            padding: 4px;
+            font-size: 14px;
+            padding: 0;
+            opacity: 0.9;
         }
 
         .balance-amount {
-            font-size: 32px;
+            font-size: 26px;
             font-weight: 700;
-            margin-bottom: 20px;
             letter-spacing: -0.5px;
         }
 
-        .balance-actions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .balance-action {
+        .add-money-btn {
             background: white;
+            color: #1e40af;
             border: none;
-            padding: 12px 8px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .balance-action:active {
+        .add-money-btn:active {
             transform: scale(0.95);
         }
 
-        .action-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            border-radius: 8px;
+        /* QUICK ACTIONS - Below balance */
+        .quick-actions {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-around;
+            gap: 12px;
+            border-radius: 16px 16px 0 0;
+            margin-top: -8px;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            flex: 1;
+            transition: all 0.2s;
+        }
+
+        .action-item:active {
+            transform: scale(0.95);
+        }
+
+        .action-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: #f0f9ff;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 20px;
+        }
+
+        .action-icon-wrapper ion-icon {
+            color: #3b82f6;
+            font-size: 24px;
         }
 
         .action-text {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            color: #1e40af;
+            color: #4b5563;
+        }
+
+        /* BUSINESS SERVICE BANNER */
+        .business-banner {
+            margin: 16px 20px;
+            padding: 12px 16px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #10b981;
+        }
+
+        .business-content {
+            flex: 1;
+        }
+
+        .business-content p {
+            font-size: 12px;
+            color: #065f46;
+            font-weight: 500;
+        }
+
+        .business-content h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #047857;
+            margin-top: 2px;
+        }
+
+        .business-arrow {
+            font-size: 18px;
+            color: #10b981;
         }
 
         /* PROMO BANNER */
         .promo-section {
-            padding: 16px 20px;
+            padding: 0 20px 16px;
             background: white;
         }
 
         .promo-banner {
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -194,18 +257,18 @@
         }
 
         .promo-icon {
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .promo-content h4 {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #78350f;
             margin-bottom: 2px;
         }
 
         .promo-content p {
-            font-size: 12px;
+            font-size: 11px;
             color: #92400e;
             font-weight: 500;
         }
@@ -224,13 +287,13 @@
         }
 
         .section-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: #1f2937;
         }
 
         .view-all {
-            font-size: 13px;
+            font-size: 12px;
             color: #3b82f6;
             font-weight: 600;
             cursor: pointer;
@@ -257,15 +320,19 @@
         }
 
         .service-icon {
-            width: 56px;
-            height: 56px;
+            width: 52px;
+            height: 52px;
             background: #f3f4f6;
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
             transition: all 0.2s;
+        }
+
+        .service-icon ion-icon {
+            font-size: 26px;
+            color: #3b82f6;
         }
 
         .service-item:hover .service-icon {
@@ -273,7 +340,7 @@
         }
 
         .service-name {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: #4b5563;
             text-align: center;
@@ -288,14 +355,15 @@
         }
 
         .quick-link {
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            padding: 16px;
+            background: #f9fafb;
+            padding: 14px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
             transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .quick-link:active {
@@ -305,12 +373,16 @@
         .quick-link-icon {
             width: 40px;
             height: 40px;
-            background: white;
+            background: #eff6ff;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+        }
+
+        .quick-link-icon ion-icon {
+            color: #3b82f6;
+            font-size: 22px;
         }
 
         .quick-link-text {
@@ -330,6 +402,41 @@
             font-weight: 500;
         }
 
+        /* REFERRAL BANNER */
+        .referral-banner {
+            margin: 0 20px 16px;
+            padding: 14px;
+            background: #eff6ff;
+            border-radius: 12px;
+            color: #3b82f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .referral-content h4 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .referral-content p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .referral-btn {
+            background: white;
+            color: #2563eb;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
         /* TRANSACTIONS */
         .transactions-section {
             padding: 0 20px 20px;
@@ -340,7 +447,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #f3f4f6;
             cursor: pointer;
         }
@@ -350,14 +457,14 @@
         }
 
         .transaction-icon {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             background: #f3f4f6;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             flex-shrink: 0;
         }
 
@@ -378,20 +485,20 @@
         }
 
         .transaction-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #1f2937;
             margin-bottom: 3px;
         }
 
         .transaction-date {
-            font-size: 12px;
+            font-size: 11px;
             color: #6b7280;
             font-weight: 500;
         }
 
         .transaction-amount {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
         }
 
@@ -429,13 +536,16 @@
         }
 
         .nav-icon {
-            font-size: 24px;
-            opacity: 0.5;
-            transition: all 0.2s;
+            width: 24px;
+            height: 24px;
+            stroke-width: 2;
+            color: #6b7280;
+            transition: all 0.25s ease;
         }
 
         .nav-item.active .nav-icon {
-            opacity: 1;
+            color: #2563eb;
+            transform: scale(1.05);
         }
 
         .nav-label {
@@ -448,225 +558,22 @@
             color: #3b82f6;
         }
 
-        /* REFERRAL BANNER */
-        .referral-banner {
-            margin: 16px 20px;
-            padding: 16px;
-           /* background: linear-gradient(135deg, #10b981 0%, #059669 100%);*/
-            background: #eff6ff;
-            border-radius: 12px;
-            color: #3b82f6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .referral-content h4 {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .referral-content p {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .referral-btn {
-            background: white;
-            /*color: #059669;*/
-            color: #2563eb;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
         @media (max-width: 480px) {
             .services-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
-
-
-
-
-        .bottom-nav ion-icon {
-    font-size: 24px;
-    color: #9ca3af; /* inactive grey */
-    transition: color .3s ease;
-}
-
-.nav-item.active ion-icon {
-    color: #3b82f6; /* active blue (matches your header) */
-}
-
-.nav-item .nav-label {
-    color: #9ca3af;
-}
-
-.nav-item.active .nav-label {
-    color: #3b82f6;
-}
-
-
-
-
-
-
-/* ==========================
-   Lucide Icons — Bottom Nav
-   ========================== */
-
-/* Base icon styling */
-.nav-icon {
-  width: 24px;              /* consistent size */
-  height: 24px;
-  stroke-width: 2;          /* line thickness */
-  color: #6b7280;           /* default gray */
-  transition: all 0.25s ease;
-}
-
-/* Hover effect — subtle lift + color change */
-.nav-item:hover .nav-icon {
-  color: #111827;           /* darker gray */
-  transform: translateY(-2px);
-}
-
-/* Active icon — highlight in blue */
-.nav-item.active .nav-icon {
-  color: #2563eb;           /* blue-600 tone */
-  transform: scale(1.05);
-}
-
-/* Optional: animate on click (quick pulse) */
-.nav-item:active .nav-icon {
-  transform: scale(0.9);
-  transition: transform 0.1s ease;
-}
-
-/* Optional: mobile adjustment */
-@media (max-width: 480px) {
-  .nav-icon {
-    width: 26px;
-    height: 26px;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ================================
-   🔹 Services Grid Styles
-   Clean fintech layout — icons only
-   ================================ */
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 1rem;
-  background: #ffffff;
-}
-
-/* Icon container */
-.service-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: #2563eb10; /* subtle blue tint */
-  margin-bottom: 8px;
-  transition: all 0.25s ease;
-}
-
-/* Ionicon styling */
-.service-icon ion-icon {
-  font-size: 24px;
-  color: #2563eb; /* primary blue */
-  transition: transform 0.25s ease, color 0.25s ease;
-}
-
-/* Animate the icon on hover */
-.service-item:hover .service-icon ion-icon {
-  transform: scale(1.1);
-  color: #1d4ed8; /* darker blue */
-}
-
-
-
-
-
-
-
-
-
-/* =====================================
-   💰 Quick Links Section — Fintech UI
-   ===================================== */
-
-
-
-/* Each quick link item */
-.quick-link {
-  display: flex;
-  align-items: center;
-  background: #f9fafb;
-  
-  
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-
-/* Icon container */
-.quick-link-icon {
-  
-  background: #2563eb10; /* transparent blue circle */
-  transition: background 0.3s ease;
-}
-
-/* Icon styling */
-.quick-link-icon ion-icon {
-  color: #2563eb;
-  transition: transform 0.25s ease, color 0.25s ease;
-}
-
-/* Animate icon on hover */
-.quick-link:hover .quick-link-icon ion-icon {
-  transform: scale(1.1);
-  color: #1d4ed8; /* darker blue */
-}
-
-
-
-
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- HEADER -->
+        <!-- HEADER - Compact -->
         <div class="header">
             <div class="header-top">
                 <div class="user-info">
                     <div class="avatar">EA</div>
                     <div class="user-details">
-                        <h3>Emmanuel Adeola</h3>
+                        <h3>Hi, Emmanuel</h3>
                         <p>ID: PAY234567890</p>
                     </div>
                 </div>
@@ -674,44 +581,69 @@
                     <button class="icon-btn" onclick="window.location.href='notifications.html'">
                         🔔
                     </button>
-
                     <button class="icon-btn" onclick="window.location.href='support-chat.html'">
-                      💬
-                    </button>
-                </div>
-            </div>
-
-            <!-- BALANCE CARD -->
-            <div class="balance-card">
-                <div class="balance-header">
-                    <div class="balance-label">Wallet Balance</div>
-                    <button class="eye-icon" id="toggleBalance">👁️</button>
-                </div>
-                <div class="balance-amount" id="balanceAmount">₦125,450.00</div>
-                <div class="balance-actions">
-                    <button class="balance-action" onclick="location.href='add-money.html'">
-                         <!--<div class="action-icon">➕</div>--->
-                        <div class="action-text">Add Money</div>
-                    </button>
-                    <button class="balance-action" onclick="location.href='#withdraw'">
-                        <!--<div class="action-icon">💳</div>--->
-                        <div class="action-text">Withdraw</div>
-                    </button>
-                    <button class="balance-action" onclick="location.href='transfer.html'">
-                         <!--<div class="action-icon">📤</div>--->
-                        <div class="action-text">Transfer</div>
+                        💬
                     </button>
                 </div>
             </div>
         </div>
+
+        <!-- BALANCE SECTION - Blue background with Add Money -->
+        <div class="balance-section">
+            <div class="balance-card">
+                <div class="balance-info">
+                    <div class="balance-label">
+                        Available Balance
+                        <button class="eye-icon" id="toggleBalance">👁️</button>
+                    </div>
+                    <div class="balance-amount" id="balanceAmount">₦125,450.00</div>
+                </div>
+                <button class="add-money-btn" onclick="location.href='add-money.html'">
+                    + Add Money
+                </button>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS - To Meritwise, To Bank, Withdraw -->
+        <div class="quick-actions">
+            <div class="action-item" onclick="location.href='transfer.html'">
+                <div class="action-icon-wrapper">
+                    <ion-icon name="swap-horizontal-outline"></ion-icon>
+                </div>
+                <div class="action-text">To Meritwise</div>
+            </div>
+            <div class="action-item" onclick="location.href='#bank'">
+                <div class="action-icon-wrapper">
+                    <ion-icon name="business-outline"></ion-icon>
+                </div>
+                <div class="action-text">To Bank</div>
+            </div>
+            <div class="action-item" onclick="location.href='#withdraw'">
+                <div class="action-icon-wrapper">
+                    <ion-icon name="wallet-outline"></ion-icon>
+                </div>
+                <div class="action-text">Withdraw</div>
+            </div>
+        </div>
+
+        <!-- BUSINESS SERVICE BANNER 
+        <div class="business-banner">
+            <div class="business-content">
+                <p>Business Service - Today's Sales</p>
+                <h4>₦0.00</h4>
+            </div>
+            <div class="business-arrow">→</div>
+        </div>
+       -->
+
 
         <!-- PROMO BANNER 
         <div class="promo-section">
             <div class="promo-banner">
                 <div class="promo-icon">🎁</div>
                 <div class="promo-content">
-                    <h4>Get ₦500 Cashback!</h4>
-                    <p>On your next airtime purchase above ₦1000</p>
+                    <h4>Bonus from Airtime Purchase</h4>
+                    <p>+₦4.00 • Successful</p>
                 </div>
             </div>
         </div> -->
@@ -720,57 +652,53 @@
         <div class="services-section">
             <div class="section-header">
                 <h2 class="section-title">Services</h2>
-               <!-- <span class="view-all">See All →</span> -->
             </div>
 
             <div class="services-grid">
-    <div class="service-item" onclick="location.href='airtime-data.html'">
-        <div class="service-icon"><ion-icon name="phone-portrait-outline"></ion-icon></div>
-        <div class="service-name">Airtime</div>
-    </div>
+                <div class="service-item" onclick="location.href='airtime-data.html'">
+                    <div class="service-icon"><ion-icon name="phone-portrait-outline"></ion-icon></div>
+                    <div class="service-name">Airtime</div>
+                </div>
 
-    <div class="service-item" onclick="location.href='paybills.html'">
-        <div class="service-icon"><ion-icon name="flash-outline"></ion-icon></div>
-        <div class="service-name">Pay Bills</div>
-    </div>
+                <div class="service-item" onclick="location.href='airtime-data.html'">
+                    <div class="service-icon"><ion-icon name="wifi-outline"></ion-icon></div>
+                    <div class="service-name">Data</div>
+                </div>
 
-    <div class="service-item" onclick="location.href='virtual-cards.html'">
-        <div class="service-icon"><ion-icon name="card-outline"></ion-icon></div>
-        <div class="service-name">Cards</div>
-    </div>
+                <div class="service-item" onclick="location.href='paybills.html'">
+                    <div class="service-icon"><ion-icon name="flash-outline"></ion-icon></div>
+                    <div class="service-name">Pay Bills</div>
+                </div>
 
-    <div class="service-item" onclick="location.href='referral-rewards.html'">
-        <div class="service-icon"><ion-icon name="star-outline"></ion-icon></div>
-        <div class="service-name">Rewards</div>
-    </div>
-</div>
-
+                <div class="service-item" onclick="location.href='virtual-cards.html'">
+                    <div class="service-icon"><ion-icon name="card-outline"></ion-icon></div>
+                    <div class="service-name">Cards</div>
+                </div>
+            </div>
 
             <!-- QUICK LINKS -->
             <div class="quick-links">
-             <div class="quick-link" onclick="location.href='loan-application.html'">
-                 <div class="quick-link-icon">
-                     <ion-icon name="cash-outline"></ion-icon>
-                 </div>
-                 <div class="quick-link-text">
-                     <h4>Quick Loans</h4>
-                     <p>Get instant credit</p>
-                 </div>
-             </div>
-         
-             <div class="quick-link" onclick="location.href='savings-investments.html'">
-                 <div class="quick-link-icon">
-                     <ion-icon name="business-outline"></ion-icon>
-                 </div>
-                 <div class="quick-link-text">
-                     <h4>Savings</h4>
-                     <p>Save & earn</p>
-                 </div>
-             </div>
-         </div>
+                <div class="quick-link" onclick="location.href='loan-application.html'">
+                    <div class="quick-link-icon">
+                        <ion-icon name="cash-outline"></ion-icon>
+                    </div>
+                    <div class="quick-link-text">
+                        <h4>Quick Loans</h4>
+                        <p>Get instant credit</p>
+                    </div>
+                </div>
+            
+                <div class="quick-link" onclick="location.href='savings-investments.html'">
+                    <div class="quick-link-icon">
+                        <ion-icon name="trending-up-outline"></ion-icon>
+                    </div>
+                    <div class="quick-link-text">
+                        <h4>Savings</h4>
+                        <p>Save & earn</p>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        
 
         <!-- REFERRAL BANNER -->
         <div class="referral-banner">
@@ -843,34 +771,31 @@
             </div>
         </div>
 
-    
-<!-- BOTTOM NAVIGATION -->
-<div class="bottom-nav">
-    <div class="nav-item active">
-        <i data-lucide="home" class="nav-icon"></i>
-        <div class="nav-label">Home</div>
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <i data-lucide="home" class="nav-icon"></i>
+                <div class="nav-label">Home</div>
+            </div>
+
+            <div class="nav-item">
+                <i data-lucide="credit-card" class="nav-icon"></i>
+                <div class="nav-label">Services</div>
+            </div>
+
+            <div class="nav-item" onclick="window.location.href='history.html'">
+                <i data-lucide="history" class="nav-icon"></i>
+                <div class="nav-label">History</div>
+            </div>
+
+            <div class="nav-item" onclick="window.location.href='profile-settings.html'">
+                <i data-lucide="user" class="nav-icon"></i>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
     </div>
 
-    <div class="nav-item">
-        <i data-lucide="credit-card" class="nav-icon"></i>
-        <div class="nav-label">Services</div>
-    </div>
-
-    <div class="nav-item" onclick="window.location.href='history.html'">
-        <i data-lucide="history" class="nav-icon"></i>
-        <div class="nav-label">History</div>
-    </div>
-
-    <div class="nav-item" onclick="window.location.href='profile-settings.html'">
-        <i data-lucide="user" class="nav-icon"></i>
-        <div class="nav-label">Account</div>
-    </div>
-</div>
-</div>
-
-
-
-<script>
+   <script>
     const API_BASE_URL = 'http://localhost:5000/api'; // change if deployed
 
 document.addEventListener('DOMContentLoaded', async () => {
