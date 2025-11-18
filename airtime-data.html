@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airtime & Data - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .header-title p {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .wallet-balance {
+            text-align: right;
+        }
+
+        .wallet-label {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .wallet-amount {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            background: white;
+            padding: 4px 20px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px;
+            background: none;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            color: #9ca3af;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* NETWORK SELECTION */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .network-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .network-card {
+            aspect-ratio: 1;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .network-card:active {
+            transform: scale(0.95);
+        }
+
+        .network-card.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .network-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .network-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .network-card.selected .network-name {
+            color: #3b82f6;
+        }
+
+        /* PHONE INPUT */
+        .phone-input-wrapper {
+            position: relative;
+        }
+
+        .phone-input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .phone-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+        }
+
+        .phone-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .beneficiary-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* AMOUNT INPUT */
+        .amount-display {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 24px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .amount-label {
+            font-size: 12px;
+            color: #1e40af;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .amount-input {
+            background: none;
+            border: none;
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e3a8a;
+            text-align: center;
+            width: 100%;
+        }
+
+        .amount-input:focus {
+            outline: none;
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .quick-amt {
+            padding: 12px 8px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-amt:active {
+            transform: scale(0.95);
+        }
+
+        .quick-amt.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        /* CATEGORY TABS */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+            /*-ms-overflow-style: none;*/
+        }
+
+        .category-tab {
+            padding: 10px 18px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .category-tab:active {
+            transform: scale(0.95);
+        }
+
+        .category-tab.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        /* DATA PLANS - CHANGED TO GRID */
+        .data-plans {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .plan-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .plan-card:active {
+            transform: scale(0.98);
+        }
+
+        .plan-card.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .plan-header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .plan-info h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            text-align: center;
+        }
+
+        .plan-info p {
+            font-size: 10px;
+            color: #6b7280;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .plan-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .plan-bonus {
+            font-size: 9px;
+            color: #f59e0b;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 4px;
+            background: #fef3c7;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        /* TRANSACTION SUMMARY */
+        .summary-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .summary-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid #fcd34d;
+            font-weight: 700;
+        }
+
+        .summary-label {
+            color: #78350f;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            color: #92400e;
+            font-weight: 600;
+        }
+
+        /* PROCEED BUTTON */
+        .proceed-btn {
+            width: 100%;
+            padding: 18px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .proceed-btn:active {
+            transform: scale(0.98);
+        }
+
+        .proceed-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* SAVED NUMBERS */
+        .saved-section {
+            margin-bottom: 24px;
+        }
+
+        .saved-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .saved-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .saved-card:active {
+            transform: scale(0.98);
+        }
+
+        .saved-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .saved-card p {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .no-plans {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .quick-amounts {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <div class="header-title">
+                <h1>Buy Airtime & Data</h1>
+                <p>Choose service below</p>
+            </div>
+            <div class="wallet-balance">
+                <div class="wallet-label">Balance</div>
+                <div class="wallet-amount" id="walletAmount">₦125,450</div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" data-tab="airtime">Airtime</button>
+            <button class="tab" data-tab="data">Data Bundle</button>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- AIRTIME SECTION -->
+            <div class="section active" id="airtime-section">
+                <!-- Saved Numbers -->
+                <div class="saved-section">
+                    <div class="label">Recent Numbers</div>
+                    <div class="saved-grid">
+                        <div class="saved-card" data-number="08012345678">
+                            <h4>Personal</h4>
+                            <p>080 1234 5678 • MTN</p>
+                        </div>
+                        <div class="saved-card" data-number="08098765432">
+                            <h4>Office</h4>
+                            <p>080 9876 5432 • Airtel</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Selection -->
+                <div class="form-group">
+                    <div class="label">Select Network</div>
+                    <div class="network-grid">
+                        <div class="network-card" data-network="MTN">
+                            <div class="network-logo" style="background: #ffcb05;">📱</div>
+                            <div class="network-name">MTN</div>
+                        </div>
+                        <div class="network-card" data-network="Glo">
+                            <div class="network-logo" style="background: #8dc73f;">🟢</div>
+                            <div class="network-name">Glo</div>
+                        </div>
+                        <div class="network-card" data-network="Airtel">
+                            <div class="network-logo" style="background: #ed1c24;">🔴</div>
+                            <div class="network-name">Airtel</div>
+                        </div>
+                        <div class="network-card" data-network="9mobile">
+                            <div class="network-logo" style="background: #00a65a;">🟡</div>
+                            <div class="network-name">9mobile</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <div class="label">Phone Number</div>
+                    <div class="phone-input-wrapper">
+                        <span class="phone-prefix">+234</span>
+                        <input type="tel" class="phone-input" id="airtimePhone" placeholder="801 234 5678" maxlength="10">
+                        <button class="beneficiary-btn">Saved</button>
+                    </div>
+                </div>
+
+                <!-- Amount -->
+                <div class="form-group">
+                    <div class="label">Enter Amount</div>
+                    <div class="amount-display">
+                        <div class="amount-label">Amount to Pay</div>
+                        <input type="text" class="amount-input" id="airtimeAmount" placeholder="₦0" value="₦">
+                    </div>
+                    <div class="quick-amounts">
+                        <button class="quick-amt" data-amount="100">₦100</button>
+                        <button class="quick-amt" data-amount="200">₦200</button>
+                        <button class="quick-amt" data-amount="500">₦500</button>
+                        <button class="quick-amt" data-amount="1000">₦1,000</button>
+                        <button class="quick-amt" data-amount="2000">₦2,000</button>
+                        <button class="quick-amt" data-amount="5000">₦5,000</button>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="summary-box">
+                    <div class="summary-title">Transaction Summary</div>
+                    <div class="summary-row">
+                        <span class="summary-label">Network:</span>
+                        <span class="summary-value" id="airtimeSummaryNetwork">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Phone Number:</span>
+                        <span class="summary-value" id="airtimeSummaryPhone">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Amount:</span>
+                        <span class="summary-value" id="airtimeSummaryAmount">₦0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">You Pay:</span>
+                        <span class="summary-value" id="airtimeSummaryTotal">₦0</span>
+                    </div>
+                </div>
+
+                <button class="proceed-btn" id="airtimeProceedBtn" disabled>Proceed to Payment</button>
+            </div>
+
+            <!-- DATA SECTION -->
+            <div class="section" id="data-section">
+                <!-- Saved Numbers -->
+                <div class="saved-section">
+                    <div class="label">Recent Numbers</div>
+                    <div class="saved-grid">
+                        <div class="saved-card" data-number="08012345678">
+                            <h4>Personal</h4>
+                            <p>080 1234 5678 • MTN</p>
+                        </div>
+                        <div class="saved-card" data-number="08098765432">
+                            <h4>Office</h4>
+                            <p>080 9876 5432 • Airtel</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Selection -->
+                <div class="form-group">
+                    <div class="label">Select Network</div>
+                    <div class="network-grid">
+                        <div class="network-card" data-network="MTN" data-data-network="mtn">
+                            <div class="network-logo" style="background: #ffcb05;">📱</div>
+                            <div class="network-name">MTN</div>
+                        </div>
+                        <div class="network-card" data-network="Glo" data-data-network="glo">
+                            <div class="network-logo" style="background: #8dc73f;">🟢</div>
+                            <div class="network-name">Glo</div>
+                        </div>
+                        <div class="network-card" data-network="Airtel" data-data-network="airtel">
+                            <div class="network-logo" style="background: #ed1c24;">🔴</div>
+                            <div class="network-name">Airtel</div>
+                        </div>
+                        <div class="network-card" data-network="9mobile" data-data-network="etisalat">
+                            <div class="network-logo" style="background: #00a65a;">🟡</div>
+                            <div class="network-name">9mobile</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <div class="label">Phone Number</div>
+                    <div class="phone-input-wrapper">
+                        <span class="phone-prefix">+234</span>
+                        <input type="tel" class="phone-input" id="dataPhone" placeholder="801 234 5678" maxlength="10">
+                        <button class="beneficiary-btn">Saved</button>
+                    </div>
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="form-group">
+                    <div class="label">Select Category</div>
+                    <div class="category-tabs" id="categoryTabs">
+                        <button class="category-tab active" data-category="hot">🔥 Hot</button>
+                        <button class="category-tab" data-category="daily">Daily</button>
+                        <button class="category-tab" data-category="weekly">Weekly</button>
+                        <button class="category-tab" data-category="monthly">Monthly</button>
+                        <button class="category-tab" data-category="yearly">Yearly</button>
+                    </div>
+                </div>
+
+                <!-- Data Plans -->
+                <div class="form-group">
+                    <div class="label">Select Data Plan</div>
+                    <div class="data-plans" id="dataPlans">
+                        <div class="no-plans">Select a network to view available plans</div>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="summary-box">
+                    <div class="summary-title">Transaction Summary</div>
+                    <div class="summary-row">
+                        <span class="summary-label">Network:</span>
+                        <span class="summary-value" id="dataSummaryNetwork">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Phone Number:</span>
+                        <span class="summary-value" id="dataSummaryPhone">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Data Plan:</span>
+                        <span class="summary-value" id="dataSummaryPlan">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">You Pay:</span>
+                        <span class="summary-value" id="dataSummaryTotal">₦0</span>
+                    </div>
+                </div>
+
+                <button class="proceed-btn" id="dataProceedBtn" disabled>Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+const API_BASE_URL = 'http://localhost:5000/api';
+const SANDBOX_MODE = true;
+
+const DATA_PLANS = {
+    mtn: {
+        hot: [
+            { size: '2GB', duration: '30 Days', price: 1500, bonus: '+2mins', variationCode: 'mtn-2gb-hot' },
+            { size: '2.7GB', duration: '30 Days', price: 3000, bonus: '+15mins Talk', variationCode: 'mtn-2.7gb-hot' },
+            { size: '2.7GB', duration: '30 Days', price: 2000, bonus: '+2mins', variationCode: 'mtn-2.7gb-hot-2' }
+        ],
+        daily: [
+            { size: '100MB', duration: '1 Day', price: 100, bonus: '', variationCode: 'mtn-100mb-daily' },
+            { size: '500MB', duration: '1 Day', price: 300, bonus: '', variationCode: 'mtn-500mb-daily' }
+        ],
+        weekly: [
+            { size: '1.5GB', duration: '7 Days', price: 1000, bonus: '', variationCode: 'mtn-1.5gb-weekly' },
+            { size: '6GB', duration: '7 Days', price: 1500, bonus: '', variationCode: 'mtn-6gb-weekly' }
+        ],
+        monthly: [
+            { size: '3.5GB', duration: '30 Days', price: 2500, bonus: '+5mins', variationCode: 'mtn-3.5gb-monthly' },
+            { size: '10GB', duration: '30 Days', price: 4500, bonus: '+10mins', variationCode: 'mtn-10gb-monthly' },
+            { size: '12.5GB', duration: '30 Days', price: 5500, bonus: '+2mins', variationCode: 'mtn-12.5gb-monthly' },
+            { size: '16.5GB', duration: '30 Days', price: 6500, bonus: '+10mins', variationCode: 'mtn-16.5gb-monthly' },
+            { size: '20GB', duration: '30 Days', price: 6000, bonus: '', variationCode: 'mtn-3gb-6000' },
+            { size: '25GB', duration: '30 Days', price: 9000, bonus: '', variationCode: 'mtn-25gb-monthly' },
+            { size: '36GB', duration: '30 Days', price: 11000, bonus: '', variationCode: 'mtn-36gb-monthly' },
+            { size: '65GB', duration: '30 Days', price: 16000, bonus: '', variationCode: 'mtn-65gb-monthly' },
+            { size: '75GB', duration: '30 Days', price: 18000, bonus: '', variationCode: 'mtn-75gb-monthly' }
+        ],
+        yearly: [
+            { size: '120GB', duration: '30 Days', price: 24000, bonus: 'Broadband', variationCode: 'mtn-120gb-yearly' },
+            { size: '150GB', duration: '30 Days', price: 30000, bonus: 'Broadband', variationCode: 'mtn-150gb-yearly' },
+            { size: '165GB', duration: '30 Days', price: 35000, bonus: '', variationCode: 'mtn-165gb-yearly' }
+        ]
+    },
+    glo: {
+        hot: [
+            { size: '1.6GB', duration: '30 Days', price: 1000, bonus: '', variationCode: 'glo-1.6gb-hot' },
+            { size: '3.9GB', duration: '30 Days', price: 2000, bonus: '', variationCode: 'glo-3.9gb-hot' }
+        ],
+        daily: [
+            { size: '150MB', duration: '1 Day', price: 100, bonus: '', variationCode: 'glo-150mb-daily' },
+            { size: '350MB', duration: '1 Day', price: 200, bonus: '', variationCode: 'glo-350mb-daily' }
+        ],
+        weekly: [
+            { size: '1.35GB', duration: '7 Days', price: 500, bonus: '', variationCode: 'glo-1.35gb-weekly' },
+            { size: '3.25GB', duration: '7 Days', price: 1000, bonus: '', variationCode: 'glo-3.25gb-weekly' }
+        ],
+        monthly: [
+            { size: '5.8GB', duration: '30 Days', price: 2500, bonus: '', variationCode: 'glo-5.8gb-monthly' },
+            { size: '7.7GB', duration: '30 Days', price: 3000, bonus: '', variationCode: 'glo-7.7gb-monthly' },
+            { size: '10GB', duration: '30 Days', price: 4000, bonus: '', variationCode: 'glo-10gb-monthly' },
+            { size: '13.25GB', duration: '30 Days', price: 5000, bonus: '', variationCode: 'glo-13.25gb-monthly' }
+        ],
+        yearly: [
+            { size: '60GB', duration: '90 Days', price: 15000, bonus: '', variationCode: 'glo-60gb-yearly' },
+            { size: '100GB', duration: '180 Days', price: 25000, bonus: '', variationCode: 'glo-100gb-yearly' }
+        ]
+    },
+    airtel: {
+        hot: [
+            { size: '1.5GB', duration: '30 Days', price: 1200, bonus: '', variationCode: 'airtel-1.5gb-hot' },
+            { size: '3GB', duration: '30 Days', price: 1500, bonus: '', variationCode: 'airtel-3gb-hot' }
+        ],
+        daily: [
+            { size: '100MB', duration: '1 Day', price: 100, bonus: '', variationCode: 'airtel-100mb-daily' },
+            { size: '300MB', duration: '1 Day', price: 200, bonus: '', variationCode: 'airtel-300mb-daily' }
+        ],
+        weekly: [
+            { size: '1GB', duration: '7 Days', price: 500, bonus: '', variationCode: 'airtel-1gb-weekly' },
+            { size: '2GB', duration: '7 Days', price: 1000, bonus: '', variationCode: 'airtel-2gb-weekly' }
+        ],
+        monthly: [
+            { size: '4.5GB', duration: '30 Days', price: 2000, bonus: '', variationCode: 'airtel-4.5gb-monthly' },
+            { size: '6GB', duration: '30 Days', price: 2500, bonus: '', variationCode: 'airtel-6gb-monthly' },
+            { size: '10GB', duration: '30 Days', price: 3500, bonus: '', variationCode: 'airtel-10gb-monthly' },
+            { size: '20GB', duration: '30 Days', price: 5000, bonus: '', variationCode: 'airtel-20gb-monthly' }
+        ],
+        yearly: [
+            { size: '100GB', duration: '120 Days', price: 20000, bonus: '', variationCode: 'airtel-100gb-yearly' },
+            { size: '200GB', duration: '365 Days', price: 40000, bonus: '', variationCode: 'airtel-200gb-yearly' }
+        ]
+    },
+    etisalat: {
+        hot: [
+            { size: '1GB', duration: '30 Days', price: 1000, bonus: '', variationCode: '9mobile-1gb-hot' },
+            { size: '2.5GB', duration: '30 Days', price: 2000, bonus: '', variationCode: '9mobile-2.5gb-hot' }
+        ],
+        daily: [
+            { size: '100MB', duration: '1 Day', price: 100, bonus: '', variationCode: '9mobile-100mb-daily' },
+            { size: '650MB', duration: '1 Day', price: 500, bonus: '', variationCode: '9mobile-650mb-daily' }
+        ],
+        weekly: [
+            { size: '1.5GB', duration: '7 Days', price: 1000, bonus: '', variationCode: '9mobile-1.5gb-weekly' },
+            { size: '4.5GB', duration: '7 Days', price: 2000, bonus: '', variationCode: '9mobile-4.5gb-weekly' }
+        ],
+        monthly: [
+            { size: '5GB', duration: '30 Days', price: 2500, bonus: '', variationCode: '9mobile-5gb-monthly' },
+            { size: '11.5GB', duration: '30 Days', price: 4000, bonus: '', variationCode: '9mobile-11.5gb-monthly' },
+            { size: '15GB', duration: '30 Days', price: 5000, bonus: '', variationCode: '9mobile-15gb-monthly' },
+            { size: '40GB', duration: '30 Days', price: 10000, bonus: '', variationCode: '9mobile-40gb-monthly' }
+        ],
+        yearly: [
+            { size: '75GB', duration: '180 Days', price: 15000, bonus: '', variationCode: '9mobile-75gb-yearly' },
+            { size: '120GB', duration: '365 Days', price: 30000, bonus: '', variationCode: '9mobile-120gb-yearly' }
+        ]
+    }
+};
+
+const tabs = document.querySelectorAll('.tab');
+const sections = document.querySelectorAll('.section');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+        tabs.forEach(t => t.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById(this.dataset.tab + '-section').classList.add('active');
+    });
+});
+
+let airtimeData = { network: '', phone: '', amount: 0 };
+let dataData = { network: '', dataNetwork: '', phone: '', plan: '', price: 0, variationCode: '' };
+
+let currentDataNetwork = '';
+let currentCategory = 'hot';
+
+function formatPhoneForVTpass(rawPhone) {
+    if (SANDBOX_MODE) {
+        const sandboxMapping = {
+            "8169513224": "08011111111",
+            "2010000000": "201000000000",
+            "5000000000": "500000000000",
+            "4000000000": "400000000000",
+            "3000000000": "300000000000"
+        };
+        return sandboxMapping[rawPhone] || rawPhone;
+    } else {
+        return /^\d{10}$/.test(rawPhone) && rawPhone.startsWith("8") ? "+234"+rawPhone : rawPhone;
+    }
+}
+
+const airtimeNetworks = document.querySelectorAll('#airtime-section .network-card');
+const airtimePhoneInput = document.getElementById('airtimePhone');
+const airtimeAmountInput = document.getElementById('airtimeAmount');
+const airtimeQuickBtns = document.querySelectorAll('#airtime-section .quick-amt');
+
+airtimeNetworks.forEach(card => {
+    card.addEventListener('click', () => {
+        airtimeNetworks.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        airtimeData.network = card.dataset.network;
+        document.getElementById('airtimeSummaryNetwork').textContent = airtimeData.network;
+        validateAirtime();
+    });
+});
+
+airtimePhoneInput.addEventListener('input', () => {
+    const rawPhone = airtimePhoneInput.value;
+    airtimeData.phone = formatPhoneForVTpass(rawPhone);
+    document.getElementById('airtimeSummaryPhone').textContent = airtimeData.phone || '-';
+    validateAirtime();
+});
+
+airtimeAmountInput.addEventListener('input', () => {
+    let val = airtimeAmountInput.value.replace(/[^0-9]/g, '');
+    airtimeData.amount = parseInt(val) || 0;
+    airtimeAmountInput.value = airtimeData.amount ? '₦' + airtimeData.amount.toLocaleString() : '₦';
+    document.getElementById('airtimeSummaryAmount').textContent = '₦'+airtimeData.amount.toLocaleString();
+    document.getElementById('airtimeSummaryTotal').textContent = '₦'+airtimeData.amount.toLocaleString();
+    validateAirtime();
+});
+
+airtimeQuickBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        airtimeQuickBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        airtimeData.amount = parseInt(btn.dataset.amount);
+        airtimeAmountInput.value = '₦'+airtimeData.amount.toLocaleString();
+        document.getElementById('airtimeSummaryAmount').textContent = '₦'+airtimeData.amount.toLocaleString();
+        document.getElementById('airtimeSummaryTotal').textContent = '₦'+airtimeData.amount.toLocaleString();
+        validateAirtime();
+    });
+});
+
+function validateAirtime() {
+    document.getElementById('airtimeProceedBtn').disabled = !(airtimeData.network && airtimeData.phone && airtimeData.amount >= 50);
+}
+
+const dataNetworks = document.querySelectorAll('#data-section .network-card');
+const dataPhoneInput = document.getElementById('dataPhone');
+const categoryTabs = document.querySelectorAll('.category-tab');
+
+dataNetworks.forEach(card => {
+    card.addEventListener('click', () => {
+        dataNetworks.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        dataData.network = card.dataset.network;
+        dataData.dataNetwork = card.dataset.dataNetwork;
+        currentDataNetwork = card.dataset.dataNetwork;
+        document.getElementById('dataSummaryNetwork').textContent = dataData.network;
+        
+        loadDataPlans(currentDataNetwork, currentCategory);
+        validateData();
+    });
+});
+
+dataPhoneInput.addEventListener('input', () => {
+    const rawPhone = dataPhoneInput.value;
+    dataData.phone = formatPhoneForVTpass(rawPhone);
+    document.getElementById('dataSummaryPhone').textContent = dataData.phone || '-';
+    validateData();
+});
+
+categoryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        categoryTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCategory = tab.dataset.category;
+        
+        if (currentDataNetwork) {
+            loadDataPlans(currentDataNetwork, currentCategory);
+        }
+    });
+});
+
+function loadDataPlans(network, category) {
+    const plansContainer = document.getElementById('dataPlans');
+    plansContainer.innerHTML = '';
+    
+    const plans = DATA_PLANS[network]?.[category];
+    
+    if (!plans || plans.length === 0) {
+        plansContainer.innerHTML = '<div class="no-plans">No plans available for this category</div>';
+        return;
+    }
+    
+    plans.forEach(plan => {
+        const planCard = document.createElement('div');
+        planCard.className = 'plan-card';
+        planCard.dataset.plan = plan.size;
+        planCard.dataset.price = plan.price;
+        planCard.dataset.variationCode = plan.variationCode;
+        
+        planCard.innerHTML = `
+            <div class="plan-header">
+                <div class="plan-info">
+                    <h3>${plan.size}</h3>
+                    <p>${plan.duration}</p>
+                </div>
+                <div class="plan-price">₦${plan.price.toLocaleString()}</div>
+                ${plan.bonus ? `<div class="plan-bonus">${plan.bonus}</div>` : ''}
+            </div>
+        `;
+        
+        planCard.addEventListener('click', () => {
+            document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+            planCard.classList.add('selected');
+            
+            dataData.plan = plan.size;
+            dataData.price = plan.price;
+            dataData.variationCode = plan.variationCode;
+            
+            document.getElementById('dataSummaryPlan').textContent = plan.size;
+            document.getElementById('dataSummaryTotal').textContent = '₦'+plan.price.toLocaleString();
+            validateData();
+        });
+        
+        plansContainer.appendChild(planCard);
+    });
+}
+
+function validateData() {
+    document.getElementById('dataProceedBtn').disabled = !(dataData.network && dataData.phone && dataData.plan && dataData.variationCode);
+}
+
+async function purchase(serviceType) {
+    const token = sessionStorage.getItem('token');
+    if (!token) return alert('Not logged in');
+
+    let payload;
+    try { payload = JSON.parse(atob(token.split('.')[1])); } catch {
+        sessionStorage.removeItem('token');
+        return alert('Session expired. Please log in again.');
+    }
+    const userId = payload.userId;
+    if (!userId) return alert('Invalid user session');
+
+    let body = { userId };
+    if (serviceType === 'airtime') {
+        body = { ...body, ...airtimeData, type: 'airtime' };
+    }
+    if (serviceType === 'data') {
+        body = { 
+            userId,
+            network: dataData.dataNetwork,
+            phone: dataData.phone, 
+            amount: dataData.price,
+            variationCode: dataData.variationCode,
+            type: 'data'
+        };
+    }
+
+    console.log('Sending POST body:', body);
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/vtpass/airtime-data`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (res.status === 401) {
+            alert('❌ Unauthorized! Your token may be invalid or expired.');
+            return;
+        }
+
+        const data = await res.json();
+        if (res.ok && data.vtpassResponse?.code === '000') {
+            alert(`✅ Purchase successful! ${serviceType === 'airtime' ? '₦'+airtimeData.amount : '₦'+dataData.price} spent`);
+            await fetchWalletBalance();
+        } else {
+            console.error('VTpass error response:', data);
+            alert(`❌ Purchase failed: ${data.message || 'VTpass error'}`);
+        }
+    } catch (err) {
+        console.error('Purchase error:', err);
+        alert('❌ An error occurred. Try again later.');
+    }
+}
+
+document.getElementById('airtimeProceedBtn').addEventListener('click', () => purchase('airtime'));
+document.getElementById('dataProceedBtn').addEventListener('click', () => purchase('data'));
+
+async function fetchWalletBalance() {
+    const token = sessionStorage.getItem('token');
+    if (!token) return;
+
+    let payload;
+    try { payload = JSON.parse(atob(token.split('.')[1])); } catch { return; }
+    const userId = payload.userId;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/wallet/${userId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok && data.balance) {
+            document.getElementById('walletAmount').textContent = `₦${Number(data.balance.available).toLocaleString("en-NG", { minimumFractionDigits: 2 })}`
+        }
+    } catch (err) { console.error(err); }
+}
+
+fetchWalletBalance();
+</script>
+
+</body>
+</html>
