@@ -299,7 +299,11 @@
             overflow-x: auto;
             padding-bottom: 4px;
             scrollbar-width: none;
-            /*-ms-overflow-style: none;*/
+            -ms-overflow-style: none;
+        }
+
+        .category-tab::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Opera */
         }
 
         .category-tab {
