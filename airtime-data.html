@@ -298,6 +298,8 @@
             margin-bottom: 16px;
             overflow-x: auto;
             padding-bottom: 4px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
         .category-tab {
@@ -1067,7 +1069,7 @@ async function fetchWalletBalance() {
         });
         const data = await res.json();
         if (res.ok && data.balance) {
-            document.getElementById('walletAmount').textContent = `₦${Number(data.balance.available).toLocaleString()}`;
+            document.getElementById('walletAmount').textContent = `₦${Number(data.balance.available).toLocaleString("en-NG", { minimumFractionDigits: 2 })}`
         }
     } catch (err) { console.error(err); }
 }
