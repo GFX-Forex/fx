@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings & Investment - PayUtility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Total Savings Card */
+        .total-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .total-label {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .total-amount {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .total-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: white;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .activity-feed.show {
+            max-height: 300px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f9fafb;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            background: #f0fdf4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .activity-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .activity-text strong {
+            font-size: 14px;
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        .activity-text span {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Section */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        /* Savings Plans Grid */
+        .plans-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .plan-card {
+            background: white;
+            border: 2px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .plan-card:hover {
+            border-color: #10b981;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+        }
+
+        .plan-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .plan-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .plan-badge {
+            background: #10b981;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .plan-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 6px;
+        }
+
+        .plan-description {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .plan-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .plan-stat {
+            text-align: center;
+        }
+
+        .plan-stat-label {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .plan-stat-value {
+            font-size: 16px;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        /* Active Savings */
+        .savings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .saving-item {
+            background: white;
+            border: 1px solid #f3f4f6;
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .saving-item:active {
+            transform: scale(0.98);
+        }
+
+        .saving-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .saving-info {
+            flex: 1;
+        }
+
+        .saving-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .saving-target {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .saving-amount {
+            font-size: 18px;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        /* Investment Cards */
+        .investment-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .investment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .investment-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #065f46;
+        }
+
+        .investment-return {
+            background: #10b981;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .investment-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .investment-detail {
+            text-align: center;
+        }
+
+        .investment-detail-label {
+            font-size: 11px;
+            color: #047857;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .investment-detail-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #065f46;
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .cta-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-content {
+            padding: 20px 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #10b981;
+            background: white;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            background: #f9fafb;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .frequency-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .frequency-btn {
+            padding: 12px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .frequency-btn.active {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .modal-actions {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #f3f4f6;
+            position: sticky;
+            bottom: 0;
+            background: white;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            font-size: 12px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+
+
+
+
+
+        /* Withdrawal Modal */
+        .withdrawal-summary {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .summary-row span {
+            color: #6b7280;
+        }
+
+        .summary-row strong {
+            color: #10b981;
+            font-size: 16px;
+        }
+
+        .penalty-breakdown {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .breakdown-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #78350f;
+            margin-bottom: 12px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+            color: #78350f;
+        }
+
+        .breakdown-row.penalty span {
+            color: #dc2626;
+        }
+
+        .breakdown-row.total {
+            border-top: 2px solid #f59e0b;
+            margin-top: 8px;
+            padding-top: 12px;
+        }
+
+        .breakdown-row.total strong {
+            color: #065f46;
+            font-size: 16px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            opacity: 0.5;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .nav-item.active .nav-label {
+            color: #10b981;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 480px) {
+            .plan-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+        
+        /* Celebration Animation */
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .celebrating {
+            animation: celebrate 0.5s ease 3;
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: confetti 2s ease-out forwards;
+            z-index: 9999;
+        }
+
+        /* Shimmer effect on progress bar */
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .progress-fill {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Pulse animation for CTA */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+            50% { box-shadow: 0 4px 24px rgba(16, 185, 129, 0.6); }
+        }
+
+        .cta-btn {
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 480px) {
+            .plan-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <div class="header-title">
+                    <h1>Savings & Investment</h1>
+                    <p>Grow your money with us</p>
+                </div>
+               <div class="header-icon" onclick="toggleActivityFeed()">📊</div>
+            </div>
+
+            <!-- Total Savings Card -->
+            <div class="total-card">
+                <div class="total-label">Total Savings & Investments</div>
+                <div class="total-amount">₦245,600</div>
+                <div class="total-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Interest Earned</div>
+                        <div class="stat-value">₦12,450</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Active Plans</div>
+                        <div class="stat-value">3 Plans</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Activity Feed -->
+        <div class="activity-feed">
+            <div class="activity-item">
+                <span class="activity-icon">💰</span>
+                <div class="activity-text">
+                    <strong>₦5,000 auto-saved</strong>
+                    <span>Wedding Fund • Today at 9:00 AM</span>
+                </div>
+            </div>
+            <div class="activity-item">
+                <span class="activity-icon">🎯</span>
+                <div class="activity-text">
+                    <strong>You're halfway there!</strong>
+                    <span>Wedding Fund reached 50%</span>
+                </div>
+            </div>
+            <div class="activity-item">
+                <span class="activity-icon">⚡</span>
+                <div class="activity-text">
+                    <strong>Next auto-save: Tomorrow</strong>
+                    <span>₦15,000 will be saved automatically</span>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('explore')">Explore Plans</button>
+                <button class="tab" onclick="switchTab('active')">My Savings</button>
+                <button class="tab" onclick="switchTab('investments')">Investments</button>
+            </div>
+
+            <!-- Explore Plans Section -->
+            <div class="section active" id="explore-section">
+                <h3 class="section-title">Available Savings Plans</h3>
+
+                <div class="plans-grid">
+                    <!-- Regular Savings -->
+                    <div class="plan-card" onclick="openCreateSavings('regular')">
+                        <div class="plan-header">
+                            <div class="plan-icon">🏦</div>
+                            <div class="plan-badge">Most Popular</div>
+                        </div>
+                        <h4 class="plan-name">Regular Savings</h4>
+                        <p class="plan-description">Save at your own pace with flexible withdrawal and competitive interest rates</p>
+                        <div class="plan-stats">
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Interest Rate</div>
+                                <div class="plan-stat-value">10% p.a</div>
+                            </div>
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Withdrawal</div>
+                                <div class="plan-stat-value">Anytime</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Target Savings -->
+                    <div class="plan-card" onclick="openCreateSavings('target')">
+                        <div class="plan-header">
+                            <div class="plan-icon">🎯</div>
+                        </div>
+                        <h4 class="plan-name">Target Savings</h4>
+                        <p class="plan-description">Save towards a specific goal with automated deposits and higher returns</p>
+                        <div class="plan-stats">
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Interest Rate</div>
+                                <div class="plan-stat-value">12% p.a</div>
+                            </div>
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Withdrawal</div>
+                                <div class="plan-stat-value">At maturity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fixed Deposit -->
+                    <div class="plan-card" onclick="openCreateSavings('fixed')">
+                        <div class="plan-header">
+                            <div class="plan-icon">🔒</div>
+                            <div class="plan-badge">Best Returns</div>
+                        </div>
+                        <h4 class="plan-name">Fixed Deposit</h4>
+                        <p class="plan-description">Lock your funds for a fixed period and earn guaranteed high returns</p>
+                        <div class="plan-stats">
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Interest Rate</div>
+                                <div class="plan-stat-value">15% p.a</div>
+                            </div>
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Min. Duration</div>
+                                <div class="plan-stat-value">3 months</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group Savings -->
+                    <div class="plan-card" onclick="openCreateSavings('group')">
+                        <div class="plan-header">
+                            <div class="plan-icon">👥</div>
+                        </div>
+                        <h4 class="plan-name">Group Savings (Ajo)</h4>
+                        <p class="plan-description">Save with friends and family in a trusted rotating savings group</p>
+                        <div class="plan-stats">
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Min. Members</div>
+                                <div class="plan-stat-value">5 people</div>
+                            </div>
+                            <div class="plan-stat">
+                                <div class="plan-stat-label">Cycle</div>
+                                <div class="plan-stat-value">Weekly/Monthly</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="cta-btn" onclick="openCreateSavings('regular')">
+                    <span>➕</span> Create New Savings Plan
+                </button>
+            </div>
+
+            <!-- My Savings Section -->
+            <div class="section" id="active-section">
+                <h3 class="section-title">Active Savings Plans</h3>
+
+                <div class="savings-list">
+                    <!-- Wedding Savings -->
+                    <div class="saving-item" onclick="viewSavingsDetails('wedding')">
+                        <div class="saving-header">
+                            <div class="saving-info">
+                                <div class="saving-name">💒 Wedding Fund</div>
+                                <div class="saving-target">Target: ₦500,000 by Dec 2024</div>
+                            </div>
+                            <div class="saving-amount">₦345,000</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 69%"></div>
+                        </div>
+                        <div class="progress-text">69% completed • ₦155,000 remaining</div>
+                    </div>
+
+                    <!-- Car Savings -->
+                    <div class="saving-item" onclick="viewSavingsDetails('car')">
+                        <div class="saving-header">
+                            <div class="saving-info">
+                                <div class="saving-name">🚗 New Car Fund</div>
+                                <div class="saving-target">Target: ₦2,000,000 by Jun 2025</div>
+                            </div>
+                            <div class="saving-amount">₦650,000</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 32.5%"></div>
+                        </div>
+                        <div class="progress-text">32% completed • ₦1,350,000 remaining</div>
+                    </div>
+
+                    <!-- Emergency Fund -->
+                    <div class="saving-item" onclick="viewSavingsDetails('emergency')">
+                        <div class="saving-header">
+                            <div class="saving-info">
+                                <div class="saving-name">🆘 Emergency Fund</div>
+                                <div class="saving-target">Regular Savings • Flexible</div>
+                            </div>
+                            <div class="saving-amount">₦125,000</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text">10% interest p.a • Withdraw anytime</div>
+                    </div>
+                </div>
+
+                <button class="cta-btn" onclick="openCreateSavings('regular')">
+                    <span>➕</span> Create New Savings Plan
+                </button>
+            </div>
+
+            <!-- Investments Section -->
+            <div class="section" id="investments-section">
+                <h3 class="section-title">Investment Opportunities</h3>
+
+                <!-- Investment Card 1 -->
+                <div class="investment-card">
+                    <div class="investment-header">
+                        <div class="investment-title">💼 Treasury Bills (91 Days)</div>
+                        <div class="investment-return">8.5%</div>
+                    </div>
+                    <div class="investment-details">
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Min. Amount</div>
+                            <div class="investment-detail-value">₦50,000</div>
+                        </div>
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Duration</div>
+                            <div class="investment-detail-value">91 Days</div>
+                        </div>
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Risk</div>
+                            <div class="investment-detail-value">Low</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investment Card 2 -->
+                <div class="investment-card">
+                    <div class="investment-header">
+                        <div class="investment-title">📈 Mutual Funds</div>
+                        <div class="investment-return">12-18%</div>
+                    </div>
+                    <div class="investment-details">
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Min. Amount</div>
+                            <div class="investment-detail-value">₦10,000</div>
+                        </div>
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Duration</div>
+                            <div class="investment-detail-value">Flexible</div>
+                        </div>
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Risk</div>
+                            <div class="investment-detail-value">Medium</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investment Card 3 -->
+                <div class="investment-card">
+                    <div class="investment-header">
+                        <div class="investment-title">🏘️ Real Estate</div>
+                        <div class="investment-return">20-35%</div>
+                    </div>
+                    <div class="investment-details">
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Min. Amount</div>
+                            <div class="investment-detail-value">₦100,000</div>
+                        </div>
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Duration</div>
+                            <div class="investment-detail-value">12-24 Months</div>
+                        </div>
+                        <div class="investment-detail">
+                            <div class="investment-detail-label">Risk</div>
+                            <div class="investment-detail-value">Medium</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="cta-btn" onclick="alert('Investment feature coming soon!')">
+                    <span>📊</span> Explore All Investments
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Savings</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">History</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Account</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Savings Modal -->
+    <div class="modal-overlay" id="createSavingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">
+                    <span>🏦</span> Create Savings Plan
+                </h3>
+            </div>
+            <div class="modal-content">
+                <div class="info-box" id="planInfoBox">
+                    <p><strong>💡 Tip:</strong> Set realistic goals and automate your savings to achieve them faster!</p>
+                </div>
+
+                <form id="savingsForm">
+                    <div class="form-group">
+                        <label class="label">Savings Name</label>
+                        <input type="text" class="input-field" placeholder="e.g., Wedding Fund, New Car" id="savingsName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Target Amount</label>
+                        <input type="number" class="input-field" placeholder="₦0" id="targetAmount" min="1000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Initial Deposit</label>
+                        <input type="number" class="input-field" placeholder="₦0" id="initialDeposit" min="1000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Savings Frequency</label>
+                        <div class="frequency-options">
+                            <button type="button" class="frequency-btn" data-freq="daily">Daily</button>
+                            <button type="button" class="frequency-btn active" data-freq="weekly">Weekly</button>
+                            <button type="button" class="frequency-btn" data-freq="monthly">Monthly</button>
+                            <button type="button" class="frequency-btn" data-freq="custom">Custom</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Auto-save Amount</label>
+                        <input type="number" class="input-field" placeholder="₦0" id="autoSaveAmount" min="500">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Duration (Optional)</label>
+                        <select class="select-field" id="duration">
+                            <option value="">Select duration</option>
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="12">12 Months</option>
+                            <option value="24">24 Months</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Choose Icon</label>
+                        <div class="frequency-options">
+                            <button type="button" class="frequency-btn" data-icon="🏠">🏠 Home</button>
+                            <button type="button" class="frequency-btn" data-icon="🚗">🚗 Car</button>
+                            <button type="button" class="frequency-btn" data-icon="✈️">✈️ Travel</button>
+                            <button type="button" class="frequency-btn" data-icon="💒">💒 Wedding</button>
+                            <button type="button" class="frequency-btn" data-icon="🎓">🎓 Education</button>
+                            <button type="button" class="frequency-btn" data-icon="💼">💼 Business</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createSavings()">Create Plan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div class="modal-overlay" id="withdrawalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span>💸</span> <span id="withdrawalTitle">Withdraw Funds</span>
+                </h3>
+            </div>
+            <div class="modal-content">
+                <div class="info-box" id="withdrawalInfoBox">
+                    <p><strong>⚠️ Withdrawal Policy:</strong> Withdrawing early may incur penalties</p>
+                </div>
+
+                <div class="withdrawal-summary">
+                    <div class="summary-row">
+                        <span>Available Balance:</span>
+                        <strong id="availableBalance">₦0</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Interest Earned:</span>
+                        <strong id="interestEarned">₦0</strong>
+                    </div>
+                </div>
+
+                <form id="withdrawalForm">
+                    <div class="form-group">
+                        <label class="label">Withdrawal Amount</label>
+                        <input type="number" class="input-field" placeholder="₦0" id="withdrawalAmount" required>
+                        <small style="color: #6b7280; font-size: 12px; margin-top: 4px; display: block;">
+                            <span id="withdrawalFee"></span>
+                        </small>
+                    </div>
+
+                    <div class="penalty-breakdown" id="penaltyBreakdown" style="display: none;">
+                        <div class="breakdown-title">Breakdown:</div>
+                        <div class="breakdown-row">
+                            <span>Withdrawal Amount:</span>
+                            <span id="withdrawalAmountDisplay">₦0</span>
+                        </div>
+                        <div class="breakdown-row penalty">
+                            <span>Penalty Fee:</span>
+                            <span id="penaltyFeeDisplay">-₦0</span>
+                        </div>
+                        <div class="breakdown-row total">
+                            <span><strong>You'll Receive:</strong></span>
+                            <span><strong id="finalAmountDisplay">₦0</strong></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeWithdrawalModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="processWithdrawal()">Confirm Withdrawal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPlanType = 'regular';
+        let selectedFrequency = 'weekly';
+        let selectedIcon = '🏦';
+
+
+
+        // Plan details configuration
+        const planDetails = {
+            'regular': {
+                title: '🏦 Create Regular Savings',
+                interest: '10% p.a',
+                description: 'Save flexibly with withdrawal anytime',
+                minAmount: 5000,
+                withdrawalPolicy: 'Anytime - No penalty',
+                features: [
+                    '✓ Flexible deposits',
+                    '✓ Withdraw anytime without penalty',
+                    '✓ 10% annual interest',
+                    '✓ No lock-in period'
+                ]
+            },
+            'target': {
+                title: '🎯 Create Target Savings',
+                interest: '12% p.a',
+                description: 'Save towards a specific goal with better returns',
+                minAmount: 10000,
+                withdrawalPolicy: 'Early withdrawal: 2% penalty on interest earned',
+                features: [
+                    '✓ Automated savings',
+                    '✓ 12% annual interest',
+                    '✓ Goal-based tracking',
+                    '✓ Small penalty for early withdrawal'
+                ]
+            },
+            'fixed': {
+                title: '🔒 Create Fixed Deposit',
+                interest: '15% p.a',
+                description: 'Lock funds for guaranteed high returns',
+                minAmount: 50000,
+                withdrawalPolicy: 'Early withdrawal: 5% penalty + lose 50% of interest',
+                features: [
+                    '✓ Highest interest rate (15%)',
+                    '✓ Guaranteed returns',
+                    '✓ Minimum 3 months lock',
+                    '✓ Significant penalty for early withdrawal'
+                ]
+            },
+            'group': {
+                title: '👥 Create Group Savings (Ajo)',
+                interest: 'No interest (Rotation-based)',
+                description: 'Save with friends and family - traditional Ajo/Esusu',
+                minAmount: 5000,
+                withdrawalPolicy: 'Cannot withdraw - Rotation schedule only',
+                features: [
+                    '✓ Rotating payout system',
+                    '✓ 5-20 members per group',
+                    '✓ Guaranteed payout on your turn',
+                    '✓ BVN verification required'
+                ]
+            }
+        };
+
+
+
+    
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tab}-section`).classList.add('active');
+        }
+
+        // Open create savings modal
+        function openCreateSavings(type) {
+            selectedPlanType = type;
+            const modal = document.getElementById('createSavingsModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const planInfo = document.getElementById('planInfoBox');
+            const minAmountField = document.getElementById('initialDeposit');
+            
+            const plan = planDetails[type] || planDetails['regular'];
+            
+            // Update modal title
+            modalTitle.innerHTML = plan.title;
+            
+            // Update info box with plan-specific details
+            planInfo.innerHTML = `
+                <p><strong>📊 Interest Rate:</strong> ${plan.interest}</p>
+                <p><strong>💰 Minimum:</strong> ₦${plan.minAmount.toLocaleString()}</p>
+                <p><strong>🔓 Withdrawal:</strong> ${plan.withdrawalPolicy}</p>
+                <hr style="margin: 12px 0; border: none; border-top: 1px solid #f59e0b;">
+                ${plan.features.map(f => `<p style="margin: 4px 0;">${f}</p>`).join('')}
+            `;
+            
+            // Set minimum amount
+            minAmountField.min = plan.minAmount;
+            minAmountField.placeholder = `Min: ₦${plan.minAmount.toLocaleString()}`;
+            
+            modal.classList.add('active');
+        }
+
+
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('createSavingsModal').classList.remove('active');
+            document.getElementById('savingsForm').reset();
+        }
+
+        // Frequency selection
+        document.querySelectorAll('.frequency-btn[data-freq]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.frequency-btn[data-freq]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedFrequency = this.dataset.freq;
+            });
+        });
+
+        // Icon selection
+        document.querySelectorAll('.frequency-btn[data-icon]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.frequency-btn[data-icon]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedIcon = this.dataset.icon;
+            });
+        });
+
+        // Create savings
+        function createSavings() {
+            const name = document.getElementById('savingsName').value;
+            const target = document.getElementById('targetAmount').value;
+            const initial = document.getElementById('initialDeposit').value;
+            const autoSave = document.getElementById('autoSaveAmount').value;
+            const duration = document.getElementById('duration').value;
+
+            if (!name || !target || !initial) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            if (parseInt(initial) > parseInt(target)) {
+                alert('Initial deposit cannot be greater than target amount');
+                return;
+            }
+
+            // Simulate creation
+            const btn = event.target;
+            btn.textContent = 'Creating...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert(`✓ Savings Plan Created!\n\nName: ${selectedIcon} ${name}\nTarget: ₦${parseInt(target).toLocaleString()}\nInitial: ₦${parseInt(initial).toLocaleString()}\nFrequency: ${selectedFrequency}\nType: ${selectedPlanType}\n\nYour savings plan is now active!`);
+                
+                btn.textContent = 'Create Plan';
+                btn.disabled = false;
+                closeModal();
+                
+                // Switch to active savings tab
+                document.querySelectorAll('.tab')[1].click();
+            }, 1500);
+        }
+
+        // View savings details
+        function viewSavingsDetails(type) {
+            const details = {
+                'wedding': {
+                    name: '💒 Wedding Fund',
+                    target: 500000,
+                    current: 345000,
+                    interest: 12450,
+                    progress: 69,
+                    created: 'Jan 15, 2024',
+                    frequency: 'Weekly',
+                    autoSave: 15000,
+                    planType: 'target'
+                },
+                'car': {
+                    name: '🚗 New Car Fund',
+                    target: 2000000,
+                    current: 650000,
+                    interest: 28000,
+                    progress: 32,
+                    created: 'Mar 01, 2024',
+                    frequency: 'Monthly',
+                    autoSave: 50000,
+                    planType: 'target'
+                },
+                'emergency': {
+                    name: '🆘 Emergency Fund',
+                    target: 0,
+                    current: 125000,
+                    interest: 5200,
+                    progress: 0,
+                    created: 'Feb 10, 2024',
+                    frequency: 'Flexible',
+                    autoSave: 0,
+                    planType: 'regular'
+                }
+            };
+        
+            const detail = details[type];
+            if (detail) {
+                const actions = confirm(`${detail.name}\n\nBalance: ₦${detail.current.toLocaleString()}\nTarget: ₦${detail.target.toLocaleString() || 'Flexible'}\nInterest Earned: ₦${detail.interest.toLocaleString()}\nProgress: ${detail.progress}%\nCreated: ${detail.created}\nFrequency: ${detail.frequency}\nAuto-save: ₦${detail.autoSave.toLocaleString()}\n\nPress OK to Withdraw or Cancel to close`);
+                
+                if (actions) {
+                    openWithdrawalModal(detail.name, detail.current, detail.interest, detail.planType);
+                }
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('createSavingsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Format currency inputs
+        document.querySelectorAll('#targetAmount, #initialDeposit, #autoSaveAmount').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value) {
+                    const formatted = parseInt(this.value).toLocaleString();
+                    console.log('Amount:', formatted);
+                }
+            });
+        });
+
+        // Toggle activity feed
+        function toggleActivityFeed() {
+            const feed = document.querySelector('.activity-feed');
+            feed.classList.toggle('show');
+        }
+
+        // Withdrawal policies per plan type
+        const withdrawalPolicies = {
+            'regular': { penalty: 0, description: 'No penalty - Withdraw anytime!' },
+            'target': { penalty: 0.02, description: 'Early withdrawal: 2% penalty on interest earned' },
+            'fixed': { penalty: 0.05, interestLoss: 0.5, description: 'Early withdrawal: 5% penalty + lose 50% of interest' },
+            'group': { penalty: null, description: 'Cannot withdraw - Rotation schedule only' }
+        };
+        
+        let currentSavingForWithdrawal = null;
+        
+        function openWithdrawalModal(savingType, balance, interest, planType) {
+            currentSavingForWithdrawal = { savingType, balance, interest, planType };
+            
+            const modal = document.getElementById('withdrawalModal');
+            const policy = withdrawalPolicies[planType] || withdrawalPolicies['regular'];
+            const infoBox = document.getElementById('withdrawalInfoBox');
+            const withdrawalAmountInput = document.getElementById('withdrawalAmount');
+            
+            // Check if group savings
+            if (planType === 'group') {
+                alert('⚠️ Group Savings (Ajo) cannot be withdrawn early.\n\nYou will receive your payout on your scheduled turn according to the rotation.');
+                return;
+            }
+            
+            // Update modal content
+            document.getElementById('withdrawalTitle').textContent = `Withdraw from ${savingType}`;
+            document.getElementById('availableBalance').textContent = `₦${balance.toLocaleString()}`;
+            document.getElementById('interestEarned').textContent = `₦${interest.toLocaleString()}`;
+            
+            // Update policy info
+            if (policy.penalty === 0) {
+                infoBox.innerHTML = `<p><strong>✅ ${policy.description}</strong></p>`;
+                infoBox.style.background = '#d1fae5';
+                infoBox.style.borderLeftColor = '#10b981';
+            } else {
+                infoBox.innerHTML = `<p><strong>⚠️ ${policy.description}</strong></p>`;
+                infoBox.style.background = '#fef3c7';
+                infoBox.style.borderLeftColor = '#f59e0b';
+            }
+            
+            // Set max withdrawal amount
+            withdrawalAmountInput.max = balance;
+            withdrawalAmountInput.value = '';
+            
+            // Hide penalty breakdown initially
+            document.getElementById('penaltyBreakdown').style.display = 'none';
+            
+            modal.classList.add('active');
+        }
+        
+        function closeWithdrawalModal() {
+            document.getElementById('withdrawalModal').classList.remove('active');
+            document.getElementById('withdrawalForm').reset();
+            currentSavingForWithdrawal = null;
+        }
+        
+        // Calculate withdrawal with penalties
+        document.getElementById('withdrawalAmount')?.addEventListener('input', function() {
+            const amount = parseFloat(this.value) || 0;
+            
+            if (!currentSavingForWithdrawal || amount <= 0) {
+                document.getElementById('penaltyBreakdown').style.display = 'none';
+                return;
+            }
+            
+            const { interest, planType } = currentSavingForWithdrawal;
+            const policy = withdrawalPolicies[planType];
+            
+            let penaltyFee = 0;
+            let finalAmount = amount;
+            
+            if (policy.penalty > 0) {
+                // Calculate penalty on interest
+                penaltyFee = interest * policy.penalty;
+                
+                // For fixed deposit, also lose 50% of interest
+                if (policy.interestLoss) {
+                    penaltyFee += interest * policy.interestLoss;
+                }
+                
+                finalAmount = amount - penaltyFee;
+            }
+            
+            // Show breakdown
+            document.getElementById('withdrawalAmountDisplay').textContent = `₦${amount.toLocaleString()}`;
+            document.getElementById('penaltyFeeDisplay').textContent = `-₦${Math.round(penaltyFee).toLocaleString()}`;
+            document.getElementById('finalAmountDisplay').textContent = `₦${Math.round(finalAmount).toLocaleString()}`;
+            document.getElementById('penaltyBreakdown').style.display = 'block';
+            
+            // Update withdrawal fee text
+            const feeText = policy.penalty === 0 
+                ? `✓ No fees - You'll receive ₦${amount.toLocaleString()}`
+                : `⚠️ Penalty: ₦${Math.round(penaltyFee).toLocaleString()} - You'll receive ₦${Math.round(finalAmount).toLocaleString()}`;
+            
+            document.getElementById('withdrawalFee').textContent = feeText;
+        });
+        
+        function processWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawalAmount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            if (!currentSavingForWithdrawal) return;
+            
+            const { savingType, balance, interest, planType } = currentSavingForWithdrawal;
+            
+            if (amount > balance) {
+                alert('Insufficient balance');
+                return;
+            }
+            
+            const policy = withdrawalPolicies[planType];
+            let penaltyFee = 0;
+            let finalAmount = amount;
+            
+            if (policy.penalty > 0) {
+                penaltyFee = interest * policy.penalty;
+                if (policy.interestLoss) {
+                    penaltyFee += interest * policy.interestLoss;
+                }
+                finalAmount = amount - penaltyFee;
+            }
+            
+            const btn = event.target;
+            btn.textContent = 'Processing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert(`✓ Withdrawal Successful!\n\nFrom: ${savingType}\nAmount Withdrawn: ₦${amount.toLocaleString()}\nPenalty Fee: ₦${Math.round(penaltyFee).toLocaleString()}\n\nYou Received: ₦${Math.round(finalAmount).toLocaleString()}\n\nFunds will be sent to your account shortly.`);
+                
+                btn.textContent = 'Confirm Withdrawal';
+                btn.disabled = false;
+                closeWithdrawalModal();
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
