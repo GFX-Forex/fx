@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lockfund</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1a202c;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-2px);
+        }
+
+        .header-content {
+            margin-left: 16px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .balance-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .balance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .balance-item:last-child {
+            border-bottom: none;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .balance-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .balance-amount.locked {
+            color: #667eea;
+        }
+
+        .balance-amount.available {
+            color: #48bb78;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a202c;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 16px 16px 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+
+        .duration-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .duration-btn {
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f7fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .duration-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .duration-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .duration-days {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .duration-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .secondary-btn {
+            width: 100%;
+            padding: 18px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .secondary-btn:hover {
+            background: #f0f4ff;
+        }
+
+        .active-lock {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .lock-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .lock-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 16px;
+        }
+
+        .lock-info h3 {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .lock-amount {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .lock-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lock-detail {
+            text-align: center;
+        }
+
+        .lock-detail-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .lock-detail-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .countdown {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .countdown-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .countdown-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .disclaimer {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 12px;
+            color: #718096;
+            line-height: 1.6;
+            border-left: 4px solid #667eea;
+        }
+
+        .success-message {
+            background: #48bb78;
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M12.5 15L7.5 10L12.5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="header-content">
+                <div class="header-title">Lockfund</div>
+                <div class="header-subtitle">Restrict part of your wallet balance</div>
+            </div>
+        </div>
+
+        <div id="successMessage" class="success-message"></div>
+
+        <div class="balance-card">
+            <div class="balance-item">
+                <span class="balance-label">Total Wallet Balance</span>
+                <span class="balance-amount" id="totalBalance">₦50,000.00</span>
+            </div>
+            <div class="balance-item">
+                <span class="balance-label">Available Balance</span>
+                <span class="balance-amount available" id="availableBalance">₦50,000.00</span>
+            </div>
+            <div class="balance-item">
+                <span class="balance-label">Locked Balance</span>
+                <span class="balance-amount locked" id="lockedBalance">₦0.00</span>
+            </div>
+        </div>
+
+        <div id="activeLockSection" class="hidden">
+            <div class="active-lock">
+                <div class="lock-header">
+                    <div class="lock-icon">🔒</div>
+                    <div class="lock-info">
+                        <h3>Active Lockfund</h3>
+                        <div class="lock-amount" id="activeLockAmount">₦0.00</div>
+                    </div>
+                </div>
+                
+                <div class="countdown">
+                    <div class="countdown-label">Unlocks in</div>
+                    <div class="countdown-value" id="countdownDisplay">0 days</div>
+                </div>
+
+                <div class="lock-details">
+                    <div class="lock-detail">
+                        <div class="lock-detail-label">Started</div>
+                        <div class="lock-detail-value" id="lockStartDate">-</div>
+                    </div>
+                    <div class="lock-detail">
+                        <div class="lock-detail-label">Unlocks</div>
+                        <div class="lock-detail-value" id="lockEndDate">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-card">
+                <div class="card-title">Add to Lockfund</div>
+                <div class="form-group">
+                    <label class="form-label">Amount to Add</label>
+                    <div class="input-wrapper">
+                        <span class="currency-symbol">₦</span>
+                        <input type="number" class="form-input" id="addAmount" placeholder="0.00">
+                    </div>
+                </div>
+                <button class="secondary-btn" onclick="addToLockfund()">Add Funds</button>
+            </div>
+        </div>
+
+        <div id="createLockSection">
+            <div class="main-card">
+                <div class="card-title">Create Lockfund</div>
+                
+                <div class="form-group">
+                    <label class="form-label">Amount to Lock</label>
+                    <div class="input-wrapper">
+                        <span class="currency-symbol">₦</span>
+                        <input type="number" class="form-input" id="lockAmount" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Lock Duration</label>
+                    <div class="duration-grid">
+                        <div class="duration-btn" data-days="7" onclick="selectDuration(7)">
+                            <span class="duration-days">7</span>
+                            <span class="duration-label">Days</span>
+                        </div>
+                        <div class="duration-btn" data-days="14" onclick="selectDuration(14)">
+                            <span class="duration-days">14</span>
+                            <span class="duration-label">Days</span>
+                        </div>
+                        <div class="duration-btn" data-days="30" onclick="selectDuration(30)">
+                            <span class="duration-days">30</span>
+                            <span class="duration-label">Days</span>
+                        </div>
+                        <div class="duration-btn" data-days="60" onclick="selectDuration(60)">
+                            <span class="duration-days">60</span>
+                            <span class="duration-label">Days</span>
+                        </div>
+                        <div class="duration-btn" data-days="90" onclick="selectDuration(90)">
+                            <span class="duration-days">90</span>
+                            <span class="duration-label">Days</span>
+                        </div>
+                        <div class="duration-btn" data-days="180" onclick="selectDuration(180)">
+                            <span class="duration-days">180</span>
+                            <span class="duration-label">Days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="primary-btn" id="lockBtn" onclick="createLockfund()">Lock Funds</button>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Important:</strong> Locked funds do not earn interest and are not savings or investment products. This is a wallet balance restriction feature to help you manage spending.
+        </div>
+    </div>
+
+    <script>
+        // Simulated wallet data - replace with actual API calls
+        let walletData = {
+            totalBalance: 50000,
+            lockedBalance: 0,
+            lockfund: null
+        };
+
+        let selectedDuration = null;
+
+        function formatCurrency(amount) {
+            return '₦' + amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatDate(date) {
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            return date.toLocaleDateString('en-GB', options);
+        }
+
+        function updateUI() {
+            const availableBalance = walletData.totalBalance - walletData.lockedBalance;
+            
+            document.getElementById('totalBalance').textContent = formatCurrency(walletData.totalBalance);
+            document.getElementById('availableBalance').textContent = formatCurrency(availableBalance);
+            document.getElementById('lockedBalance').textContent = formatCurrency(walletData.lockedBalance);
+
+            if (walletData.lockfund && walletData.lockfund.status === 'active') {
+                document.getElementById('createLockSection').classList.add('hidden');
+                document.getElementById('activeLockSection').classList.remove('hidden');
+                
+                document.getElementById('activeLockAmount').textContent = formatCurrency(walletData.lockfund.amount);
+                document.getElementById('lockStartDate').textContent = formatDate(new Date(walletData.lockfund.startAt));
+                document.getElementById('lockEndDate').textContent = formatDate(new Date(walletData.lockfund.unlockAt));
+                
+                updateCountdown();
+            } else {
+                document.getElementById('createLockSection').classList.remove('hidden');
+                document.getElementById('activeLockSection').classList.add('hidden');
+            }
+        }
+
+        function updateCountdown() {
+            if (!walletData.lockfund) return;
+
+            const now = new Date();
+            const unlockDate = new Date(walletData.lockfund.unlockAt);
+            const diff = unlockDate - now;
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+            if (days <= 0) {
+                document.getElementById('countdownDisplay').textContent = 'Unlocked';
+                walletData.lockfund.status = 'completed';
+                walletData.lockedBalance = 0;
+                walletData.lockfund = null;
+                updateUI();
+            } else {
+                document.getElementById('countdownDisplay').textContent = days + ' days';
+            }
+        }
+
+        function selectDuration(days) {
+            selectedDuration = days;
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-days="${days}"]`).classList.add('active');
+        }
+
+        function showMessage(message, isError = false) {
+            const msgEl = document.getElementById('successMessage');
+            msgEl.textContent = message;
+            msgEl.style.background = isError ? '#e53e3e' : '#48bb78';
+            msgEl.style.display = 'block';
+            
+            setTimeout(() => {
+                msgEl.style.display = 'none';
+            }, 3000);
+        }
+
+        function createLockfund() {
+            const amount = parseFloat(document.getElementById('lockAmount').value);
+            const availableBalance = walletData.totalBalance - walletData.lockedBalance;
+
+            if (!amount || amount <= 0) {
+                showMessage('Please enter a valid amount', true);
+                return;
+            }
+
+            if (!selectedDuration) {
+                showMessage('Please select a lock duration', true);
+                return;
+            }
+
+            if (amount > availableBalance) {
+                showMessage('Insufficient available balance', true);
+                return;
+            }
+
+            // Create lockfund
+            const startDate = new Date();
+            const unlockDate = new Date();
+            unlockDate.setDate(unlockDate.getDate() + selectedDuration);
+
+            walletData.lockfund = {
+                amount: amount,
+                startAt: startDate.toISOString(),
+                unlockAt: unlockDate.toISOString(),
+                status: 'active'
+            };
+            walletData.lockedBalance = amount;
+
+            showMessage(`Successfully locked ${formatCurrency(amount)} for ${selectedDuration} days`);
+            
+            document.getElementById('lockAmount').value = '';
+            selectedDuration = null;
+            document.querySelectorAll('.duration-btn').forEach(btn => btn.classList.remove('active'));
+            
+            updateUI();
+        }
+
+        function addToLockfund() {
+            const amount = parseFloat(document.getElementById('addAmount').value);
+            const availableBalance = walletData.totalBalance - walletData.lockedBalance;
+
+            if (!amount || amount <= 0) {
+                showMessage('Please enter a valid amount', true);
+                return;
+            }
+
+            if (amount > availableBalance) {
+                showMessage('Insufficient available balance', true);
+                return;
+            }
+
+            // Add to existing lockfund
+            walletData.lockfund.amount += amount;
+            walletData.lockedBalance += amount;
+
+            showMessage(`Successfully added ${formatCurrency(amount)} to your Lockfund`);
+            
+            document.getElementById('addAmount').value = '';
+            updateUI();
+        }
+
+        function goBack() {
+            showMessage('Returning to home...', false);
+            // In actual implementation: window.location.href = '/home' or similar
+        }
+
+        // Initialize
+        updateUI();
+
+        // Update countdown every minute
+        setInterval(updateCountdown, 60000);
+    </script>
+</body>
+</html>
