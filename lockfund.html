@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: #ffffff;
             min-height: 100vh;
-            color: #1a202c;
+            color: #0f172a;
         }
 
         .container {
@@ -26,121 +26,271 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            padding: 16px 20px 32px 20px;
-            border-radius: 0 0 32px 32px;
-            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+            padding: 20px;
+            background: white;
         }
 
         .header-top {
             display: flex;
             align-items: center;
-            margin-bottom: 24px;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             width: 36px;
             height: 36px;
-            border-radius: 10px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            backdrop-filter: blur(10px);
             transition: all 0.2s ease;
         }
 
         .back-btn:active {
             transform: scale(0.95);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .header-content {
-            flex: 1;
-            text-align: center;
-            margin-right: 36px;
+            background: #f1f5f9;
         }
 
         .header-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            color: white;
-            letter-spacing: -0.3px;
+            color: #0f172a;
+            letter-spacing: -0.5px;
         }
 
         .header-subtitle {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            color: #64748b;
             margin-top: 2px;
             font-weight: 400;
         }
 
-        .balance-overview {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin: -16px 20px 0 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        .spacer {
+            width: 36px;
         }
 
-        .balance-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid #f1f5f9;
+        .balance-section {
+            padding: 0 20px 20px 20px;
         }
 
-        .balance-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+        .balance-main {
+            text-align: center;
+            margin-bottom: 24px;
         }
 
-        .balance-item:first-child {
-            padding-top: 0;
-        }
-
-        .balance-label {
-            font-size: 13px;
+        .balance-label-main {
+            font-size: 12px;
             color: #64748b;
+            margin-bottom: 8px;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .balance-amount {
-            font-size: 16px;
+        .balance-amount-main {
+            font-size: 36px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .balance-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .balance-card-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .balance-card-amount {
+            font-size: 18px;
             font-weight: 700;
             color: #0f172a;
             letter-spacing: -0.3px;
         }
 
-        .balance-amount.locked {
+        .balance-card.locked .balance-card-amount {
             color: #2563eb;
         }
 
-        .balance-amount.available {
+        .balance-card.available .balance-card-amount {
             color: #10b981;
         }
 
         .content-section {
-            padding: 24px 20px;
+            padding: 0 20px 24px 20px;
+        }
+
+        .active-lock {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .active-lock::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .lock-header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .lock-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lock-info h3 {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .lock-amount {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: white;
+        }
+
+        .countdown-wrapper {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .countdown-label {
+            font-size: 11px;
+            opacity: 0.85;
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .countdown-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .countdown-unit {
+            font-size: 10px;
+            opacity: 0.85;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: white;
+        }
+
+        .lock-details {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lock-detail {
+            text-align: center;
+        }
+
+        .lock-detail-label {
+            font-size: 10px;
+            opacity: 0.85;
+            margin-bottom: 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .lock-detail-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
         }
 
         .main-card {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
             margin-bottom: 16px;
             border: 1px solid #e2e8f0;
         }
 
         .card-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             margin-bottom: 20px;
             color: #0f172a;
-            letter-spacing: -0.2px;
+            letter-spacing: -0.3px;
         }
 
         .form-group {
@@ -149,10 +299,12 @@
 
         .form-label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: #475569;
             margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .input-wrapper {
@@ -161,29 +313,30 @@
 
         .currency-symbol {
             position: absolute;
-            left: 14px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             color: #2563eb;
         }
 
         .form-input {
             width: 100%;
-            padding: 14px 14px 14px 36px;
+            padding: 16px 16px 16px 38px;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             transition: all 0.2s ease;
-            background: white;
+            background: #f8fafc;
             color: #0f172a;
         }
 
         .form-input:focus {
             outline: none;
             border-color: #2563eb;
+            background: white;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
@@ -198,10 +351,10 @@
         }
 
         .duration-btn {
-            padding: 14px 8px;
+            padding: 16px 8px;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            background: white;
+            background: #f8fafc;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
@@ -213,35 +366,38 @@
 
         .duration-btn.active {
             border-color: #2563eb;
-            background: #eff6ff;
+            background: #2563eb;
         }
 
         .duration-days {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
             color: #0f172a;
             display: block;
             margin-bottom: 2px;
+            letter-spacing: -0.5px;
         }
 
         .duration-btn.active .duration-days {
-            color: #2563eb;
+            color: white;
         }
 
         .duration-label {
-            font-size: 11px;
+            font-size: 10px;
             color: #64748b;
-            font-weight: 500;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .duration-btn.active .duration-label {
-            color: #2563eb;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .primary-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            padding: 18px;
+            background: #0f172a;
             color: white;
             border: none;
             border-radius: 12px;
@@ -249,8 +405,10 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
             letter-spacing: -0.2px;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
         }
 
         .primary-btn:active {
@@ -265,113 +423,28 @@
 
         .secondary-btn {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: white;
-            color: #2563eb;
-            border: 2px solid #2563eb;
+            color: #0f172a;
+            border: 2px solid #0f172a;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
-            letter-spacing: -0.2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .secondary-btn:active {
             transform: scale(0.98);
-            background: #eff6ff;
-        }
-
-        .active-lock {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            border-radius: 20px;
-            padding: 24px;
-            color: white;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
-        }
-
-        .lock-header {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .lock-icon {
-            width: 44px;
-            height: 44px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-right: 14px;
-            flex-shrink: 0;
-        }
-
-        .lock-info h3 {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .lock-amount {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .countdown {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .countdown-label {
-            font-size: 11px;
-            opacity: 0.85;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-
-        .countdown-value {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-
-        .lock-details {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .lock-detail {
-            text-align: center;
-        }
-
-        .lock-detail-label {
-            font-size: 11px;
-            opacity: 0.85;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-
-        .lock-detail-value {
-            font-size: 14px;
-            font-weight: 700;
+            background: #f8fafc;
         }
 
         .disclaimer {
             background: #eff6ff;
             border-radius: 12px;
-            padding: 14px;
+            padding: 16px;
             font-size: 11px;
             color: #475569;
             line-height: 1.6;
@@ -385,18 +458,18 @@
 
         .success-message {
             position: fixed;
-            top: 20px;
+            top: 24px;
             left: 50%;
             transform: translateX(-50%);
-            background: #10b981;
+            background: #0f172a;
             color: white;
-            padding: 14px 24px;
-            border-radius: 12px;
+            padding: 16px 28px;
+            border-radius: 50px;
             font-size: 13px;
             font-weight: 600;
             display: none;
             animation: slideDown 0.3s ease;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.4);
             z-index: 1000;
             max-width: 90%;
         }
@@ -408,7 +481,7 @@
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translate(-50%, -10px);
+                transform: translate(-50%, -20px);
             }
             to {
                 opacity: 1;
@@ -420,16 +493,8 @@
             display: none;
         }
 
-        /* Smooth scrolling */
         html {
             scroll-behavior: smooth;
-        }
-
-        /* Loading state */
-        .primary-btn.loading,
-        .secondary-btn.loading {
-            pointer-events: none;
-            opacity: 0.7;
         }
 
         .primary-btn.loading::after,
@@ -455,28 +520,32 @@
         <div class="header">
             <div class="header-top">
                 <button class="back-btn" onclick="goBack()">
-                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                        <path d="M12.5 15L7.5 10L12.5 5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                        <path d="M12.5 15L7.5 10L12.5 5" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <div class="header-content">
+                <div style="flex: 1; text-align: center; margin: 0 -36px 0 0;">
                     <div class="header-title">Lockfund</div>
                     <div class="header-subtitle">Control your spending</div>
                 </div>
+                <div class="spacer"></div>
+            </div>
+        </div>
+
+        <div class="balance-section">
+            <div class="balance-main">
+                <div class="balance-label-main">Total Balance</div>
+                <div class="balance-amount-main" id="totalBalance">₦50,000.00</div>
             </div>
 
-            <div class="balance-overview">
-                <div class="balance-item">
-                    <span class="balance-label">Total Balance</span>
-                    <span class="balance-amount" id="totalBalance">₦50,000.00</span>
+            <div class="balance-grid">
+                <div class="balance-card available">
+                    <div class="balance-card-label">Available</div>
+                    <div class="balance-card-amount" id="availableBalance">₦50,000</div>
                 </div>
-                <div class="balance-item">
-                    <span class="balance-label">Available</span>
-                    <span class="balance-amount available" id="availableBalance">₦50,000.00</span>
-                </div>
-                <div class="balance-item">
-                    <span class="balance-label">Locked</span>
-                    <span class="balance-amount locked" id="lockedBalance">₦0.00</span>
+                <div class="balance-card locked">
+                    <div class="balance-card-label">Locked</div>
+                    <div class="balance-card-amount" id="lockedBalance">₦0</div>
                 </div>
             </div>
         </div>
@@ -494,9 +563,26 @@
                         </div>
                     </div>
                     
-                    <div class="countdown">
+                    <div class="countdown-wrapper">
                         <div class="countdown-label">Unlocks in</div>
-                        <div class="countdown-value" id="countdownDisplay">0 days</div>
+                        <div class="countdown-display">
+                            <div class="countdown-item">
+                                <span class="countdown-value" id="days">00</span>
+                                <span class="countdown-unit">Days</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-value" id="hours">00</span>
+                                <span class="countdown-unit">Hours</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-value" id="minutes">00</span>
+                                <span class="countdown-unit">Mins</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-value" id="seconds">00</span>
+                                <span class="countdown-unit">Secs</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="lock-details">
@@ -584,9 +670,14 @@
         };
 
         let selectedDuration = null;
+        let countdownInterval = null;
 
         function formatCurrency(amount) {
-            return '₦' + amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigths: 2 });
+            return '₦' + amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatCurrencyShort(amount) {
+            return '₦' + amount.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
         function formatDate(date) {
@@ -594,12 +685,56 @@
             return date.toLocaleDateString('en-GB', options);
         }
 
+        function updateCountdown() {
+            if (!walletData.lockfund || walletData.lockfund.status !== 'active') {
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+                return;
+            }
+
+            const now = new Date().getTime();
+            const unlockDate = new Date(walletData.lockfund.unlockAt).getTime();
+            const distance = unlockDate - now;
+
+            if (distance < 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                
+                walletData.lockfund.status = 'completed';
+                walletData.lockedBalance = 0;
+                walletData.lockfund = null;
+                
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+                
+                showMessage('Lockfund unlocked!');
+                updateUI();
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
         function updateUI() {
             const availableBalance = walletData.totalBalance - walletData.lockedBalance;
             
             document.getElementById('totalBalance').textContent = formatCurrency(walletData.totalBalance);
-            document.getElementById('availableBalance').textContent = formatCurrency(availableBalance);
-            document.getElementById('lockedBalance').textContent = formatCurrency(walletData.lockedBalance);
+            document.getElementById('availableBalance').textContent = formatCurrencyShort(availableBalance);
+            document.getElementById('lockedBalance').textContent = formatCurrencyShort(walletData.lockedBalance);
 
             if (walletData.lockfund && walletData.lockfund.status === 'active') {
                 document.getElementById('createLockSection').classList.add('hidden');
@@ -609,29 +744,18 @@
                 document.getElementById('lockStartDate').textContent = formatDate(new Date(walletData.lockfund.startAt));
                 document.getElementById('lockEndDate').textContent = formatDate(new Date(walletData.lockfund.unlockAt));
                 
-                updateCountdown();
+                if (!countdownInterval) {
+                    updateCountdown();
+                    countdownInterval = setInterval(updateCountdown, 1000);
+                }
             } else {
                 document.getElementById('createLockSection').classList.remove('hidden');
                 document.getElementById('activeLockSection').classList.add('hidden');
-            }
-        }
-
-        function updateCountdown() {
-            if (!walletData.lockfund) return;
-
-            const now = new Date();
-            const unlockDate = new Date(walletData.lockfund.unlockAt);
-            const diff = unlockDate - now;
-            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-
-            if (days <= 0) {
-                document.getElementById('countdownDisplay').textContent = 'Unlocked';
-                walletData.lockfund.status = 'completed';
-                walletData.lockedBalance = 0;
-                walletData.lockfund = null;
-                updateUI();
-            } else {
-                document.getElementById('countdownDisplay').textContent = days + (days === 1 ? ' day' : ' days');
+                
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
             }
         }
 
@@ -731,7 +855,6 @@
         }
 
         updateUI();
-        setInterval(updateCountdown, 60000);
     </script>
 </body>
 </html>
