@@ -383,7 +383,7 @@
             transition: all 0.2s ease;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            /*box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);*/
         }
 
         .primary-btn:active {
@@ -444,7 +444,7 @@
             font-weight: 600;
             display: none;
             animation: slideDown 0.3s ease;
-            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);
+            /*box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);*/
             z-index: 1000;
             max-width: 90%;
         }
@@ -477,7 +477,7 @@
             border-radius: 22px;
             padding: 28px;
             margin-bottom: 16px;
-            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3);
+            /*box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3);*/
             color: white;
             text-align: center;
             animation: unlockPulse 0.6s ease;
@@ -641,7 +641,13 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .lock-icon ion-icon {
+            font-size: 24px;
+            color: white;
+        }    
     </style>
+    <link rel="stylesheet" href="css/safe-area.css">
 </head>
 <body>
     <div class="container">
@@ -702,7 +708,10 @@
             <div id="activeLockSection" class="hidden">
                 <div class="active-lock">
                     <div class="lock-header">
-                        <div class="lock-icon">🔒</div>
+                        <!--<div class="lock-icon">🔒</div>-->
+                        <div class="lock-icon">
+                            <ion-icon name="lock-closed"></ion-icon>
+                        </div>
                         <div class="lock-info">
                             <h3>Active Lockfund</h3>
                             <div class="lock-amount" id="activeLockAmount">₦0.00</div>
@@ -1103,5 +1112,8 @@
 
         updateUI();
     </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="js/statusbar-config.js"></script>
 </body>
 </html>
