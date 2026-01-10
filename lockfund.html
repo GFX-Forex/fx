@@ -121,7 +121,7 @@
             border-radius: 22px;
             padding: 24px;
             margin-bottom: 16px;
-            /*box-shadow: 0 20px 50px rgba(37, 99, 235, 0.3);*/
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -472,6 +472,159 @@
             scroll-behavior: smooth;
         }
 
+        .unlock-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 22px;
+            padding: 28px;
+            margin-bottom: 16px;
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3);
+            color: white;
+            text-align: center;
+            animation: unlockPulse 0.6s ease;
+        }
+
+        @keyframes unlockPulse {
+            0% { transform: scale(0.95); opacity: 0; }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .unlock-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .unlock-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .unlock-amount {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .unlock-details {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .unlock-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11px;
+        }
+
+        .unlock-detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .unlock-detail-label {
+            opacity: 0.85;
+        }
+
+        .unlock-detail-value {
+            font-weight: 700;
+        }
+
+        .history-section {
+            margin-bottom: 16px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .history-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+        }
+
+        .history-stats {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .history-list {
+            background: white;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .history-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item-left {
+            flex: 1;
+        }
+
+        .history-item-amount {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 3px;
+            letter-spacing: -0.3px;
+        }
+
+        .history-item-date {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .history-item-duration {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .history-empty {
+            padding: 32px 20px;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .history-empty-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+
+        .history-empty-text {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
         .primary-btn.loading::after,
         .secondary-btn.loading::after {
             content: '';
@@ -521,6 +674,31 @@
         <div id="successMessage" class="success-message"></div>
 
         <div class="content-section">
+            <div id="unlockSection" class="hidden">
+                <div class="unlock-card">
+                    <div class="unlock-icon">🎉</div>
+                    <div class="unlock-title">Funds Unlocked!</div>
+                    <div class="unlock-amount" id="unlockAmount">₦0.00</div>
+                    
+                    <div class="unlock-details">
+                        <div class="unlock-detail-row">
+                            <span class="unlock-detail-label">Locked For</span>
+                            <span class="unlock-detail-value" id="unlockDuration">-</span>
+                        </div>
+                        <div class="unlock-detail-row">
+                            <span class="unlock-detail-label">Started</span>
+                            <span class="unlock-detail-value" id="unlockStartDate">-</span>
+                        </div>
+                        <div class="unlock-detail-row">
+                            <span class="unlock-detail-label">Completed</span>
+                            <span class="unlock-detail-value" id="unlockEndDate">-</span>
+                        </div>
+                    </div>
+                    
+                    <button class="secondary-btn" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); color: white;" onclick="dismissUnlock()">Create Another Lock</button>
+                </div>
+            </div>
+
             <div id="activeLockSection" class="hidden">
                 <div class="active-lock">
                     <div class="lock-header">
@@ -579,6 +757,19 @@
             </div>
 
             <div id="createLockSection">
+                <div id="historySection" class="history-section hidden">
+                    <div class="history-header">
+                        <div class="history-title">Lock History</div>
+                        <div class="history-stats" id="historyStats">0 completed</div>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <div class="history-empty">
+                            <div class="history-empty-icon">📋</div>
+                            <div class="history-empty-text">No lock history yet</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="main-card">
                     <div class="card-title">Create Lockfund</div>
                     
@@ -646,11 +837,13 @@
         let walletData = {
             totalBalance: 50000,
             lockedBalance: 0,
-            lockfund: null
+            lockfund: null,
+            lockHistory: []
         };
 
         let selectedDuration = null;
         let countdownInterval = null;
+        let justUnlocked = false;
 
         function formatCurrency(amount) {
             return '₦' + amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -663,6 +856,49 @@
         function formatDate(date) {
             const options = { day: '2-digit', month: 'short', year: 'numeric' };
             return date.toLocaleDateString('en-GB', options);
+        }
+
+        function getDurationText(days) {
+            if (days < 30) return days + ' days';
+            if (days < 365) {
+                const months = Math.round(days / 30);
+                return months + (months === 1 ? ' month' : ' months');
+            }
+            return '1 year';
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            const historyStats = document.getElementById('historyStats');
+            const historySection = document.getElementById('historySection');
+
+            if (walletData.lockHistory.length === 0) {
+                historySection.classList.add('hidden');
+                return;
+            }
+
+            historySection.classList.remove('hidden');
+            historyStats.textContent = walletData.lockHistory.length + ' completed';
+
+            const historyHTML = walletData.lockHistory
+                .slice()
+                .reverse()
+                .slice(0, 5)
+                .map(lock => {
+                    const duration = Math.round((new Date(lock.unlockAt) - new Date(lock.startAt)) / (1000 * 60 * 60 * 24));
+                    return `
+                        <div class="history-item">
+                            <div class="history-item-left">
+                                <div class="history-item-amount">${formatCurrency(lock.amount)}</div>
+                                <div class="history-item-date">${formatDate(new Date(lock.startAt))} - ${formatDate(new Date(lock.unlockAt))}</div>
+                            </div>
+                            <div class="history-item-duration">${getDurationText(duration)}</div>
+                        </div>
+                    `;
+                })
+                .join('');
+
+            historyList.innerHTML = historyHTML;
         }
 
         function updateCountdown() {
@@ -684,6 +920,22 @@
                 document.getElementById('minutes').textContent = '00';
                 document.getElementById('seconds').textContent = '00';
                 
+                // Save to history
+                const completedLock = {
+                    amount: walletData.lockfund.amount,
+                    startAt: walletData.lockfund.startAt,
+                    unlockAt: walletData.lockfund.unlockAt
+                };
+                walletData.lockHistory.push(completedLock);
+                
+                // Show unlock card
+                justUnlocked = true;
+                const duration = Math.round((new Date(completedLock.unlockAt) - new Date(completedLock.startAt)) / (1000 * 60 * 60 * 24));
+                document.getElementById('unlockAmount').textContent = formatCurrency(completedLock.amount);
+                document.getElementById('unlockDuration').textContent = getDurationText(duration);
+                document.getElementById('unlockStartDate').textContent = formatDate(new Date(completedLock.startAt));
+                document.getElementById('unlockEndDate').textContent = formatDate(new Date(completedLock.unlockAt));
+                
                 walletData.lockfund.status = 'completed';
                 walletData.lockedBalance = 0;
                 walletData.lockfund = null;
@@ -693,7 +945,6 @@
                     countdownInterval = null;
                 }
                 
-                showMessage('Lockfund unlocked!');
                 updateUI();
                 return;
             }
@@ -716,9 +967,17 @@
             document.getElementById('availableBalance').textContent = formatCurrencyShort(availableBalance);
             document.getElementById('lockedBalance').textContent = formatCurrencyShort(walletData.lockedBalance);
 
+            if (justUnlocked) {
+                document.getElementById('unlockSection').classList.remove('hidden');
+                document.getElementById('createLockSection').classList.add('hidden');
+                document.getElementById('activeLockSection').classList.add('hidden');
+                return;
+            }
+
             if (walletData.lockfund && walletData.lockfund.status === 'active') {
                 document.getElementById('createLockSection').classList.add('hidden');
                 document.getElementById('activeLockSection').classList.remove('hidden');
+                document.getElementById('unlockSection').classList.add('hidden');
                 
                 document.getElementById('activeLockAmount').textContent = formatCurrency(walletData.lockfund.amount);
                 document.getElementById('lockStartDate').textContent = formatDate(new Date(walletData.lockfund.startAt));
@@ -731,12 +990,20 @@
             } else {
                 document.getElementById('createLockSection').classList.remove('hidden');
                 document.getElementById('activeLockSection').classList.add('hidden');
+                document.getElementById('unlockSection').classList.add('hidden');
+                
+                renderHistory();
                 
                 if (countdownInterval) {
                     clearInterval(countdownInterval);
                     countdownInterval = null;
                 }
             }
+        }
+
+        function dismissUnlock() {
+            justUnlocked = false;
+            updateUI();
         }
 
         function selectDuration(days) {
