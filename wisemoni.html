@@ -704,26 +704,56 @@
                 </div>
             </div>
 
+            <div style="background: #4A90E2; padding: 0 24px 24px;">
+                <div style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 20px;">📢</span>
+                    <span style="color: #ffffff; font-size: 13px;">Money Transfer Levy of N50 is charged on all deposits</span>
+                </div>
+            </div>
+
             <div class="content">
                 <div class="limit-card">
                     <div class="limit-label">Your available loan limit</div>
-                    <div class="limit-value">₦0</div>
+                    <div class="limit-value">₦520,000</div>
                     <div class="outstanding">
                         <div class="outstanding-label">Outstanding limit</div>
-                        <div class="outstanding-value">₦350,000</div>
+                        <div class="outstanding-value">₦0</div>
                     </div>
-                    <button class="btn-primary" onclick="navigate('repaymentPage')">
-                        Repay Now
-                        <div class="due-info">Loan Amount ₦242,900 Due on 22 Jan 2026</div>
+                    <button class="btn-primary" onclick="navigate('applyPage')" style="position: relative;">
+                        Get Funds
+                        <div style="position: absolute; top: -8px; right: 16px; background: #FF6B6B; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600;">Limit will expire</div>
                     </button>
-                    <button class="btn-secondary" onclick="navigate('applyPage')">Increase loan limit</button>
                 </div>
 
-                <div class="alert">
-                    <div class="alert-icon">⚠️</div>
-                    <div class="alert-content">
-                        <strong>Fraud Alert</strong>
-                        <p>EasyLoan will NOT ask you to repay into personal account. Beware!</p>
+                <div style="background: linear-gradient(135deg, #FFD93D 0%, #6BCF7F 100%); border-radius: 16px; padding: 20px; margin-bottom: 24px; position: relative; overflow: hidden;">
+                    <div style="position: relative; z-index: 1;">
+                        <div style="font-size: 22px; font-weight: 700; color: #000; margin-bottom: 8px;">WIN GREAT PRIZES</div>
+                        <div style="background: #000; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 12px; margin-bottom: 12px;">Winning the iPhone grand prize</div>
+                        <div>
+                            <button style="background: #6BCF7F; color: #fff; border: none; padding: 10px 24px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer;">Lucky Draw 🎉</button>
+                        </div>
+                    </div>
+                    <div style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); font-size: 120px; opacity: 0.3;">📱</div>
+                </div>
+
+                <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #000;">Coupon Guide</div>
+                        <div style="background: #4ECDC4; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 12px;">
+                            <div style="font-size: 40px; margin-bottom: 8px;">💡</div>
+                            <div style="color: #fff; font-size: 13px; font-weight: 600;">Coupon 💰</div>
+                        </div>
+                        <button style="background: #fff; color: #4ECDC4; border: 1.5px solid #4ECDC4; padding: 10px 20px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; width: 100%;">Know More</button>
+                    </div>
+
+                    <div style="flex: 1;">
+                        <div style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #000;">Please pay attention to this!</div>
+                        <div style="background: #4ECDC4; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 12px;">
+                            <div style="font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 4px;">Notice!</div>
+                            <div style="font-size: 12px; color: #fff;">Dangers of overdue!</div>
+                            <div style="font-size: 40px; margin-top: 8px;">⚠️</div>
+                        </div>
+                        <button style="background: #fff; color: #4ECDC4; border: 1.5px solid #4ECDC4; padding: 10px 20px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; width: 100%;">Learn more</button>
                     </div>
                 </div>
             </div>
