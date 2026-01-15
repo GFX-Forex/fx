@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyLoan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .app {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 70px;
+        }
+
+        .header {
+            background: #4A90E2;
+            padding: 50px 24px 24px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .time {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .icons {
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .brand {
+            color: #ffffff;
+        }
+
+        .brand h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .brand p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .limit-card {
+            background: #F8F9FB;
+            border-radius: 16px;
+            padding: 28px 24px;
+            margin-top: -40px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .limit-label {
+            font-size: 13px;
+            color: #8E8E93;
+            margin-bottom: 12px;
+            letter-spacing: 0.2px;
+        }
+
+        .limit-value {
+            font-size: 52px;
+            font-weight: 700;
+            color: #4A90E2;
+            line-height: 1;
+            margin-bottom: 24px;
+        }
+
+        .outstanding {
+            padding-top: 16px;
+            border-top: 1px solid #E5E5EA;
+        }
+
+        .outstanding-label {
+            font-size: 13px;
+            color: #8E8E93;
+            margin-bottom: 8px;
+        }
+
+        .outstanding-value {
+            font-size: 26px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .btn-primary {
+            background: #4A90E2;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            background: #3A7BC8;
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #4A90E2;
+            border: 1.5px solid #4A90E2;
+            border-radius: 12px;
+            padding: 16px 24px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        .due-info {
+            font-size: 12px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .alert {
+            background: #FFF9E6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .alert-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .alert-content strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 4px;
+            color: #000000;
+        }
+
+        .alert-content p {
+            font-size: 13px;
+            color: #3C3C43;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        .detail-group {
+            background: #F8F9FB;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 16px;
+            border-bottom: 1px solid #E5E5EA;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-left {
+            font-size: 14px;
+            color: #8E8E93;
+        }
+
+        .detail-right {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            text-align: right;
+        }
+
+        .detail-link {
+            color: #4A90E2;
+            cursor: pointer;
+        }
+
+        .installments {
+            background: #F8F9FB;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .installment-header {
+            display: flex;
+            padding: 12px 16px;
+            background: #E5E5EA;
+            font-size: 12px;
+            font-weight: 600;
+            color: #3C3C43;
+        }
+
+        .installment-col {
+            flex: 1;
+            text-align: center;
+        }
+
+        .installment-row {
+            display: flex;
+            padding: 16px;
+            border-bottom: 1px solid #E5E5EA;
+            align-items: center;
+        }
+
+        .installment-row:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            background: #FF9500;
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .repay-card {
+            background: #F8F9FB;
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .repay-label {
+            font-size: 13px;
+            color: #8E8E93;
+            margin-bottom: 12px;
+        }
+
+        .repay-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: #4A90E2;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .repay-note {
+            font-size: 12px;
+            color: #8E8E93;
+            margin-bottom: 24px;
+        }
+
+        .loan-list-card {
+            background: #F8F9FB;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .loan-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .loan-list-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .loan-list-link {
+            font-size: 14px;
+            color: #4A90E2;
+            cursor: pointer;
+        }
+
+        .loan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #E5E5EA;
+        }
+
+        .loan-item:last-child {
+            border-bottom: none;
+        }
+
+        .loan-item-left {
+            flex: 1;
+        }
+
+        .loan-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 4px;
+        }
+
+        .loan-date {
+            font-size: 13px;
+            color: #8E8E93;
+        }
+
+        .amount-picker {
+            text-align: center;
+            padding: 32px 0;
+        }
+
+        .amount-display {
+            font-size: 48px;
+            font-weight: 700;
+            color: #000000;
+            margin: 20px 0;
+        }
+
+        .amount-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            background: #4A90E2;
+            color: #ffffff;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .quick-select {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .quick-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1.5px solid #E5E5EA;
+            background: #ffffff;
+            color: #000000;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-btn.selected {
+            border-color: #4A90E2;
+            background: #4A90E2;
+            color: #ffffff;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #8E8E93;
+            margin-top: 12px;
+        }
+
+        .tenure-section {
+            margin: 32px 0;
+        }
+
+        .tenure-grid {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tenure-card {
+            flex: 1;
+            background: #ffffff;
+            border: 1.5px solid #E5E5EA;
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tenure-card.selected {
+            border-color: #4A90E2;
+            background: #4A90E2;
+            color: #ffffff;
+        }
+
+        .tenure-card.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .tenure-days {
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .tenure-rate {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .summary-card {
+            background: #F8F9FB;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #E5E5EA;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #8E8E93;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            text-align: right;
+        }
+
+        .summary-value.highlight {
+            font-size: 18px;
+            color: #4A90E2;
+        }
+
+        .schedule-card {
+            background: #FFF9E6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .schedule-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #000000;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .schedule-left div:first-child {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 4px;
+        }
+
+        .schedule-left div:last-child {
+            font-size: 12px;
+            color: #8E8E93;
+        }
+
+        .schedule-right div:first-child {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            text-align: right;
+            margin-bottom: 4px;
+        }
+
+        .schedule-right div:last-child {
+            font-size: 12px;
+            color: #8E8E93;
+            text-align: right;
+        }
+
+        .note-box {
+            background: #F8F9FB;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            color: #3C3C43;
+            line-height: 1.6;
+            margin-top: 16px;
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-top: 1px solid #E5E5EA;
+            display: flex;
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 8px 0;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            background: none;
+            border: none;
+            color: #8E8E93;
+            font-size: 10px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
+            color: #4A90E2;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .topbar {
+            background: #4A90E2;
+            color: #ffffff;
+            padding: 48px 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-icon {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+        }
+
+        .topbar-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 340px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        .modal-close {
+            background: #E5E5EA;
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .history-item {
+            background: #F8F9FB;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:active {
+            background: #E5E5EA;
+        }
+
+        .history-icon {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .history-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .history-arrow {
+            font-size: 16px;
+            color: #8E8E93;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- HOME PAGE -->
+        <div id="homePage" class="page active">
+            <div class="header">
+                <div class="brand">
+                    <h1>WiseMoni</h1>
+                    <p>Easy loans for your every need 💰</p>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="limit-card">
+                    <div class="limit-label">Your available loan limit</div>
+                    <div class="limit-value">₦0</div>
+                    <div class="outstanding">
+                        <div class="outstanding-label">Outstanding limit</div>
+                        <div class="outstanding-value">₦350,000</div>
+                    </div>
+                    <button class="btn-primary" onclick="navigate('repaymentPage')">
+                        Repay Now
+                        <div class="due-info">Loan Amount ₦242,900 Due on 22 Jan 2026</div>
+                    </button>
+                    <button class="btn-secondary" onclick="navigate('applyPage')">Increase loan limit</button>
+                </div>
+
+                <div class="alert">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-content">
+                        <strong>Fraud Alert</strong>
+                        <p>EasyLoan will NOT ask you to repay into personal account. Beware!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REPAYMENT PAGE -->
+        <div id="repaymentPage" class="page">
+            <div class="topbar">
+                <div class="back-icon" onclick="navigate('homePage')">←</div>
+                <div class="topbar-title">Repayment</div>
+            </div>
+
+            <div class="content">
+                <div class="repay-card">
+                    <div class="repay-label">Repayment Amount</div>
+                    <div class="repay-amount">₦242,900</div>
+                    <div class="repay-note">(Next Due amount ₦242,900)</div>
+                    <button class="btn-primary" onclick="showModal('paymentModal')">Repay Now</button>
+                    <button class="btn-secondary" onclick="showModal('fullPaymentModal')">Full repayment</button>
+                </div>
+
+                <div class="loan-list-card">
+                    <div class="loan-list-header">
+                        <div class="loan-list-title">Easemoni Loan</div>
+                        <div class="loan-list-link" onclick="navigate('detailsPage')">Details →</div>
+                    </div>
+                    <div class="loan-item">
+                        <div class="loan-item-left">
+                            <div class="loan-amount">₦242,900</div>
+                            <div class="loan-date">22 Jan 2026</div>
+                        </div>
+                        <div class="badge">Outstanding</div>
+                    </div>
+                    <div class="loan-item">
+                        <div class="loan-item-left">
+                            <div class="loan-amount">₦248,500</div>
+                            <div class="loan-date">21 Feb 2026</div>
+                        </div>
+                        <div class="badge">Outstanding</div>
+                    </div>
+                </div>
+
+                <div class="history-item" onclick="showModal('historyModal')">
+                    <div style="display: flex; align-items: center;">
+                        <span class="history-icon">📄</span>
+                        <span class="history-text">View Repayment History</span>
+                    </div>
+                    <span class="history-arrow">→</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAILS PAGE -->
+        <div id="detailsPage" class="page">
+            <div class="topbar">
+                <div class="back-icon" onclick="navigate('repaymentPage')">←</div>
+                <div class="topbar-title">Loan Details</div>
+            </div>
+
+            <div class="content">
+                <div class="section-title">Loan Details</div>
+
+                <div class="detail-group">
+                    <div class="detail-row">
+                        <div class="detail-left">Disbursement Date</div>
+                        <div class="detail-right">24 Dec 2025</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Loan ID</div>
+                        <div class="detail-right">125730031</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Loan Amount</div>
+                        <div class="detail-right">₦350,000</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Interest</div>
+                        <div class="detail-right">₦147,000</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Total amount to be repaid</div>
+                        <div class="detail-right">₦497,000</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Repayment Amount</div>
+                        <div class="detail-right">₦491,400</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Bank Name</div>
+                        <div class="detail-right">OPay</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Bank Account</div>
+                        <div class="detail-right">*****4478</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Loan Contract</div>
+                        <div class="detail-right detail-link" onclick="showModal('contractModal')">View →</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Repayment History</div>
+                        <div class="detail-right detail-link" onclick="showModal('historyModal')">View →</div>
+                    </div>
+                </div>
+
+                <div class="section-title">Installment details</div>
+
+                <div class="installments">
+                    <div class="installment-header">
+                        <div class="installment-col">Due date</div>
+                        <div class="installment-col">Due amount</div>
+                        <div class="installment-col">Status</div>
+                    </div>
+                    <div class="installment-row">
+                        <div class="installment-col">22 Jan 2026</div>
+                        <div class="installment-col">₦242,900</div>
+                        <div class="installment-col"><span class="badge">Outstanding</span></div>
+                    </div>
+                    <div class="installment-row">
+                        <div class="installment-col">21 Feb 2026</div>
+                        <div class="installment-col">₦248,500</div>
+                        <div class="installment-col"><span class="badge">Outstanding</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APPLY PAGE -->
+        <div id="applyPage" class="page">
+            <div class="topbar">
+                <div class="back-icon" onclick="navigate('homePage')">←</div>
+                <div class="topbar-title">Get Funds</div>
+            </div>
+
+            <div class="content">
+                <div class="section-title">Choose Amount</div>
+
+                <div class="amount-picker">
+                    <div class="amount-controls">
+                        <button class="control-btn" onclick="decreaseAmount()">−</button>
+                        <div class="amount-display">₦<span id="amountValue">520,000</span></div>
+                        <button class="control-btn" onclick="increaseAmount()">+</button>
+                    </div>
+                    <div class="quick-select">
+                        <button class="quick-btn" onclick="setQuickAmount(260000, this)">₦260,000</button>
+                        <button class="quick-btn" onclick="setQuickAmount(416000, this)">₦416,000</button>
+                        <button class="quick-btn selected" onclick="setQuickAmount(520000, this)">₦520,000</button>
+                    </div>
+                    <div class="info-text">ⓘ Your loan amount range is ₦26,000 to ₦520,000</div>
+                </div>
+
+                <div class="tenure-section">
+                    <div class="section-title">Choose a loan tenure</div>
+                    <div class="tenure-grid">
+                        <div class="tenure-card selected" onclick="selectTenure(this, 60)">
+                            <span class="tenure-days">60 Days</span>
+                            <span class="tenure-rate">21% Monthly</span>
+                        </div>
+                        <div class="tenure-card" onclick="selectTenure(this, 30)">
+                            <span class="tenure-days">30 Days</span>
+                            <span class="tenure-rate">24% Monthly</span>
+                        </div>
+                        <div class="tenure-card locked">
+                            <span class="tenure-days">91 Days</span>
+                            <span class="tenure-rate">Locked</span>
+                        </div>
+                    </div>
+                    <div class="info-text">ⓘ Slide right or left to view more tenure options</div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <div class="summary-label">Tenure</div>
+                        <div class="summary-value">2 installment(s) for 60 days</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Received Amount</div>
+                        <div class="summary-value">₦520,000</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Discount</div>
+                        <div class="summary-value" style="color: #8E8E93;">Unavailable</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Interest</div>
+                        <div class="summary-value">₦218,400</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Total Amount Due</div>
+                        <div class="summary-value highlight">₦738,400</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Disbursement Account</div>
+                        <div class="summary-value detail-link" onclick="showModal('bankModal')">Add Bank Account →</div>
+                    </div>
+                </div>
+
+                <div class="schedule-card">
+                    <div class="schedule-title">Repayment Schedule</div>
+                    <div class="schedule-item">
+                        <div class="schedule-left">
+                            <div>21 Jan 2026</div>
+                            <div>Your first repayment date</div>
+                        </div>
+                        <div class="schedule-right">
+                            <div>₦369,200</div>
+                            <div>To be paid</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="applyForLoan()">Apply Now</button>
+
+                <div class="note-box">
+                    <strong>Note:</strong> It is important that you repay your loan as at when due to enjoy increase in your loan limit and avoid penalties.
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="navbar">
+            <button class="nav-item active" onclick="navigate('homePage')">
+                <span class="nav-icon">🏠</span>
+                Loan
+            </button>
+            <button class="nav-item" onclick="navigate('repaymentPage')">
+                <span class="nav-icon">💳</span>
+                Repayment
+            </button>
+            <button class="nav-item" onclick="navigate('detailsPage')">
+                <span class="nav-icon">📄</span>
+                Details
+            </button>
+            <button class="nav-item" onclick="navigate('applyPage')">
+                <span class="nav-icon">➕</span>
+                Apply
+            </button>
+        </div>
+
+        <!-- MODALS -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Select Payment Method</div>
+                <div class="detail-group">
+                    <div class="detail-row" style="cursor: pointer;">
+                        <div class="detail-left">Bank Transfer</div>
+                        <div class="detail-right">→</div>
+                    </div>
+                    <div class="detail-row" style="cursor: pointer;">
+                        <div class="detail-left">Card Payment</div>
+                        <div class="detail-right">→</div>
+                    </div>
+                    <div class="detail-row" style="cursor: pointer;">
+                        <div class="detail-left">USSD</div>
+                        <div class="detail-right">→</div>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('paymentModal')">Close</button>
+            </div>
+        </div>
+
+        <div id="fullPaymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Full Repayment</div>
+                <div class="summary-card" style="margin: 0;">
+                    <div class="summary-row">
+                        <div class="summary-label">Total Outstanding</div>
+                        <div class="summary-value">₦491,400</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Discount (Early Payment)</div>
+                        <div class="summary-value" style="color: #34C759;">-₦5,600</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Amount to Pay</div>
+                        <div class="summary-value highlight">₦485,800</div>
+                    </div>
+                </div>
+                <button class="btn-primary" style="margin-top: 16px;">Proceed to Payment</button>
+                <button class="modal-close" onclick="closeModal('fullPaymentModal')">Cancel</button>
+            </div>
+        </div>
+
+        <div id="historyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Repayment History</div>
+                <div class="info-text" style="text-align: center; padding: 40px 20px;">
+                    No repayment history yet
+                </div>
+                <button class="modal-close" onclick="closeModal('historyModal')">Close</button>
+            </div>
+        </div>
+
+        <div id="contractModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Loan Contract Agreement</div>
+                <div style="font-size: 13px; line-height: 1.7; color: #3C3C43;">
+                    <p style="margin-bottom: 12px;"><strong>LOAN AGREEMENT</strong></p>
+                    <p style="margin-bottom: 12px;">This Loan Agreement is entered into as of 24 December 2025.</p>
+                    <p style="margin-bottom: 12px;"><strong>Principal Amount:</strong> ₦350,000</p>
+                    <p style="margin-bottom: 12px;"><strong>Interest Rate:</strong> 42% per annum</p>
+                    <p style="margin-bottom: 12px;"><strong>Repayment Terms:</strong> The borrower agrees to repay the loan in 2 equal installments over 60 days.</p>
+                    <p style="margin-bottom: 12px;"><strong>Late Payment:</strong> A penalty of 2% per day will be charged on overdue amounts.</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('contractModal')">Close</button>
+            </div>
+        </div>
+
+        <div id="bankModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Add Bank Account</div>
+                <div style="margin: 16px 0;">
+                    <label style="display: block; font-size: 13px; color: #8E8E93; margin-bottom: 8px;">Bank Name</label>
+                    <select style="width: 100%; padding: 12px; border: 1.5px solid #E5E5EA; border-radius: 8px; font-size: 15px;">
+                        <option>Select Bank</option>
+                        <option>Access Bank</option>
+                        <option>GTBank</option>
+                        <option>First Bank</option>
+                        <option>UBA</option>
+                        <option>Zenith Bank</option>
+                        <option>OPay</option>
+                    </select>
+                </div>
+                <div style="margin: 16px 0;">
+                    <label style="display: block; font-size: 13px; color: #8E8E93; margin-bottom: 8px;">Account Number</label>
+                    <input type="text" placeholder="Enter account number" style="width: 100%; padding: 12px; border: 1.5px solid #E5E5EA; border-radius: 8px; font-size: 15px;">
+                </div>
+                <div style="margin: 16px 0;">
+                    <label style="display: block; font-size: 13px; color: #8E8E93; margin-bottom: 8px;">Account Name</label>
+                    <input type="text" placeholder="Account name will appear here" style="width: 100%; padding: 12px; border: 1.5px solid #E5E5EA; border-radius: 8px; font-size: 15px; background: #F8F9FB;" disabled>
+                </div>
+                <button class="btn-primary" style="margin-top: 8px;">Save Account</button>
+                <button class="modal-close" onclick="closeModal('bankModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAmount = 520000;
+        let selectedTenure = 60;
+
+        function navigate(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            if(pageId === 'homePage') navItems[0].classList.add('active');
+            else if(pageId === 'repaymentPage') navItems[1].classList.add('active');
+            else if(pageId === 'detailsPage') navItems[2].classList.add('active');
+            else if(pageId === 'applyPage') navItems[3].classList.add('active');
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function setQuickAmount(amount, btn) {
+            currentAmount = amount;
+            document.getElementById('amountValue').textContent = formatNumber(amount);
+            
+            document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function increaseAmount() {
+            if(currentAmount < 520000) {
+                currentAmount += 10000;
+                document.getElementById('amountValue').textContent = formatNumber(currentAmount);
+                document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+            }
+        }
+
+        function decreaseAmount() {
+            if(currentAmount > 26000) {
+                currentAmount -= 10000;
+                document.getElementById('amountValue').textContent = formatNumber(currentAmount);
+                document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+            }
+        }
+
+        function selectTenure(card, days) {
+            if(card.classList.contains('locked')) return;
+            
+            document.querySelectorAll('.tenure-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedTenure = days;
+        }
+
+        function applyForLoan() {
+            showModal('bankModal');
+        }
+
+        document.addEventListener('click', function(e) {
+            if(e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
