@@ -692,10 +692,19 @@
         }
 
         .nav-icon {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 4px;
-        }
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    color: #64748B;
+    margin-bottom: 4px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-item.active .nav-icon {
+    color: #2E5BFF;
+}
 
         .topbar {
             background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
@@ -1098,24 +1107,25 @@
         </div>
 
         <!-- BOTTOM NAVIGATION -->
-        <div class="navbar">
-            <button class="nav-item active" onclick="navigate('homePage')">
-                <span class="nav-icon">🏠</span>
-                Loan
-            </button>
-            <button class="nav-item" onclick="navigate('repaymentPage')">
-                <span class="nav-icon">💳</span>
-                Repayment
-            </button>
-            <button class="nav-item" onclick="navigate('detailsPage')">
-                <span class="nav-icon">📄</span>
-                Details
-            </button>
-            <button class="nav-item" onclick="navigate('applyPage')">
-                <span class="nav-icon">➕</span>
-                Apply
-            </button>
-        </div>
+        <!-- BOTTOM NAVIGATION -->
+<div class="navbar">
+    <button class="nav-item active" onclick="navigate('homePage')">
+        <i data-lucide="home" class="nav-icon"></i>
+        Loan
+    </button>
+    <button class="nav-item" onclick="navigate('repaymentPage')">
+        <i data-lucide="credit-card" class="nav-icon"></i>
+        Repayment
+    </button>
+    <button class="nav-item" onclick="navigate('detailsPage')">
+        <i data-lucide="file-text" class="nav-icon"></i>
+        Details
+    </button>
+    <button class="nav-item" onclick="navigate('applyPage')">
+        <i data-lucide="plus-circle" class="nav-icon"></i>
+        Apply
+    </button>
+</div>
 
         <!-- MODALS -->
         <div id="paymentModal" class="modal">
@@ -1286,5 +1296,7 @@
             }
         });
     </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
