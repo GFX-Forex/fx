@@ -431,26 +431,36 @@
             margin-bottom: 24px;
         }
 
-        .control-btn {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
-            color: #FFFFFF;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-weight: 300;
-        }
+     .amount-display {
+    font-size: 42px;
+    font-weight: 800;
+    color: #2E5BFF;
+    margin: 24px 0;
+    line-height: 1.1;
+}
 
-        .control-btn:active {
-            transform: scale(0.92);
-        }
+.control-btn {
+    background: transparent;
+    color: #2E5BFF;
+    border: none;
+    font-size: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 300;
+    padding: 0;
+    width: auto;
+    height: auto;
+}
 
+.control-btn:active {
+    transform: scale(0.92);
+    opacity: 0.7;
+}
+
+       
         .quick-select {
             display: flex;
             gap: 10px;
@@ -486,21 +496,45 @@
             margin: 32px 0;
         }
 
-        .tenure-grid {
-            display: flex;
-            gap: 10px;
-        }
+        
+
+   .tenure-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+}
+
+
+.tenure-grid::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tenure-grid::-webkit-scrollbar-track {
+    background: #F5F7FA;
+    border-radius: 10px;
+}
+
+.tenure-grid::-webkit-scrollbar-thumb {
+    background: #2E5BFF;
+    border-radius: 10px;
+}
 
         .tenure-card {
-            flex: 1;
-            background: #FFFFFF;
-            border: 2px solid #E8ECF4;
-            border-radius: 14px;
-            padding: 20px 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    min-width: 110px;
+    flex-shrink: 0;
+    background: #FFFFFF;
+    border: 2px solid #E8ECF4;
+    border-radius: 14px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    scroll-snap-align: start;
+}
 
         .tenure-card.selected {
             border-color: #2E5BFF;
@@ -810,8 +844,8 @@
                 </div>
                 <div class="notice-bar">
                     <span class="notice-icon">📢</span>
-                    <span class="notice-text">Repayon time for higher loan limit</span>
-                </div>
+                    <span class="notice-text">Repay on time for higher loan limit</span>
+                </div> 
             </div>
 
             <div class="content">
@@ -990,19 +1024,27 @@
                 <div class="tenure-section">
                     <div class="section-title">Choose Loan Tenure</div>
                     <div class="tenure-grid">
-                        <div class="tenure-card selected" onclick="selectTenure(this, 60)">
-                            <span class="tenure-days">60 Days</span>
-                            <span class="tenure-rate">21% Monthly</span>
-                        </div>
-                        <div class="tenure-card" onclick="selectTenure(this, 30)">
-                            <span class="tenure-days">30 Days</span>
-                            <span class="tenure-rate">24% Monthly</span>
-                        </div>
-                        <div class="tenure-card locked">
-                            <span class="tenure-days">91 Days</span>
-                            <span class="tenure-rate">Locked</span>
-                        </div>
-                    </div>
+    <div class="tenure-card" onclick="selectTenure(this, 7)">
+        <span class="tenure-days">7 Days</span>
+        <span class="tenure-rate">28% Monthly</span>
+    </div>
+    <div class="tenure-card" onclick="selectTenure(this, 15)">
+        <span class="tenure-days">15 Days</span>
+        <span class="tenure-rate">26% Monthly</span>
+    </div>
+    <div class="tenure-card locked" onclick="selectTenure(this, 30)">
+        <span class="tenure-days">30 Days</span>
+        <span class="tenure-rate">24% Monthly</span>
+    </div>
+    <div class="tenure-card locked" onclick="selectTenure(this, 60)">
+        <span class="tenure-days">60 Days</span>
+        <span class="tenure-rate">21% Monthly</span>
+    </div>
+    <div class="tenure-card locked">
+        <span class="tenure-days">91 Days</span>
+        <span class="tenure-rate">18% Monthly</span>
+    </div>
+</div>
                     <div class="info-text">ⓘ More tenure options available</div>
                 </div>
 
