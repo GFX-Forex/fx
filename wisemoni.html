@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyLoan</title>
+    <title>WiseMoni</title>
     <style>
         * {
             margin: 0;
@@ -12,60 +12,65 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: #ffffff;
-            color: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background: #F5F7FA;
+            color: #1A1A1A;
+            line-height: 1.5;
         }
 
         .app {
             max-width: 420px;
             margin: 0 auto;
-            background: #ffffff;
+            background: #F5F7FA;
             min-height: 100vh;
             position: relative;
-            padding-bottom: 70px;
+            padding-bottom: 80px;
         }
 
         .header {
-            background: #4A90E2;
-            padding: 50px 24px 24px;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .time {
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .icons {
-            color: #ffffff;
-            font-size: 14px;
-        }
-
-        .brand {
-            color: #ffffff;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            padding: 60px 20px 32px;
         }
 
         .brand h1 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
         }
 
         .brand p {
-            font-size: 14px;
-            opacity: 0.95;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+        }
+
+        .notice-bar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            margin: 0 20px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .notice-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notice-text {
+            font-size: 13px;
+            color: #FFFFFF;
+            line-height: 1.5;
         }
 
         .content {
-            padding: 24px;
+            padding: 0 20px 20px;
         }
 
         .page {
@@ -77,137 +82,272 @@
         }
 
         .limit-card {
-            background: #F8F9FB;
-            border-radius: 16px;
-            padding: 28px 24px;
-            margin-top: -40px;
-            margin-bottom: 24px;
-            text-align: center;
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 32px 24px;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            border: 1px solid #E8ECF4;
         }
 
         .limit-label {
             font-size: 13px;
-            color: #8E8E93;
+            color: #64748B;
             margin-bottom: 12px;
-            letter-spacing: 0.2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .limit-value {
-            font-size: 52px;
+            font-size: 56px;
             font-weight: 700;
-            color: #4A90E2;
-            line-height: 1;
-            margin-bottom: 24px;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 28px;
         }
 
-        .outstanding {
-            padding-top: 16px;
-            border-top: 1px solid #E5E5EA;
+        .outstanding-box {
+            padding-top: 20px;
+            border-top: 1px solid #E8ECF4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .outstanding-label {
-            font-size: 13px;
-            color: #8E8E93;
-            margin-bottom: 8px;
+            font-size: 14px;
+            color: #64748B;
+            font-weight: 500;
         }
 
         .outstanding-value {
-            font-size: 26px;
-            font-weight: 600;
-            color: #000000;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1A1A1A;
         }
 
         .btn-primary {
-            background: #4A90E2;
-            color: #ffffff;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 16px 24px;
             width: 100%;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.2s;
+            margin-top: 24px;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .btn-primary:active {
             transform: scale(0.98);
-            background: #3A7BC8;
         }
 
         .btn-secondary {
-            background: #ffffff;
-            color: #4A90E2;
-            border: 1.5px solid #4A90E2;
-            border-radius: 12px;
+            background: #FFFFFF;
+            color: #2E5BFF;
+            border: 2px solid #2E5BFF;
+            border-radius: 14px;
             padding: 16px 24px;
             width: 100%;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             margin-top: 12px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .btn-secondary:active {
             transform: scale(0.98);
         }
 
-        .due-info {
+        .expire-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #FF3B30;
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .promo-card {
+            background: linear-gradient(135deg, #FFD93D 0%, #6BCF7F 100%);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .promo-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .promo-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .promo-badge {
+            background: #1A1A1A;
+            color: #FFFFFF;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 8px;
             font-size: 12px;
-            margin-top: 8px;
-            opacity: 0.9;
+            font-weight: 600;
+            margin-bottom: 16px;
         }
 
-        .alert {
-            background: #FFF9E6;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 24px;
+        .promo-btn {
+            background: #6BCF7F;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .promo-btn:active {
+            transform: scale(0.95);
+        }
+
+        .promo-emoji {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 100px;
+            opacity: 0.2;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .card-header {
             display: flex;
-            gap: 12px;
-            align-items: flex-start;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .alert-icon {
-            font-size: 24px;
-            flex-shrink: 0;
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A1A;
         }
 
-        .alert-content strong {
-            display: block;
-            font-size: 15px;
-            margin-bottom: 4px;
-            color: #000000;
+        .card-link {
+            font-size: 14px;
+            color: #2E5BFF;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        .alert-content p {
+        .repay-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 36px 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .repay-label {
             font-size: 13px;
-            color: #3C3C43;
-            line-height: 1.5;
+            color: #64748B;
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .repay-amount {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .repay-note {
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 24px;
+        }
+
+        .loan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #E8ECF4;
+        }
+
+        .loan-item:last-child {
+            border-bottom: none;
+        }
+
+        .loan-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .loan-date {
+            font-size: 13px;
+            color: #64748B;
+        }
+
+        .badge {
+            background: #FFF4E6;
+            color: #FF9500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
         }
 
         .section-title {
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 16px;
-            color: #000000;
-        }
-
-        .detail-group {
-            background: #F8F9FB;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            overflow: hidden;
+            color: #1A1A1A;
         }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 16px;
-            border-bottom: 1px solid #E5E5EA;
+            padding: 16px 0;
+            border-bottom: 1px solid #E8ECF4;
         }
 
         .detail-row:last-child {
@@ -216,35 +356,39 @@
 
         .detail-left {
             font-size: 14px;
-            color: #8E8E93;
+            color: #64748B;
+            font-weight: 500;
         }
 
         .detail-right {
             font-size: 14px;
-            font-weight: 600;
-            color: #000000;
+            font-weight: 700;
+            color: #1A1A1A;
             text-align: right;
         }
 
         .detail-link {
-            color: #4A90E2;
+            color: #2E5BFF;
             cursor: pointer;
         }
 
         .installments {
-            background: #F8F9FB;
-            border-radius: 12px;
+            background: #FFFFFF;
+            border-radius: 16px;
             overflow: hidden;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+            border: 1px solid #E8ECF4;
         }
 
         .installment-header {
             display: flex;
-            padding: 12px 16px;
-            background: #E5E5EA;
+            padding: 14px 20px;
+            background: #F5F7FA;
             font-size: 12px;
-            font-weight: 600;
-            color: #3C3C43;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .installment-col {
@@ -254,8 +398,8 @@
 
         .installment-row {
             display: flex;
-            padding: 16px;
-            border-bottom: 1px solid #E5E5EA;
+            padding: 18px 20px;
+            border-bottom: 1px solid #E8ECF4;
             align-items: center;
         }
 
@@ -263,165 +407,78 @@
             border-bottom: none;
         }
 
-        .badge {
-            background: #FF9500;
-            color: #ffffff;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .repay-card {
-            background: #F8F9FB;
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .repay-label {
-            font-size: 13px;
-            color: #8E8E93;
-            margin-bottom: 12px;
-        }
-
-        .repay-amount {
-            font-size: 48px;
-            font-weight: 700;
-            color: #4A90E2;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .repay-note {
-            font-size: 12px;
-            color: #8E8E93;
-            margin-bottom: 24px;
-        }
-
-        .loan-list-card {
-            background: #F8F9FB;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .loan-list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .loan-list-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #000000;
-        }
-
-        .loan-list-link {
-            font-size: 14px;
-            color: #4A90E2;
-            cursor: pointer;
-        }
-
-        .loan-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid #E5E5EA;
-        }
-
-        .loan-item:last-child {
-            border-bottom: none;
-        }
-
-        .loan-item-left {
-            flex: 1;
-        }
-
-        .loan-amount {
-            font-size: 16px;
-            font-weight: 600;
-            color: #000000;
-            margin-bottom: 4px;
-        }
-
-        .loan-date {
-            font-size: 13px;
-            color: #8E8E93;
-        }
-
         .amount-picker {
             text-align: center;
-            padding: 32px 0;
+            padding: 28px 0;
         }
 
         .amount-display {
-            font-size: 48px;
-            font-weight: 700;
-            color: #000000;
-            margin: 20px 0;
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 24px 0;
+            line-height: 1.1;
         }
 
         .amount-controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 32px;
+            gap: 40px;
             margin-bottom: 24px;
         }
 
         .control-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 24px;
-            background: #4A90E2;
-            color: #ffffff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
             border: none;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            font-weight: 300;
         }
 
         .control-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .quick-select {
             display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
 
         .quick-btn {
             flex: 1;
-            padding: 12px;
-            border: 1.5px solid #E5E5EA;
-            background: #ffffff;
-            color: #000000;
-            border-radius: 10px;
-            font-weight: 600;
+            padding: 14px;
+            border: 2px solid #E8ECF4;
+            background: #FFFFFF;
+            color: #1A1A1A;
+            border-radius: 12px;
+            font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .quick-btn.selected {
-            border-color: #4A90E2;
-            background: #4A90E2;
-            color: #ffffff;
+            border-color: #2E5BFF;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
         }
 
         .info-text {
             font-size: 12px;
-            color: #8E8E93;
+            color: #64748B;
             margin-top: 12px;
         }
 
@@ -431,24 +488,24 @@
 
         .tenure-grid {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .tenure-card {
             flex: 1;
-            background: #ffffff;
-            border: 1.5px solid #E5E5EA;
-            border-radius: 12px;
-            padding: 16px 12px;
+            background: #FFFFFF;
+            border: 2px solid #E8ECF4;
+            border-radius: 14px;
+            padding: 20px 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .tenure-card.selected {
-            border-color: #4A90E2;
-            background: #4A90E2;
-            color: #ffffff;
+            border-color: #2E5BFF;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
         }
 
         .tenure-card.locked {
@@ -457,29 +514,31 @@
         }
 
         .tenure-days {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 800;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .tenure-rate {
             font-size: 12px;
             opacity: 0.8;
+            font-weight: 500;
         }
 
         .summary-card {
-            background: #F8F9FB;
-            border-radius: 12px;
-            padding: 16px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
             margin: 24px 0;
+            border: 1px solid #E8ECF4;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #E5E5EA;
+            padding: 14px 0;
+            border-bottom: 1px solid #E8ECF4;
         }
 
         .summary-row:last-child {
@@ -488,33 +547,38 @@
 
         .summary-label {
             font-size: 14px;
-            color: #8E8E93;
+            color: #64748B;
+            font-weight: 500;
         }
 
         .summary-value {
             font-size: 14px;
-            font-weight: 600;
-            color: #000000;
+            font-weight: 700;
+            color: #1A1A1A;
             text-align: right;
         }
 
         .summary-value.highlight {
-            font-size: 18px;
-            color: #4A90E2;
+            font-size: 20px;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .schedule-card {
             background: #FFF9E6;
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 20px;
             margin-bottom: 24px;
+            border: 1px solid #FFE8B3;
         }
 
         .schedule-title {
             font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #000000;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1A1A1A;
         }
 
         .schedule-item {
@@ -523,39 +587,44 @@
         }
 
         .schedule-left div:first-child {
-            font-size: 14px;
-            font-weight: 600;
-            color: #000000;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1A1A1A;
             margin-bottom: 4px;
         }
 
         .schedule-left div:last-child {
             font-size: 12px;
-            color: #8E8E93;
+            color: #64748B;
         }
 
         .schedule-right div:first-child {
-            font-size: 16px;
-            font-weight: 600;
-            color: #000000;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1A1A1A;
             text-align: right;
             margin-bottom: 4px;
         }
 
         .schedule-right div:last-child {
             font-size: 12px;
-            color: #8E8E93;
+            color: #64748B;
             text-align: right;
         }
 
         .note-box {
-            background: #F8F9FB;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 12px;
-            color: #3C3C43;
+            background: #F5F7FA;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13px;
+            color: #64748B;
             line-height: 1.6;
             margin-top: 16px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .note-box strong {
+            color: #1A1A1A;
         }
 
         .navbar {
@@ -563,12 +632,12 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #ffffff;
-            border-top: 1px solid #E5E5EA;
+            background: #FFFFFF;
+            border-top: 1px solid #E8ECF4;
             display: flex;
             max-width: 420px;
             margin: 0 auto;
-            padding: 8px 0;
+            padding: 10px 0 8px;
         }
 
         .nav-item {
@@ -577,14 +646,15 @@
             text-align: center;
             background: none;
             border: none;
-            color: #8E8E93;
-            font-size: 10px;
+            color: #64748B;
+            font-size: 11px;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .nav-item.active {
-            color: #4A90E2;
+            color: #2E5BFF;
         }
 
         .nav-icon {
@@ -594,9 +664,9 @@
         }
 
         .topbar {
-            background: #4A90E2;
-            color: #ffffff;
-            padding: 48px 24px 20px;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+            padding: 60px 20px 24px;
             display: flex;
             align-items: center;
             gap: 16px;
@@ -610,8 +680,9 @@
         }
 
         .topbar-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .modal {
@@ -625,6 +696,7 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(4px);
         }
 
         .modal.active {
@@ -632,48 +704,50 @@
         }
 
         .modal-content {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 24px;
-            max-width: 340px;
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 28px 24px;
+            max-width: 360px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
         }
 
         .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #000000;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1A1A1A;
         }
 
         .modal-close {
-            background: #E5E5EA;
-            color: #000000;
+            background: #F5F7FA;
+            color: #1A1A1A;
             border: none;
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 14px;
             width: 100%;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             margin-top: 16px;
         }
 
         .history-item {
-            background: #F8F9FB;
-            border-radius: 12px;
-            padding: 16px;
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 18px;
             margin-bottom: 12px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid #E8ECF4;
+            transition: all 0.3s ease;
         }
 
         .history-item:active {
-            background: #E5E5EA;
+            background: #F5F7FA;
         }
 
         .history-icon {
@@ -683,13 +757,45 @@
 
         .history-text {
             font-size: 15px;
-            font-weight: 500;
-            color: #000000;
+            font-weight: 600;
+            color: #1A1A1A;
         }
 
         .history-arrow {
             font-size: 16px;
-            color: #8E8E93;
+            color: #64748B;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #E8ECF4;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2E5BFF;
+        }
+
+        input:disabled {
+            background: #F5F7FA;
+            color: #64748B;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin: 16px 0;
         }
     </style>
 </head>
@@ -702,59 +808,35 @@
                     <h1>WiseMoni</h1>
                     <p>Easy loans for your every need 💰</p>
                 </div>
-            </div>
-
-            <div style="background: #4A90E2; padding: 0 24px 24px;">
-                <div style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 20px;">📢</span>
-                    <span style="color: #ffffff; font-size: 13px;">Money Transfer Levy of N50 is charged on all deposits</span>
+                <div class="notice-bar">
+                    <span class="notice-icon">📢</span>
+                    <span class="notice-text">Repaying your loan on time increases your chances of a higher loan limit</span>
                 </div>
             </div>
 
             <div class="content">
                 <div class="limit-card">
-                    <div class="limit-label">Your available loan limit</div>
+                    <div class="limit-label">Available Loan Limit</div>
                     <div class="limit-value">₦520,000</div>
-                    <div class="outstanding">
-                        <div class="outstanding-label">Outstanding limit</div>
+                    <div class="outstanding-box">
+                        <div class="outstanding-label">Outstanding Balance</div>
                         <div class="outstanding-value">₦0</div>
                     </div>
-                    <button class="btn-primary" onclick="navigate('applyPage')" style="position: relative;">
+                    <button class="btn-primary" onclick="navigate('applyPage')">
                         Get Funds
-                        <div style="position: absolute; top: -8px; right: 16px; background: #FF6B6B; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600;">Limit will expire</div>
+                        <div class="expire-badge">Limit expires soon</div>
                     </button>
                 </div>
 
-                <div style="background: linear-gradient(135deg, #FFD93D 0%, #6BCF7F 100%); border-radius: 16px; padding: 20px; margin-bottom: 24px; position: relative; overflow: hidden;">
-                    <div style="position: relative; z-index: 1;">
-                        <div style="font-size: 22px; font-weight: 700; color: #000; margin-bottom: 8px;">WIN GREAT PRIZES</div>
-                        <div style="background: #000; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 12px; margin-bottom: 12px;">Winning the iPhone grand prize</div>
+                <div class="promo-card">
+                    <div class="promo-content">
+                        <div class="promo-title">WIN GREAT PRIZES</div>
+                        <div class="promo-badge">iPhone Grand Prize Draw</div>
                         <div>
-                            <button style="background: #6BCF7F; color: #fff; border: none; padding: 10px 24px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer;">Lucky Draw 🎉</button>
+                            <button class="promo-btn">Join Lucky Draw 🎉</button>
                         </div>
                     </div>
-                    <div style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); font-size: 120px; opacity: 0.3;">📱</div>
-                </div>
-
-                <div style="display: flex; gap: 16px; margin-bottom: 24px;">
-                    <div style="flex: 1;">
-                        <div style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #000;">Coupon Guide</div>
-                        <div style="background: #4ECDC4; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 12px;">
-                            <div style="font-size: 40px; margin-bottom: 8px;">💡</div>
-                            <div style="color: #fff; font-size: 13px; font-weight: 600;">Coupon 💰</div>
-                        </div>
-                        <button style="background: #fff; color: #4ECDC4; border: 1.5px solid #4ECDC4; padding: 10px 20px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; width: 100%;">Know More</button>
-                    </div>
-
-                    <div style="flex: 1;">
-                        <div style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #000;">Please pay attention to this!</div>
-                        <div style="background: #4ECDC4; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 12px;">
-                            <div style="font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 4px;">Notice!</div>
-                            <div style="font-size: 12px; color: #fff;">Dangers of overdue!</div>
-                            <div style="font-size: 40px; margin-top: 8px;">⚠️</div>
-                        </div>
-                        <button style="background: #fff; color: #4ECDC4; border: 1.5px solid #4ECDC4; padding: 10px 20px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; width: 100%;">Learn more</button>
-                    </div>
+                    <div class="promo-emoji">📱</div>
                 </div>
             </div>
         </div>
@@ -768,29 +850,29 @@
 
             <div class="content">
                 <div class="repay-card">
-                    <div class="repay-label">Repayment Amount</div>
+                    <div class="repay-label">Next Due Amount</div>
                     <div class="repay-amount">₦242,900</div>
-                    <div class="repay-note">(Next Due amount ₦242,900)</div>
+                    <div class="repay-note">Total outstanding: ₦491,400</div>
                     <button class="btn-primary" onclick="showModal('paymentModal')">Repay Now</button>
-                    <button class="btn-secondary" onclick="showModal('fullPaymentModal')">Full repayment</button>
+                    <button class="btn-secondary" onclick="showModal('fullPaymentModal')">Full Repayment</button>
                 </div>
 
-                <div class="loan-list-card">
-                    <div class="loan-list-header">
-                        <div class="loan-list-title">Easemoni Loan</div>
-                        <div class="loan-list-link" onclick="navigate('detailsPage')">Details →</div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Easemoni Loan</div>
+                        <div class="card-link" onclick="navigate('detailsPage')">Details →</div>
                     </div>
                     <div class="loan-item">
-                        <div class="loan-item-left">
+                        <div>
                             <div class="loan-amount">₦242,900</div>
-                            <div class="loan-date">22 Jan 2026</div>
+                            <div class="loan-date">Due: 22 Jan 2026</div>
                         </div>
                         <div class="badge">Outstanding</div>
                     </div>
                     <div class="loan-item">
-                        <div class="loan-item-left">
+                        <div>
                             <div class="loan-amount">₦248,500</div>
-                            <div class="loan-date">21 Feb 2026</div>
+                            <div class="loan-date">Due: 21 Feb 2026</div>
                         </div>
                         <div class="badge">Outstanding</div>
                     </div>
@@ -814,9 +896,9 @@
             </div>
 
             <div class="content">
-                <div class="section-title">Loan Details</div>
+                <div class="section-title">Loan Information</div>
 
-                <div class="detail-group">
+                <div class="card">
                     <div class="detail-row">
                         <div class="detail-left">Disbursement Date</div>
                         <div class="detail-right">24 Dec 2025</div>
@@ -834,19 +916,19 @@
                         <div class="detail-right">₦147,000</div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-left">Total amount to be repaid</div>
+                        <div class="detail-left">Total Repayment</div>
                         <div class="detail-right">₦497,000</div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-left">Repayment Amount</div>
-                        <div class="detail-right">₦491,400</div>
+                        <div class="detail-left">Amount Paid</div>
+                        <div class="detail-right">₦5,600</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-left">Bank Name</div>
                         <div class="detail-right">OPay</div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-left">Bank Account</div>
+                        <div class="detail-left">Account Number</div>
                         <div class="detail-right">*****4478</div>
                     </div>
                     <div class="detail-row">
@@ -854,17 +936,17 @@
                         <div class="detail-right detail-link" onclick="showModal('contractModal')">View →</div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-left">Repayment History</div>
+                        <div class="detail-left">Payment History</div>
                         <div class="detail-right detail-link" onclick="showModal('historyModal')">View →</div>
                     </div>
                 </div>
 
-                <div class="section-title">Installment details</div>
+                <div class="section-title">Installment Schedule</div>
 
                 <div class="installments">
                     <div class="installment-header">
-                        <div class="installment-col">Due date</div>
-                        <div class="installment-col">Due amount</div>
+                        <div class="installment-col">Due Date</div>
+                        <div class="installment-col">Amount</div>
                         <div class="installment-col">Status</div>
                     </div>
                     <div class="installment-row">
@@ -885,11 +967,11 @@
         <div id="applyPage" class="page">
             <div class="topbar">
                 <div class="back-icon" onclick="navigate('homePage')">←</div>
-                <div class="topbar-title">Get Funds</div>
+                <div class="topbar-title">Apply for Loan</div>
             </div>
 
             <div class="content">
-                <div class="section-title">Choose Amount</div>
+                <div class="section-title">Select Amount</div>
 
                 <div class="amount-picker">
                     <div class="amount-controls">
@@ -902,11 +984,11 @@
                         <button class="quick-btn" onclick="setQuickAmount(416000, this)">₦416,000</button>
                         <button class="quick-btn selected" onclick="setQuickAmount(520000, this)">₦520,000</button>
                     </div>
-                    <div class="info-text">ⓘ Your loan amount range is ₦26,000 to ₦520,000</div>
+                    <div class="info-text">ⓘ Loan range: ₦26,000 to ₦520,000</div>
                 </div>
 
                 <div class="tenure-section">
-                    <div class="section-title">Choose a loan tenure</div>
+                    <div class="section-title">Choose Loan Tenure</div>
                     <div class="tenure-grid">
                         <div class="tenure-card selected" onclick="selectTenure(this, 60)">
                             <span class="tenure-days">60 Days</span>
@@ -921,13 +1003,13 @@
                             <span class="tenure-rate">Locked</span>
                         </div>
                     </div>
-                    <div class="info-text">ⓘ Slide right or left to view more tenure options</div>
+                    <div class="info-text">ⓘ More tenure options available</div>
                 </div>
 
                 <div class="summary-card">
                     <div class="summary-row">
-                        <div class="summary-label">Tenure</div>
-                        <div class="summary-value">2 installment(s) for 60 days</div>
+                        <div class="summary-label">Tenure Period</div>
+                        <div class="summary-value">2 installments over 60 days</div>
                     </div>
                     <div class="summary-row">
                         <div class="summary-label">Received Amount</div>
@@ -935,19 +1017,19 @@
                     </div>
                     <div class="summary-row">
                         <div class="summary-label">Discount</div>
-                        <div class="summary-value" style="color: #8E8E93;">Unavailable</div>
+                        <div class="summary-value" style="color: #64748B;">Unavailable</div>
                     </div>
                     <div class="summary-row">
-                        <div class="summary-label">Interest</div>
+                        <div class="summary-label">Interest Charges</div>
                         <div class="summary-value">₦218,400</div>
                     </div>
                     <div class="summary-row">
-                        <div class="summary-label">Total Amount Due</div>
+                        <div class="summary-label">Total Repayment</div>
                         <div class="summary-value highlight">₦738,400</div>
                     </div>
                     <div class="summary-row">
                         <div class="summary-label">Disbursement Account</div>
-                        <div class="summary-value detail-link" onclick="showModal('bankModal')">Add Bank Account →</div>
+                        <div class="summary-value detail-link" onclick="showModal('bankModal')">Add Account →</div>
                     </div>
                 </div>
 
@@ -956,7 +1038,7 @@
                     <div class="schedule-item">
                         <div class="schedule-left">
                             <div>21 Jan 2026</div>
-                            <div>Your first repayment date</div>
+                            <div>First repayment date</div>
                         </div>
                         <div class="schedule-right">
                             <div>₦369,200</div>
@@ -965,10 +1047,10 @@
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="applyForLoan()">Apply Now</button>
+                <button class="btn-primary" onclick="applyForLoan()">Apply for Loan</button>
 
                 <div class="note-box">
-                    <strong>Note:</strong> It is important that you repay your loan as at when due to enjoy increase in your loan limit and avoid penalties.
+                    <strong>Important:</strong> Repaying your loan on time helps you enjoy increased loan limits and avoid penalties.
                 </div>
             </div>
         </div>
@@ -997,7 +1079,7 @@
         <div id="paymentModal" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Select Payment Method</div>
-                <div class="detail-group">
+                <div class="card">
                     <div class="detail-row" style="cursor: pointer;">
                         <div class="detail-left">Bank Transfer</div>
                         <div class="detail-right">→</div>
@@ -1007,7 +1089,7 @@
                         <div class="detail-right">→</div>
                     </div>
                     <div class="detail-row" style="cursor: pointer;">
-                        <div class="detail-left">USSD</div>
+                        <div class="detail-left">USSD Code</div>
                         <div class="detail-right">→</div>
                     </div>
                 </div>
@@ -1024,7 +1106,7 @@
                         <div class="summary-value">₦491,400</div>
                     </div>
                     <div class="summary-row">
-                        <div class="summary-label">Discount (Early Payment)</div>
+                        <div class="summary-label">Early Payment Discount</div>
                         <div class="summary-value" style="color: #34C759;">-₦5,600</div>
                     </div>
                     <div class="summary-row">
@@ -1040,8 +1122,8 @@
         <div id="historyModal" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Repayment History</div>
-                <div class="info-text" style="text-align: center; padding: 40px 20px;">
-                    No repayment history yet
+                <div class="info-text" style="text-align: center; padding: 40px 20px; color: #64748B;">
+                    No repayment history available yet
                 </div>
                 <button class="modal-close" onclick="closeModal('historyModal')">Close</button>
             </div>
@@ -1050,13 +1132,13 @@
         <div id="contractModal" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Loan Contract Agreement</div>
-                <div style="font-size: 13px; line-height: 1.7; color: #3C3C43;">
-                    <p style="margin-bottom: 12px;"><strong>LOAN AGREEMENT</strong></p>
+                <div style="font-size: 13px; line-height: 1.7; color: #64748B;">
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">LOAN AGREEMENT</strong></p>
                     <p style="margin-bottom: 12px;">This Loan Agreement is entered into as of 24 December 2025.</p>
-                    <p style="margin-bottom: 12px;"><strong>Principal Amount:</strong> ₦350,000</p>
-                    <p style="margin-bottom: 12px;"><strong>Interest Rate:</strong> 42% per annum</p>
-                    <p style="margin-bottom: 12px;"><strong>Repayment Terms:</strong> The borrower agrees to repay the loan in 2 equal installments over 60 days.</p>
-                    <p style="margin-bottom: 12px;"><strong>Late Payment:</strong> A penalty of 2% per day will be charged on overdue amounts.</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Principal Amount:</strong> ₦350,000</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Interest Rate:</strong> 42% per annum</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Repayment Terms:</strong> The borrower agrees to repay the loan in 2 equal installments over 60 days.</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Late Payment:</strong> A penalty of 2% per day will be charged on overdue amounts.</p>
                 </div>
                 <button class="modal-close" onclick="closeModal('contractModal')">Close</button>
             </div>
@@ -1065,9 +1147,9 @@
         <div id="bankModal" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Add Bank Account</div>
-                <div style="margin: 16px 0;">
-                    <label style="display: block; font-size: 13px; color: #8E8E93; margin-bottom: 8px;">Bank Name</label>
-                    <select style="width: 100%; padding: 12px; border: 1.5px solid #E5E5EA; border-radius: 8px; font-size: 15px;">
+                <div class="form-group">
+                    <label>Bank Name</label>
+                    <select>
                         <option>Select Bank</option>
                         <option>Access Bank</option>
                         <option>GTBank</option>
@@ -1077,13 +1159,13 @@
                         <option>OPay</option>
                     </select>
                 </div>
-                <div style="margin: 16px 0;">
-                    <label style="display: block; font-size: 13px; color: #8E8E93; margin-bottom: 8px;">Account Number</label>
-                    <input type="text" placeholder="Enter account number" style="width: 100%; padding: 12px; border: 1.5px solid #E5E5EA; border-radius: 8px; font-size: 15px;">
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" placeholder="Enter account number">
                 </div>
-                <div style="margin: 16px 0;">
-                    <label style="display: block; font-size: 13px; color: #8E8E93; margin-bottom: 8px;">Account Name</label>
-                    <input type="text" placeholder="Account name will appear here" style="width: 100%; padding: 12px; border: 1.5px solid #E5E5EA; border-radius: 8px; font-size: 15px; background: #F8F9FB;" disabled>
+                <div class="form-group">
+                    <label>Account Name</label>
+                    <input type="text" placeholder="Account name will appear here" disabled>
                 </div>
                 <button class="btn-primary" style="margin-top: 8px;">Save Account</button>
                 <button class="modal-close" onclick="closeModal('bankModal')">Cancel</button>
