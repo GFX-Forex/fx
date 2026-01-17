@@ -842,20 +842,53 @@
         }
 
 
-
-        #cameraContainer {
-    min-height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        /* Progress Dots */
+.progress-dot {
+    width: 12px;
+    height: 12px;
+    background: #E5E7EB;
+    border-radius: 50%;
+    transition: all 0.3s ease;
 }
 
-#cameraPreview {
-    transform: scaleX(-1); /* Mirror effect for front camera */
+.progress-dot.active {
+    background: #2E5BFF;
+    box-shadow: 0 0 12px rgba(46, 91, 255, 0.5);
 }
 
-#capturedImage {
-    object-fit: cover;
+.progress-dot.completed {
+    background: #10B981;
+}
+
+/* Face Overlay Animations */
+@keyframes pulseOverlay {
+    0%, 100% { 
+        border-color: rgba(46, 91, 255, 0.6); 
+        box-shadow: 0 0 0 0 rgba(46, 91, 255, 0.4);
+    }
+    50% { 
+        border-color: rgba(46, 91, 255, 1); 
+        box-shadow: 0 0 0 10px rgba(46, 91, 255, 0);
+    }
+}
+
+#faceOverlay.detecting {
+    animation: pulseOverlay 2s infinite;
+    border-color: #10B981;
+}
+
+#faceOverlay.error {
+    border-color: #EF4444;
+}
+
+/* Challenge Timer Animation */
+@keyframes timerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+#challengeTimer {
+    animation: timerPulse 1s infinite;
 }
     </style>
 </head>
@@ -1240,44 +1273,57 @@
                 <button class="modal-close" onclick="closeModal('bankModal')">Cancel</button>
             </div>
         </div>
-        <!-- SELFIE VERIFICATION MODAL -->
+        <!-- ADVANCED LIVENESS VERIFICATION MODAL -->
 <div id="selfieModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-title">Verify Your Identity</div>
+    <div class="modal-content" style="max-width: 420px;">
+        <div class="modal-title">Face Verification</div>
         <p style="font-size: 13px; color: #64748B; margin-bottom: 20px; text-align: center;">
-            Take a clear selfie to verify your identity before proceeding
+            Complete the face verification challenges to prevent fraud
         </p>
         
-        <!-- Camera Preview -->
-        <div id="cameraContainer" style="position: relative; background: #000; border-radius: 16px; overflow: hidden; margin-bottom: 16px;">
-            <video id="cameraPreview" autoplay playsinline style="width: 100%; display: block; border-radius: 16px;"></video>
-            <canvas id="captureCanvas" style="display: none;"></canvas>
-            
-            <!-- Captured Image Preview -->
-            <img id="capturedImage" style="display: none; width: 100%; border-radius: 16px;">
+        <!-- Progress Indicator -->
+        <div id="verificationProgress" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;">
+            <div class="progress-dot active"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
         </div>
 
-        <!-- Instructions -->
-        <div id="cameraInstructions" style="background: #FFF9E6; border-radius: 12px; padding: 14px; margin-bottom: 16px; border: 1px solid #FFE8B3;">
-            <p style="font-size: 12px; color: #64748B; margin: 0;">
-                ✓ Face the camera directly<br>
-                ✓ Ensure good lighting<br>
-                ✓ Remove glasses if possible
+        <!-- Camera Container -->
+        <div id="cameraContainer" style="position: relative; background: #000; border-radius: 16px; overflow: hidden; margin-bottom: 16px; min-height: 400px;">
+            <video id="cameraPreview" autoplay playsinline muted style="width: 100%; display: block; border-radius: 16px; transform: scaleX(-1);"></video>
+            
+            <!-- Face Detection Overlay -->
+            <div id="faceOverlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 320px; border: 3px solid rgba(46, 91, 255, 0.6); border-radius: 50%; pointer-events: none;"></div>
+            
+            <!-- Challenge Instructions -->
+            <div id="challengeDisplay" style="position: absolute; top: 20px; left: 0; right: 0; text-align: center; background: rgba(0, 0, 0, 0.75); padding: 16px; color: white;">
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;" id="challengeText">Position your face in the oval</div>
+                <div style="font-size: 14px; opacity: 0.9;" id="challengeSubtext">Make sure your face is clearly visible</div>
+                <div id="challengeTimer" style="font-size: 32px; font-weight: 900; margin-top: 12px; color: #2E5BFF;">3</div>
+            </div>
+
+            <!-- Success/Error Feedback -->
+            <div id="feedbackOverlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(46, 91, 255, 0.9); display: none; align-items: center; justify-content: center; flex-direction: column; color: white; border-radius: 16px;">
+                <div style="font-size: 48px; margin-bottom: 12px;">✓</div>
+                <div style="font-size: 20px; font-weight: 700;">Challenge Passed!</div>
+            </div>
+        </div>
+
+        <!-- Current Status -->
+        <div id="statusMessage" style="background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 12px; padding: 14px; margin-bottom: 16px; text-align: center;">
+            <p style="font-size: 13px; color: #0369A1; margin: 0; font-weight: 600;">
+                <span id="statusText">Initializing camera...</span>
             </p>
         </div>
 
-        <!-- Capture Button -->
-        <button id="captureBtn" class="btn-primary" style="margin-top: 0;">
-            📸 Capture Selfie
-        </button>
-
-        <!-- Retake/Continue Buttons (hidden initially) -->
-        <div id="actionButtons" style="display: none;">
-            <button id="retakeBtn" class="btn-secondary" style="margin-top: 0;">
-                🔄 Retake
+        <!-- Action Buttons -->
+        <div id="verificationButtons">
+            <button id="startVerificationBtn" class="btn-primary" style="margin-top: 0; display: none;">
+                Start Verification
             </button>
-            <button id="continueBtn" class="btn-primary">
-                ✓ Continue
+            <button id="completeBtn" class="btn-primary" style="margin-top: 0; display: none;">
+                ✓ Complete Verification
             </button>
         </div>
 
@@ -1347,152 +1393,320 @@
             selectedTenure = days;
         }
 
-        let capturedImageData = null;
-        let cameraStream = null;
         
-        function applyForLoan() {
-            // Open selfie verification modal instead of bank modal
-            showModal('selfieModal');
-            startCamera();
-        }
+        // ============================================
+// 🎯 ADVANCED LIVENESS DETECTION SYSTEM
+// ============================================
+
+let capturedVideoData = null;
+let cameraStream = null;
+let currentChallengeIndex = 0;
+let mediaRecorder = null;
+let recordedChunks = [];
+let verificationPassed = false;
+
+const challenges = [
+    { 
+        action: 'center', 
+        text: 'Look straight at the camera', 
+        subtext: 'Keep your face in the oval',
+        duration: 3,
+        emoji: '👤'
+    },
+    { 
+        action: 'left', 
+        text: 'Turn your head to the LEFT', 
+        subtext: 'Slowly turn left',
+        duration: 3,
+        emoji: '←'
+    },
+    { 
+        action: 'right', 
+        text: 'Turn your head to the RIGHT', 
+        subtext: 'Slowly turn right',
+        duration: 3,
+        emoji: '→'
+    },
+    { 
+        action: 'smile', 
+        text: 'SMILE at the camera', 
+        subtext: 'Show your teeth',
+        duration: 3,
+        emoji: '😊'
+    }
+];
+
+function applyForLoan() {
+    showModal('selfieModal');
+    initializeLivenessDetection();
+}
+
+async function initializeLivenessDetection() {
+    const video = document.getElementById('cameraPreview');
+    const statusText = document.getElementById('statusText');
+    const startBtn = document.getElementById('startVerificationBtn');
+    const overlay = document.getElementById('faceOverlay');
+    
+    try {
+        statusText.textContent = 'Requesting camera access...';
         
-        async function startCamera() {
-            const video = document.getElementById('cameraPreview');
-            const container = document.getElementById('cameraContainer');
-            
-            try {
-                // Request front camera access
-                cameraStream = await navigator.mediaDevices.getUserMedia({
-                    video: { 
-                        facingMode: 'user', // Front camera
-                        width: { ideal: 640 },
-                        height: { ideal: 480 }
-                    }
-                });
-                
-                video.srcObject = cameraStream;
-                video.style.display = 'block';
-                
-            } catch (error) {
-                console.error('Camera access denied:', error);
-                container.innerHTML = `
-                    <div style="padding: 40px 20px; text-align: center; color: #dc2626;">
-                        <p style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">📷 Camera Access Required</p>
-                        <p style="font-size: 13px; color: #64748B;">
-                            Please allow camera access in your browser settings to continue
-                        </p>
-                    </div>
-                `;
-            }
-        }
-        
-        function stopCamera() {
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-                cameraStream = null;
-            }
-        }
-        
-        function closeSelfieModal() {
-            stopCamera();
-            closeModal('selfieModal');
-            resetSelfieModal();
-        }
-        
-        function resetSelfieModal() {
-            const video = document.getElementById('cameraPreview');
-            const capturedImage = document.getElementById('capturedImage');
-            const actionButtons = document.getElementById('actionButtons');
-            const instructions = document.getElementById('cameraInstructions');
-            
-            video.style.display = 'block';
-            capturedImage.style.display = 'none';
-            document.getElementById('captureBtn').style.display = 'block';
-            instructions.style.display = 'block';
-            actionButtons.style.display = 'none';
-            
-            capturedImageData = null;
-        }
-        
-        // Selfie capture functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const captureBtn = document.getElementById('captureBtn');
-            const retakeBtn = document.getElementById('retakeBtn');
-            const continueBtn = document.getElementById('continueBtn');
-            
-            if (!captureBtn || !retakeBtn || !continueBtn) return; // Safety check
-            
-            captureBtn.addEventListener('click', function() {
-                const video = document.getElementById('cameraPreview');
-                const canvas = document.getElementById('captureCanvas');
-                const capturedImage = document.getElementById('capturedImage');
-                const actionButtons = document.getElementById('actionButtons');
-                const instructions = document.getElementById('cameraInstructions');
-                
-                // Set canvas size to match video
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                
-                // Draw video frame to canvas
-                const ctx = canvas.getContext('2d');
-                ctx.scale(-1, 1); // Flip horizontally to match preview
-                ctx.drawImage(video, 0, 0, canvas.width * -1, canvas.height);
-                
-                // Convert to image
-                capturedImageData = canvas.toDataURL('image/jpeg', 0.8);
-                
-                // Show captured image
-                capturedImage.src = capturedImageData;
-                capturedImage.style.display = 'block';
-                video.style.display = 'none';
-                
-                // Show retake/continue buttons
-                captureBtn.style.display = 'none';
-                instructions.style.display = 'none';
-                actionButtons.style.display = 'block';
-                
-                // Stop camera stream
-                stopCamera();
-            });
-            
-            retakeBtn.addEventListener('click', function() {
-                const video = document.getElementById('cameraPreview');
-                const capturedImage = document.getElementById('capturedImage');
-                const actionButtons = document.getElementById('actionButtons');
-                const instructions = document.getElementById('cameraInstructions');
-                
-                // Reset UI
-                capturedImage.style.display = 'none';
-                video.style.display = 'block';
-                captureBtn.style.display = 'block';
-                instructions.style.display = 'block';
-                actionButtons.style.display = 'none';
-                
-                capturedImageData = null;
-                
-                // Restart camera
-                startCamera();
-            });
-            
-            continueBtn.addEventListener('click', function() {
-                if (capturedImageData) {
-                    // Close selfie modal
-                    closeModal('selfieModal');
-                    
-                    // Reset selfie modal for next time
-                    resetSelfieModal();
-                    
-                    // Show success message
-                    alert('✓ Identity verified successfully!');
-                    
-                    // Open bank account modal
-                    showModal('bankModal');
-                    
-                    // TODO: Send capturedImageData to your backend for verification
-                    console.log('Selfie captured, ready to upload:', capturedImageData.substring(0, 50) + '...');
-                }
-            });
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { 
+                facingMode: 'user',
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
         });
+        
+        video.srcObject = cameraStream;
+        
+        // Wait for video to be ready
+        await new Promise(resolve => {
+            video.onloadedmetadata = () => {
+                video.play();
+                resolve();
+            };
+        });
+        
+        statusText.textContent = 'Camera ready! Click Start to begin verification';
+        startBtn.style.display = 'block';
+        overlay.classList.add('detecting');
+        
+        // Hide challenge display initially
+        document.getElementById('challengeDisplay').style.display = 'none';
+        
+    } catch (error) {
+        console.error('Camera error:', error);
+        statusText.textContent = '❌ Camera access denied. Please enable camera permissions.';
+        document.getElementById('statusMessage').style.background = '#FEE2E2';
+        document.getElementById('statusMessage').style.borderColor = '#FCA5A5';
+        document.getElementById('statusText').style.color = '#991B1B';
+    }
+}
+
+function startLivenessVerification() {
+    const startBtn = document.getElementById('startVerificationBtn');
+    const challengeDisplay = document.getElementById('challengeDisplay');
+    
+    startBtn.style.display = 'none';
+    challengeDisplay.style.display = 'block';
+    
+    // Start video recording
+    startRecording();
+    
+    // Reset progress
+    currentChallengeIndex = 0;
+    updateProgressDots();
+    
+    // Start first challenge
+    setTimeout(() => {
+        runChallenge(0);
+    }, 500);
+}
+
+function startRecording() {
+    const video = document.getElementById('cameraPreview');
+    
+    try {
+        mediaRecorder = new MediaRecorder(cameraStream, {
+            mimeType: 'video/webm;codecs=vp9'
+        });
+        
+        recordedChunks = [];
+        
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+        
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                capturedVideoData = reader.result;
+                console.log('Video recorded, size:', (capturedVideoData.length / 1024 / 1024).toFixed(2), 'MB');
+            };
+            reader.readAsDataURL(blob);
+        };
+        
+        mediaRecorder.start();
+        console.log('Recording started');
+        
+    } catch (error) {
+        console.error('Recording error:', error);
+    }
+}
+
+function runChallenge(index) {
+    if (index >= challenges.length) {
+        completeLivenessVerification();
+        return;
+    }
+    
+    const challenge = challenges[index];
+    const challengeText = document.getElementById('challengeText');
+    const challengeSubtext = document.getElementById('challengeSubtext');
+    const timerEl = document.getElementById('challengeTimer');
+    const overlay = document.getElementById('faceOverlay');
+    
+    // Update challenge text with emoji
+    challengeText.innerHTML = `${challenge.emoji} ${challenge.text}`;
+    challengeSubtext.textContent = challenge.subtext;
+    
+    // Animate overlay based on challenge
+    overlay.style.borderColor = 'rgba(46, 91, 255, 0.8)';
+    
+    // Countdown timer
+    let timeLeft = challenge.duration;
+    timerEl.textContent = timeLeft;
+    
+    const countdown = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            showChallengeSuccess();
+            
+            setTimeout(() => {
+                currentChallengeIndex++;
+                updateProgressDots();
+                runChallenge(currentChallengeIndex);
+            }, 1000);
+        }
+    }, 1000);
+}
+
+function showChallengeSuccess() {
+    const feedbackOverlay = document.getElementById('feedbackOverlay');
+    feedbackOverlay.style.display = 'flex';
+    
+    setTimeout(() => {
+        feedbackOverlay.style.display = 'none';
+    }, 800);
+}
+
+function updateProgressDots() {
+    const dots = document.querySelectorAll('.progress-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.remove('active', 'completed');
+        if (index < currentChallengeIndex) {
+            dot.classList.add('completed');
+        } else if (index === currentChallengeIndex) {
+            dot.classList.add('active');
+        }
+    });
+}
+
+function completeLivenessVerification() {
+    const challengeDisplay = document.getElementById('challengeDisplay');
+    const completeBtn = document.getElementById('completeBtn');
+    const statusText = document.getElementById('statusText');
+    const statusMsg = document.getElementById('statusMessage');
+    
+    // Stop recording
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+    }
+    
+    // Update all dots to completed
+    document.querySelectorAll('.progress-dot').forEach(dot => {
+        dot.classList.remove('active');
+        dot.classList.add('completed');
+    });
+    
+    challengeDisplay.style.display = 'none';
+    completeBtn.style.display = 'block';
+    
+    statusMsg.style.background = '#ECFDF5';
+    statusMsg.style.borderColor = '#6EE7B7';
+    statusText.style.color = '#047857';
+    statusText.innerHTML = '✓ All challenges completed successfully!';
+    
+    verificationPassed = true;
+}
+
+function finalizeVerification() {
+    if (!verificationPassed) {
+        alert('Please complete all verification challenges first');
+        return;
+    }
+    
+    // Close selfie modal
+    closeModal('selfieModal');
+    
+    // Reset for next time
+    resetSelfieModal();
+    
+    // Show success message
+    alert('✓ Face verification successful! Your identity has been verified.');
+    
+    // Open bank account modal
+    showModal('bankModal');
+    
+    // TODO: Send capturedVideoData to backend
+    console.log('✓ Liveness verification completed');
+    console.log('Video data ready for upload');
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+    
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+    }
+}
+
+function closeSelfieModal() {
+    stopCamera();
+    closeModal('selfieModal');
+    resetSelfieModal();
+}
+
+function resetSelfieModal() {
+    currentChallengeIndex = 0;
+    verificationPassed = false;
+    capturedVideoData = null;
+    recordedChunks = [];
+    
+    const overlay = document.getElementById('faceOverlay');
+    overlay.classList.remove('detecting', 'error');
+    
+    document.getElementById('startVerificationBtn').style.display = 'none';
+    document.getElementById('completeBtn').style.display = 'none';
+    document.getElementById('challengeDisplay').style.display = 'none';
+    
+    document.querySelectorAll('.progress-dot').forEach(dot => {
+        dot.classList.remove('active', 'completed');
+    });
+    document.querySelector('.progress-dot').classList.add('active');
+    
+    const statusMsg = document.getElementById('statusMessage');
+    statusMsg.style.background = '#F0F9FF';
+    statusMsg.style.borderColor = '#BAE6FD';
+    document.getElementById('statusText').style.color = '#0369A1';
+    document.getElementById('statusText').textContent = 'Initializing camera...';
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const startBtn = document.getElementById('startVerificationBtn');
+    const completeBtn = document.getElementById('completeBtn');
+    
+    if (startBtn) {
+        startBtn.addEventListener('click', startLivenessVerification);
+    }
+    
+    if (completeBtn) {
+        completeBtn.addEventListener('click', finalizeVerification);
+    }
+});
+
 
         document.addEventListener('click', function(e) {
             if(e.target.classList.contains('modal')) {
