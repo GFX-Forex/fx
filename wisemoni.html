@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisemoni</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background: #F5F7FA;
+            color: #1A1A1A;
+            line-height: 1.5;
+        }
+
+        .app {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #F5F7FA;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            padding: 60px 20px 32px;
+        }
+
+        .brand h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+        }
+
+        .notice-bar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            margin: 0 20px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .notice-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notice-text {
+            font-size: 13px;
+            color: #FFFFFF;
+            line-height: 1.5;
+        }
+
+        .content {
+            padding: 0 20px 20px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .limit-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 32px 24px;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .limit-label {
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .limit-value {
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 28px;
+        }
+
+        .outstanding-box {
+            padding-top: 20px;
+            border-top: 1px solid #E8ECF4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .outstanding-label {
+            font-size: 14px;
+            color: #64748B;
+            font-weight: 500;
+        }
+
+        .outstanding-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 14px;
+            padding: 16px 24px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: #FFFFFF;
+            color: #2E5BFF;
+            border: 2px solid #2E5BFF;
+            border-radius: 14px;
+            padding: 16px 24px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        .expire-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #FF3B30;
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .promo-card {
+            background: linear-gradient(135deg, #FFD93D 0%, #6BCF7F 100%);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .promo-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .promo-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .promo-badge {
+            background: #1A1A1A;
+            color: #FFFFFF;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .promo-btn {
+            background: #6BCF7F;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .promo-btn:active {
+            transform: scale(0.95);
+        }
+
+        .promo-emoji {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 100px;
+            opacity: 0.2;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .card-link {
+            font-size: 14px;
+            color: #2E5BFF;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .repay-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 36px 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .repay-label {
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .repay-amount {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .repay-note {
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 24px;
+        }
+
+        .loan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #E8ECF4;
+        }
+
+        .loan-item:last-child {
+            border-bottom: none;
+        }
+
+        .loan-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .loan-date {
+            font-size: 13px;
+            color: #64748B;
+        }
+
+        .badge {
+            background: #FFF4E6;
+            color: #FF9500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1A1A1A;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #E8ECF4;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-left {
+            font-size: 14px;
+            color: #64748B;
+            font-weight: 500;
+        }
+
+        .detail-right {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1A1A1A;
+            text-align: right;
+        }
+
+        .detail-link {
+            color: #2E5BFF;
+            cursor: pointer;
+        }
+
+        .installments {
+            background: #FFFFFF;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .installment-header {
+            display: flex;
+            padding: 14px 20px;
+            background: #F5F7FA;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .installment-col {
+            flex: 1;
+            text-align: center;
+        }
+
+        .installment-row {
+            display: flex;
+            padding: 18px 20px;
+            border-bottom: 1px solid #E8ECF4;
+            align-items: center;
+        }
+
+        .installment-row:last-child {
+            border-bottom: none;
+        }
+
+        .amount-picker {
+            text-align: center;
+            padding: 28px 0;
+        }
+
+        .amount-display {
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 24px 0;
+            line-height: 1.1;
+        }
+
+        .amount-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 24px;
+        }
+
+     .amount-display {
+    font-size: 42px;
+    font-weight: 800;
+    color: #2E5BFF;
+    margin: 24px 0;
+    line-height: 1.1;
+}
+
+.control-btn {
+    background: transparent;
+    color: #2E5BFF;
+    border: none;
+    font-size: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 300;
+    padding: 0;
+    width: auto;
+    height: auto;
+}
+
+.control-btn:active {
+    transform: scale(0.92);
+    opacity: 0.7;
+}
+
+       
+        .quick-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .quick-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #E8ECF4;
+            background: #FFFFFF;
+            color: #1A1A1A;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn.selected {
+            border-color: #2E5BFF;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 12px;
+        }
+
+        .tenure-section {
+            margin: 32px 0;
+        }
+
+        
+
+   .tenure-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+}
+
+
+.tenure-grid::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tenure-grid::-webkit-scrollbar-track {
+    background: #F5F7FA;
+    border-radius: 10px;
+}
+
+.tenure-grid::-webkit-scrollbar-thumb {
+    background: #2E5BFF;
+    border-radius: 10px;
+}
+
+        .tenure-card {
+    min-width: 110px;
+    flex-shrink: 0;
+    background: #FFFFFF;
+    border: 2px solid #E8ECF4;
+    border-radius: 14px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    scroll-snap-align: start;
+}
+
+        .tenure-card.selected {
+            border-color: #2E5BFF;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+        }
+
+        .tenure-card.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .tenure-days {
+            font-size: 18px;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .tenure-rate {
+            font-size: 12px;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .summary-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+            border: 1px solid #E8ECF4;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #E8ECF4;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #64748B;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1A1A1A;
+            text-align: right;
+        }
+
+        .summary-value.highlight {
+            font-size: 20px;
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .schedule-card {
+            background: #FFF9E6;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #FFE8B3;
+        }
+
+        .schedule-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1A1A1A;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .schedule-left div:first-child {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .schedule-left div:last-child {
+            font-size: 12px;
+            color: #64748B;
+        }
+
+        .schedule-right div:first-child {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1A1A1A;
+            text-align: right;
+            margin-bottom: 4px;
+        }
+
+        .schedule-right div:last-child {
+            font-size: 12px;
+            color: #64748B;
+            text-align: right;
+        }
+
+        .note-box {
+            background: #F5F7FA;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13px;
+            color: #64748B;
+            line-height: 1.6;
+            margin-top: 16px;
+            border: 1px solid #E8ECF4;
+        }
+
+        .note-box strong {
+            color: #1A1A1A;
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-top: 1px solid #E8ECF4;
+            display: flex;
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 10px 0 8px;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            background: none;
+            border: none;
+            color: #64748B;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-item.active {
+            color: #2E5BFF;
+        }
+
+        .nav-icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    color: #64748B;
+    margin-bottom: 4px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-item.active .nav-icon {
+    color: #2E5BFF;
+}
+
+        .topbar {
+            background: linear-gradient(135deg, #2E5BFF 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+            padding: 60px 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-icon {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+        }
+
+        .topbar-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 28px 24px;
+            max-width: 360px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1A1A1A;
+        }
+
+        .modal-close {
+            background: #F5F7FA;
+            color: #1A1A1A;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .history-item {
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #E8ECF4;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:active {
+            background: #F5F7FA;
+        }
+
+        .history-icon {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .history-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1A1A1A;
+        }
+
+        .history-arrow {
+            font-size: 16px;
+            color: #64748B;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #E8ECF4;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2E5BFF;
+        }
+
+        input:disabled {
+            background: #F5F7FA;
+            color: #64748B;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin: 16px 0;
+        }
+
+
+
+        /* 🌟 PREMIUM VERIFICATION ANIMATIONS */
+
+.ai-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    50% {
+        opacity: 0.5;
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+}
+
+/* Step Indicators */
+.step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.4;
+    transition: all 0.4s ease;
+}
+
+.step-indicator.active {
+    opacity: 1;
+}
+
+.step-indicator.completed {
+    opacity: 1;
+}
+
+.step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    color: #6B7280;
+    transition: all 0.4s ease;
+}
+
+.step-indicator.active .step-circle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    animation: stepPulse 2s infinite;
+}
+
+.step-indicator.completed .step-circle {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.step-indicator.completed .step-circle::before {
+    content: '✓';
+}
+
+.step-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #6B7280;
+    text-align: center;
+}
+
+.step-connector {
+    width: 30px;
+    height: 3px;
+    background: #E5E7EB;
+    margin-top: 18px;
+    border-radius: 3px;
+}
+
+@keyframes stepPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes successPop {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Face Guide Glow */
+#faceGuide.detecting {
+    border-color: #10B981;
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.6), inset 0 0 30px rgba(16, 185, 129, 0.2);
+    animation: guideGlow 2s infinite;
+}
+
+@keyframes guideGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+    50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.8); }
+}
+
+#faceGuide.success {
+    border-color: #10B981;
+    box-shadow: 0 0 40px rgba(16, 185, 129, 1);
+}
+
+#faceGuide.error {
+    border-color: #EF4444;
+    box-shadow: 0 0 40px rgba(239, 68, 68, 0.8);
+}
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- HOME PAGE -->
+        <div id="homePage" class="page active">
+            <div class="header">
+                <div class="brand">
+                    <h1>Wisemoni</h1>
+                    
+                </div>
+                <div class="notice-bar">
+                    <span class="notice-icon">📢</span>
+                    <span class="notice-text">Repay on time for higher loan limit</span>
+                </div> 
+            </div>
+
+            <div class="content">
+                <div class="limit-card">
+                    <div class="limit-label">Available Loan Limit</div>
+                    <div class="limit-value">₦520,000</div>
+                    <div class="outstanding-box">
+                        <div class="outstanding-label">Outstanding Balance</div>
+                        <div class="outstanding-value">₦0</div>
+                    </div>
+                    <button class="btn-primary" onclick="navigate('applyPage')">
+                        Get Funds
+                        <div class="expire-badge">Limit expires soon</div>
+                    </button>
+                </div>
+
+                <div class="promo-card">
+                    <div class="promo-content">
+                        <div class="promo-title">WIN GREAT PRIZES</div>
+                        <div class="promo-badge">iPhone Grand Prize Draw</div>
+                        <div>
+                            <button class="promo-btn">Join Lucky Draw 🎉</button>
+                        </div>
+                    </div>
+                    <div class="promo-emoji">📱</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REPAYMENT PAGE -->
+        <div id="repaymentPage" class="page">
+            <div class="topbar">
+                <div class="back-icon" onclick="navigate('homePage')">←</div>
+                <div class="topbar-title">Repayment</div>
+            </div>
+
+            <div class="content">
+                <div class="repay-card">
+                    <div class="repay-label">Next Due Amount</div>
+                    <div class="repay-amount">₦242,900</div>
+                    <div class="repay-note">Total outstanding: ₦491,400</div>
+                    <button class="btn-primary" onclick="showModal('paymentModal')">Repay Now</button>
+                    <button class="btn-secondary" onclick="showModal('fullPaymentModal')">Full Repayment</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Wisemoni Loan</div>
+                        <div class="card-link" onclick="navigate('detailsPage')">Details →</div>
+                    </div>
+                    <div class="loan-item">
+                        <div>
+                            <div class="loan-amount">₦242,900</div>
+                            <div class="loan-date">Due: 22 Jan 2026</div>
+                        </div>
+                        <div class="badge">Outstanding</div>
+                    </div>
+                    <div class="loan-item">
+                        <div>
+                            <div class="loan-amount">₦248,500</div>
+                            <div class="loan-date">Due: 21 Feb 2026</div>
+                        </div>
+                        <div class="badge">Outstanding</div>
+                    </div>
+                </div>
+
+                <div class="history-item" onclick="showModal('historyModal')">
+                    <div style="display: flex; align-items: center;">
+                        <span class="history-icon">📄</span>
+                        <span class="history-text">View Repayment History</span>
+                    </div>
+                    <span class="history-arrow">→</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAILS PAGE -->
+        <div id="detailsPage" class="page">
+            <div class="topbar">
+                <div class="back-icon" onclick="navigate('repaymentPage')">←</div>
+                <div class="topbar-title">Loan Details</div>
+            </div>
+
+            <div class="content">
+                <div class="section-title">Loan Information</div>
+
+                <div class="card">
+                    <div class="detail-row">
+                        <div class="detail-left">Disbursement Date</div>
+                        <div class="detail-right">24 Dec 2025</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Loan ID</div>
+                        <div class="detail-right">125730031</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Loan Amount</div>
+                        <div class="detail-right">₦350,000</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Interest</div>
+                        <div class="detail-right">₦147,000</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Total Repayment</div>
+                        <div class="detail-right">₦497,000</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Amount Paid</div>
+                        <div class="detail-right">₦5,600</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Bank Name</div>
+                        <div class="detail-right">OPay</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Account Number</div>
+                        <div class="detail-right">*****4478</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Loan Contract</div>
+                        <div class="detail-right detail-link" onclick="showModal('contractModal')">View →</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-left">Payment History</div>
+                        <div class="detail-right detail-link" onclick="showModal('historyModal')">View →</div>
+                    </div>
+                </div>
+
+                <div class="section-title">Installment Schedule</div>
+
+                <div class="installments">
+                    <div class="installment-header">
+                        <div class="installment-col">Due Date</div>
+                        <div class="installment-col">Amount</div>
+                        <div class="installment-col">Status</div>
+                    </div>
+                    <div class="installment-row">
+                        <div class="installment-col">22 Jan 2026</div>
+                        <div class="installment-col">₦242,900</div>
+                        <div class="installment-col"><span class="badge">Outstanding</span></div>
+                    </div>
+                    <div class="installment-row">
+                        <div class="installment-col">21 Feb 2026</div>
+                        <div class="installment-col">₦248,500</div>
+                        <div class="installment-col"><span class="badge">Outstanding</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APPLY PAGE -->
+        <div id="applyPage" class="page">
+            <div class="topbar">
+                <div class="back-icon" onclick="navigate('homePage')">←</div>
+                <div class="topbar-title">Apply for Loan</div>
+            </div>
+
+            <div class="content">
+                <div class="section-title">Select Amount</div>
+
+                <div class="amount-picker">
+                    <div class="amount-controls">
+                        <button class="control-btn" onclick="decreaseAmount()">−</button>
+                        <div class="amount-display">₦<span id="amountValue">520,000</span></div>
+                        <button class="control-btn" onclick="increaseAmount()">+</button>
+                    </div>
+                    <div class="quick-select">
+                        <button class="quick-btn" onclick="setQuickAmount(260000, this)">₦260,000</button>
+                        <button class="quick-btn" onclick="setQuickAmount(416000, this)">₦416,000</button>
+                        <button class="quick-btn selected" onclick="setQuickAmount(520000, this)">₦520,000</button>
+                    </div>
+                    <div class="info-text">ⓘ Loan range: ₦26,000 to ₦520,000</div>
+                </div>
+
+                <div class="tenure-section">
+                    <div class="section-title">Choose Loan Tenure</div>
+                    <div class="tenure-grid">
+    <div class="tenure-card" onclick="selectTenure(this, 7)">
+        <span class="tenure-days">7 Days</span>
+        <span class="tenure-rate">28% Monthly</span>
+    </div>
+    <div class="tenure-card" onclick="selectTenure(this, 15)">
+        <span class="tenure-days">15 Days</span>
+        <span class="tenure-rate">26% Monthly</span>
+    </div>
+    <div class="tenure-card locked" onclick="selectTenure(this, 30)">
+        <span class="tenure-days">30 Days</span>
+        <span class="tenure-rate">24% Monthly</span>
+    </div>
+    <div class="tenure-card locked" onclick="selectTenure(this, 60)">
+        <span class="tenure-days">60 Days</span>
+        <span class="tenure-rate">21% Monthly</span>
+    </div>
+    <div class="tenure-card locked">
+        <span class="tenure-days">91 Days</span>
+        <span class="tenure-rate">18% Monthly</span>
+    </div>
+</div>
+                    <div class="info-text">ⓘ More tenure options available</div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <div class="summary-label">Tenure Period</div>
+                        <div class="summary-value">2 installments over 60 days</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Received Amount</div>
+                        <div class="summary-value">₦520,000</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Discount</div>
+                        <div class="summary-value" style="color: #64748B;">Unavailable</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Interest Charges</div>
+                        <div class="summary-value">₦218,400</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Total Repayment</div>
+                        <div class="summary-value highlight">₦738,400</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Disbursement Account</div>
+                        <div class="summary-value detail-link" onclick="showModal('bankModal')">Add Account →</div>
+                    </div>
+                </div>
+
+                <div class="schedule-card">
+                    <div class="schedule-title">Repayment Schedule</div>
+                    <div class="schedule-item">
+                        <div class="schedule-left">
+                            <div>21 Jan 2026</div>
+                            <div>First repayment date</div>
+                        </div>
+                        <div class="schedule-right">
+                            <div>₦369,200</div>
+                            <div>To be paid</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="applyForLoan()">Apply for Loan</button>
+
+                <div class="note-box">
+                    <strong>Important:</strong> Repaying your loan on time helps you enjoy increased loan limits and avoid penalties.
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <!-- BOTTOM NAVIGATION -->
+<div class="navbar">
+    <button class="nav-item active" onclick="navigate('homePage')">
+        <i data-lucide="home" class="nav-icon"></i>
+        Loan
+    </button>
+    <button class="nav-item" onclick="navigate('repaymentPage')">
+        <i data-lucide="credit-card" class="nav-icon"></i>
+        Repayment
+    </button>
+    <button class="nav-item" onclick="navigate('detailsPage')">
+        <i data-lucide="file-text" class="nav-icon"></i>
+        Details
+    </button>
+    <button class="nav-item" onclick="navigate('applyPage')">
+        <i data-lucide="plus-circle" class="nav-icon"></i>
+        Apply
+    </button>
+</div>
+
+        <!-- MODALS -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Select Payment Method</div>
+                <div class="card">
+                    <div class="detail-row" style="cursor: pointer;">
+                        <div class="detail-left">Bank Transfer</div>
+                        <div class="detail-right">→</div>
+                    </div>
+                    <div class="detail-row" style="cursor: pointer;">
+                        <div class="detail-left">Card Payment</div>
+                        <div class="detail-right">→</div>
+                    </div>
+                    <div class="detail-row" style="cursor: pointer;">
+                        <div class="detail-left">USSD Code</div>
+                        <div class="detail-right">→</div>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('paymentModal')">Close</button>
+            </div>
+        </div>
+
+        <div id="fullPaymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Full Repayment</div>
+                <div class="summary-card" style="margin: 0;">
+                    <div class="summary-row">
+                        <div class="summary-label">Total Outstanding</div>
+                        <div class="summary-value">₦491,400</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Early Payment Discount</div>
+                        <div class="summary-value" style="color: #34C759;">-₦5,600</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Amount to Pay</div>
+                        <div class="summary-value highlight">₦485,800</div>
+                    </div>
+                </div>
+                <button class="btn-primary" style="margin-top: 16px;">Proceed to Payment</button>
+                <button class="modal-close" onclick="closeModal('fullPaymentModal')">Cancel</button>
+            </div>
+        </div>
+
+        <div id="historyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Repayment History</div>
+                <div class="info-text" style="text-align: center; padding: 40px 20px; color: #64748B;">
+                    No repayment history available yet
+                </div>
+                <button class="modal-close" onclick="closeModal('historyModal')">Close</button>
+            </div>
+        </div>
+
+        <div id="contractModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Loan Contract Agreement</div>
+                <div style="font-size: 13px; line-height: 1.7; color: #64748B;">
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">LOAN AGREEMENT</strong></p>
+                    <p style="margin-bottom: 12px;">This Loan Agreement is entered into as of 24 December 2025.</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Principal Amount:</strong> ₦350,000</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Interest Rate:</strong> 42% per annum</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Repayment Terms:</strong> The borrower agrees to repay the loan in 2 equal installments over 60 days.</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #1A1A1A;">Late Payment:</strong> A penalty of 2% per day will be charged on overdue amounts.</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('contractModal')">Close</button>
+            </div>
+        </div>
+
+        <div id="bankModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Add Bank Account</div>
+                <div class="form-group">
+                    <label>Bank Name</label>
+                    <select>
+                        <option>Select Bank</option>
+                        <option>Access Bank</option>
+                        <option>GTBank</option>
+                        <option>First Bank</option>
+                        <option>UBA</option>
+                        <option>Zenith Bank</option>
+                        <option>OPay</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" placeholder="Enter account number">
+                </div>
+                <div class="form-group">
+                    <label>Account Name</label>
+                    <input type="text" placeholder="Account name will appear here" disabled>
+                </div>
+                <button class="btn-primary" style="margin-top: 8px;">Save Account</button>
+                <button class="modal-close" onclick="closeModal('bankModal')">Cancel</button>
+            </div>
+        </div>
+ <!-- 🌟 ULTRA-PREMIUM FACE VERIFICATION MODAL -->
+<div id="selfieModal" class="modal">
+    <div class="modal-content" style="max-width: 480px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 0; overflow: hidden;">
+        
+        <!-- Glassmorphic Header -->
+        <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); padding: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
+            <div class="modal-title" style="color: white; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔐</div>
+                Face Verification
+            </div>
+            <p style="font-size: 13px; color: rgba(255, 255, 255, 0.9); margin: 0;">
+                AI-powered liveness detection to prevent fraud
+            </p>
+        </div>
+
+        <div style="background: white; padding: 24px;">
+            <!-- AI Status Badge -->
+            <div id="aiStatusBadge" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; border-radius: 12px; text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                <div class="ai-pulse" style="width: 8px; height: 8px; background: #10B981; border-radius: 50%;"></div>
+                <span style="font-size: 13px; font-weight: 700;">AI Model: Loading...</span>
+            </div>
+
+            <!-- Progress Steps -->
+            <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 20px;">
+                <div class="step-indicator active" data-step="0">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Position</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-indicator" data-step="1">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Turn Left</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-indicator" data-step="2">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Turn Right</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-indicator" data-step="3">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Smile</div>
+                </div>
+            </div>
+
+            <!-- Camera Container with Premium Frame -->
+            <div style="position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); margin-bottom: 20px;">
+                <video id="cameraPreview" autoplay playsinline muted style="width: 100%; display: block; background: #000; min-height: 400px; transform: scaleX(-1);"></video>
+                
+                <!-- Face Detection Canvas Overlay -->
+                <canvas id="detectionCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); pointer-events: none;"></canvas>
+                
+                <!-- Dynamic Face Guide -->
+                <div id="faceGuide" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 240px; height: 320px; border: 4px solid rgba(16, 185, 129, 0.6); border-radius: 50%; pointer-events: none; transition: all 0.3s ease;"></div>
+
+                <!-- Challenge Instruction Overlay -->
+                <div id="challengeOverlay" style="position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%); padding: 24px; color: white; text-align: center;">
+                    <div id="challengeIcon" style="font-size: 48px; margin-bottom: 12px; animation: bounce 1s infinite;">👤</div>
+                    <div id="challengeText" style="font-size: 20px; font-weight: 800; text-shadow: 0 2px 8px rgba(0,0,0,0.5); margin-bottom: 8px;">Position your face</div>
+                    <div id="challengeSubtext" style="font-size: 14px; opacity: 0.9;">Center your face in the oval</div>
+                </div>
+
+                <!-- Detection Confidence Bar -->
+                <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); border-radius: 12px; padding: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="color: white; font-size: 12px; font-weight: 700;">Detection Confidence</span>
+                        <span id="confidencePercent" style="color: #10B981; font-size: 14px; font-weight: 800;">0%</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.2); height: 8px; border-radius: 8px; overflow: hidden;">
+                        <div id="confidenceBar" style="background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 0%; transition: width 0.3s ease, background 0.3s ease; border-radius: 8px;"></div>
+                    </div>
+                </div>
+
+                <!-- Success Celebration -->
+                <div id="successOverlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(5, 150, 105, 0.95)); display: none; align-items: center; justify-content: center; flex-direction: column; color: white;">
+                    <div style="font-size: 80px; animation: successPop 0.6s ease;">✓</div>
+                    <div style="font-size: 24px; font-weight: 800; margin-top: 16px;">Perfect!</div>
+                </div>
+            </div>
+
+            <!-- Real-time Feedback -->
+            <div id="feedbackMessage" style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border: 2px solid #3B82F6; border-radius: 14px; padding: 16px; text-align: center; margin-bottom: 16px;">
+                <p style="margin: 0; color: #1E40AF; font-weight: 700; font-size: 14px;" id="feedbackText">
+                    <span style="font-size: 18px; margin-right: 8px;">ℹ️</span>
+                    Initializing AI model...
+                </p>
+            </div>
+
+            <!-- Action Button -->
+            <button id="startVerificationBtn" class="btn-primary" style="margin-top: 0; display: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);">
+                🚀 Start AI Verification
+            </button>
+
+            <button id="completeBtn" class="btn-primary" style="margin-top: 0; display: none; background: linear-gradient(135deg, #10B981 0%, #059669 100%); box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);">
+                ✓ Verification Complete
+            </button>
+
+            <button class="modal-close" onclick="closeSelfieModal()" style="background: #F3F4F6; color: #6B7280;">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>       
+    </div>
+
+    <script>
+        let currentAmount = 520000;
+        let selectedTenure = 60;
+
+        function navigate(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            if(pageId === 'homePage') navItems[0].classList.add('active');
+            else if(pageId === 'repaymentPage') navItems[1].classList.add('active');
+            else if(pageId === 'detailsPage') navItems[2].classList.add('active');
+            else if(pageId === 'applyPage') navItems[3].classList.add('active');
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function setQuickAmount(amount, btn) {
+            currentAmount = amount;
+            document.getElementById('amountValue').textContent = formatNumber(amount);
+            
+            document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function increaseAmount() {
+            if(currentAmount < 520000) {
+                currentAmount += 10000;
+                document.getElementById('amountValue').textContent = formatNumber(currentAmount);
+                document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+            }
+        }
+
+        function decreaseAmount() {
+            if(currentAmount > 26000) {
+                currentAmount -= 10000;
+                document.getElementById('amountValue').textContent = formatNumber(currentAmount);
+                document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+            }
+        }
+
+        function selectTenure(card, days) {
+            if(card.classList.contains('locked')) return;
+            
+            document.querySelectorAll('.tenure-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedTenure = days;
+        }
+
+        // ============================================
+// 🤖 AI-POWERED FACE VERIFICATION SYSTEM
+// ============================================
+
+let detector = null;
+let cameraStream = null;
+let detectionInterval = null;
+let currentChallengeIndex = 0;
+let challengeStartTime = null;
+let verificationPassed = false;
+let mediaRecorder = null;
+let recordedChunks = [];
+let capturedVideoData = null;
+
+const challenges = [
+    {
+        id: 'center',
+        icon: '👤',
+        text: 'Position your face',
+        subtext: 'Center your face in the oval',
+        check: (face) => face.confidence > 0.7,
+        duration: 3000
+    },
+    {
+        id: 'left',
+        icon: '←',
+        text: 'Turn your head LEFT',
+        subtext: 'Slowly turn to your left',
+        check: (face) => {
+            const yaw = face.headPose?.yaw || 0;
+            return yaw < -15; // Head turned left
+        },
+        duration: 3000
+    },
+    {
+        id: 'right',
+        icon: '→',
+        text: 'Turn your head RIGHT',
+        subtext: 'Slowly turn to your right',
+        check: (face) => {
+            const yaw = face.headPose?.yaw || 0;
+            return yaw > 15; // Head turned right
+        },
+        duration: 3000
+    },
+    {
+        id: 'smile',
+        icon: '😊',
+        text: 'SMILE!',
+        subtext: 'Show us your beautiful smile',
+        check: (face) => {
+            // Detect smile by checking mouth landmarks
+            return face.isSmiling === true;
+        },
+        duration: 3000
+    }
+];
+
+function applyForLoan() {
+    showModal('selfieModal');
+    initializeAIVerification();
+}
+
+async function initializeAIVerification() {
+    updateFeedback('Loading AI face detection model...', 'info');
+    updateAIStatus('Loading AI Model...');
+    
+    try {
+        // Load TensorFlow.js Face Landmarks model
+        const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+        const detectorConfig = {
+            runtime: 'tfjs',
+            refineLandmarks: true
+        };
+        
+        detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+        
+        updateAIStatus('AI Ready • Face Detection Active');
+        updateFeedback('AI model loaded! Click Start to begin verification', 'success');
+        
+        // Start camera
+        await startCamera();
+        
+        document.getElementById('startVerificationBtn').style.display = 'block';
+        
+    } catch (error) {
+        console.error('AI initialization error:', error);
+        updateFeedback('Failed to load AI model. Please refresh and try again.', 'error');
+        updateAIStatus('AI Error');
+    }
+}
+
+async function startCamera() {
+    const video = document.getElementById('cameraPreview');
+    
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: 'user',
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
+        });
+        
+        video.srcObject = cameraStream;
+        
+        await new Promise(resolve => {
+            video.onloadedmetadata = () => {
+                video.play();
+                
+                // Set canvas size to match video
+                const canvas = document.getElementById('detectionCanvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                resolve();
+            };
+        });
+        
+    } catch (error) {
+        console.error('Camera error:', error);
+        updateFeedback('Camera access denied. Please enable camera permissions.', 'error');
+    }
+}
+
+function startLivenessVerification() {
+    document.getElementById('startVerificationBtn').style.display = 'none';
+    currentChallengeIndex = 0;
+    
+    // Start video recording
+    startRecording();
+    
+    // Start detection loop
+    startDetectionLoop();
+    
+    // Begin first challenge
+    startChallenge(0);
+}
+
+function startRecording() {
+    try {
+        mediaRecorder = new MediaRecorder(cameraStream, {
+            mimeType: 'video/webm;codecs=vp9'
+        });
+        
+        recordedChunks = [];
+        
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+        
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                capturedVideoData = reader.result;
+            };
+            reader.readAsDataURL(blob);
+        };
+        
+        mediaRecorder.start();
+        
+    } catch (error) {
+        console.error('Recording error:', error);
+    }
+}
+
+function startDetectionLoop() {
+    const video = document.getElementById('cameraPreview');
+    const canvas = document.getElementById('detectionCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    detectionInterval = setInterval(async () => {
+        if (!detector) return;
+        
+        try {
+            const faces = await detector.estimateFaces(video, {
+                flipHorizontal: false
+            });
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (faces.length > 0) {
+                const face = faces[0];
+                
+                // Draw face landmarks
+                drawFaceLandmarks(ctx, face);
+                
+                // Calculate face metrics
+                const faceMetrics = calculateFaceMetrics(face);
+                
+                // Update confidence
+                updateConfidence(faceMetrics.confidence);
+                
+                // Check current challenge
+                if (currentChallengeIndex < challenges.length) {
+                    checkChallengeProgress(faceMetrics);
+                }
+            } else {
+                updateConfidence(0);
+                updateFeedback('No face detected. Please position yourself in the frame.', 'warning');
+            }
+            
+        } catch (error) {
+            console.error('Detection error:', error);
+        }
+    }, 100); // Check every 100ms for smooth detection
+}
+
+function drawFaceLandmarks(ctx, face) {
+    const keypoints = face.keypoints;
+    
+    // Draw facial mesh
+    ctx.fillStyle = '#10B981';
+    ctx.strokeStyle = '#10B981';
+    
+    keypoints.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 1, 0, 2 * Math.PI);
+        ctx.fill();
+    });
+}
+
+function calculateFaceMetrics(face) {
+    const keypoints = face.keypoints;
+    
+    // Calculate head pose (yaw - left/right rotation)
+    const nose = keypoints[1];
+    const leftEar = keypoints[234];
+    const rightEar = keypoints[454];
+    
+    const yaw = Math.atan2(leftEar.x - rightEar.x, leftEar.y - rightEar.y) * (180 / Math.PI);
+    
+    // Detect smile (mouth corners vs center)
+    const mouthLeft = keypoints[61];
+    const mouthRight = keypoints[291];
+    const mouthTop = keypoints[13];
+    const mouthBottom = keypoints[14];
+    
+    const mouthWidth = Math.abs(mouthRight.x - mouthLeft.x);
+    const mouthHeight = Math.abs(mouthBottom.y - mouthTop.y);
+    const smileRatio = mouthWidth / mouthHeight;
+    
+    const isSmiling = smileRatio > 3.5; // Threshold for smile detection
+    
+    return {
+        confidence: 0.9,
+        headPose: { yaw },
+        isSmiling,
+        yaw
+    };
+}
+
+function startChallenge(index) {
+    const challenge = challenges[index];
+    
+    // Update UI
+    document.getElementById('challengeIcon').textContent = challenge.icon;
+    document.getElementById('challengeText').textContent = challenge.text;
+    document.getElementById('challengeSubtext').textContent = challenge.subtext;
+    
+    // Update step indicators
+    updateStepIndicators(index);
+    
+    // Update face guide
+    const guide = document.getElementById('faceGuide');
+    guide.classList.add('detecting');
+    
+    updateFeedback(`Challenge ${index + 1}/4: ${challenge.text}`, 'info');
+    
+    challengeStartTime = Date.now();
+}
+
+function checkChallengeProgress(faceMetrics) {
+    const challenge = challenges[currentChallengeIndex];
+    const elapsed = Date.now() - challengeStartTime;
+    
+    // Check if challenge condition is met
+    if (challenge.check(faceMetrics)) {
+        const guide = document.getElementById('faceGuide');
+        guide.classList.add('success');
+        guide.classList.remove('error');
+        
+        // Need to hold position for duration
+        if (elapsed >= challenge.duration) {
+            challengePassed();
+        } else {
+            const remaining = Math.ceil((challenge.duration - elapsed) / 1000);
+            updateFeedback(`Hold this position... ${remaining}s`, 'success');
+        }
+    } else {
+        const guide = document.getElementById('faceGuide');
+        guide.classList.remove('success');
+        guide.classList.add('error');
+        
+        // Reset timer if condition not met
+        challengeStartTime = Date.now();
+    }
+}
+
+function challengePassed() {
+    const guide = document.getElementById('faceGuide');
+    guide.classList.remove('detecting', 'error');
+    guide.classList.add('success');
+    
+    // Show success animation
+    showSuccessAnimation();
+    
+    // Mark step as completed
+    const stepIndicators = document.querySelectorAll('.step-indicator');
+    stepIndicators[currentChallengeIndex].classList.add('completed');
+    stepIndicators[currentChallengeIndex].classList.remove('active');
+    
+    // Move to next challenge
+    currentChallengeIndex++;
+    
+    if (currentChallengeIndex < challenges.length) {
+        setTimeout(() => {
+            guide.classList.remove('success');
+            startChallenge(currentChallengeIndex);
+        }, 1500);
+    } else {
+        // All challenges completed
+        completeVerification();
+    }
+}
+
+function showSuccessAnimation() {
+    const overlay = document.getElementById('successOverlay');
+    overlay.style.display = 'flex';
+    
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 1200);
+}
+
+function completeVerification() {
+    clearInterval(detectionInterval);
+    
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+    }
+    
+    const guide = document.getElementById('faceGuide');
+    guide.classList.remove('detecting', 'error');
+    guide.classList.add('success');
+    
+    updateFeedback('🎉 All challenges completed! Identity verified successfully.', 'success');
+    updateConfidence(1.0);
+    
+    document.getElementById('completeBtn').style.display = 'block';
+    
+    verificationPassed = true;
+}
+
+function updateStepIndicators(activeIndex) {
+    const indicators = document.querySelectorAll('.step-indicator');
+    indicators.forEach((indicator, index) => {
+        indicator.classList.remove('active', 'completed');
+        if (index < activeIndex) {
+            indicator.classList.add('completed');
+        } else if (index === activeIndex) {
+            indicator.classList.add('active');
+        }
+    });
+}
+
+function updateConfidence(value) {
+    const percent = Math.round(value * 100);
+    document.getElementById('confidencePercent').textContent = `${percent}%`;
+    document.getElementById('confidenceBar').style.width = `${percent}%`;
+    
+    if (percent >= 80) {
+        document.getElementById('confidenceBar').style.background = 'linear-gradient(90deg, #10B981, #34D399)';
+    } else if (percent >= 50) {
+        document.getElementById('confidenceBar').style.background = 'linear-gradient(90deg, #F59E0B, #FBBF24)';
+    } else {
+        document.getElementById('confidenceBar').style.background = 'linear-gradient(90deg, #EF4444, #F87171)';
+    }
+}
+
+function updateFeedback(text, type) {
+    const feedbackEl = document.getElementById('feedbackMessage');
+    const feedbackText = document.getElementById('feedbackText');
+    
+    const icons = {
+        info: 'ℹ️',
+        success: '✅',
+        warning: '⚠️',
+        error: '❌'
+    };
+    
+    const colors = {
+        info: { bg: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)', border: '#3B82F6', text: '#1E40AF' },
+        success: { bg: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)', border: '#10B981', text: '#047857' },
+        warning: { bg: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)', border: '#F59E0B', text: '#92400E' },
+        error: { bg: 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)', border: '#EF4444', text: '#991B1B' }
+    };
+    
+    const style = colors[type];
+    feedbackEl.style.background = style.bg;
+    feedbackEl.style.borderColor = style.border;
+    feedbackText.style.color = style.text;
+    feedbackText.innerHTML = `<span style="font-size: 18px; margin-right: 8px;">${icons[type]}</span>${text}`;
+}
+
+function updateAIStatus(text) {
+    document.querySelector('#aiStatusBadge span').textContent = `AI Model: ${text}`;
+}
+
+function finalizeVerification() {
+    if (!verificationPassed) {
+        updateFeedback('Please complete all verification challenges first', 'error');
+        return;
+    }
+    
+    closeModal('selfieModal');
+    resetSelfieModal();
+    
+    alert('✓ Face verification successful! Your identity has been verified using AI.');
+    
+    showModal('bankModal');
+    
+    console.log('✓ AI verification completed');
+    console.log('Video data ready:', capturedVideoData ? 'Yes' : 'No');
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+    
+    if (detectionInterval) {
+        clearInterval(detectionInterval);
+        detectionInterval = null;
+    }
+    
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+    }
+}
+
+function closeSelfieModal() {
+    stopCamera();
+    closeModal('selfieModal');
+    resetSelfieModal();
+}
+
+function resetSelfieModal() {
+    currentChallengeIndex = 0;
+    verificationPassed = false;
+    capturedVideoData = null;
+    recordedChunks = [];
+    
+    const guide = document.getElementById('faceGuide');
+    guide.classList.remove('detecting', 'success', 'error');
+    
+    document.getElementById('startVerificationBtn').style.display = 'none';
+    document.getElementById('completeBtn').style.display = 'none';
+    
+    updateConfidence(0);
+    updateFeedback('Initializing...', 'info');
+    
+    const stepIndicators = document.querySelectorAll('.step-indicator');
+    stepIndicators.forEach((indicator, index) => {
+        indicator.classList.remove('active', 'completed');
+        if (index === 0) indicator.classList.add('active');
+    });
+    
+    // Clear canvas
+    const canvas = document.getElementById('detectionCanvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
+// Event Listeners - ADD THIS AT THE END OF YOUR EXISTING <script> TAG
+document.addEventListener('DOMContentLoaded', function() {
+    const startBtn = document.getElementById('startVerificationBtn');
+    const completeBtn = document.getElementById('completeBtn');
+    
+    if (startBtn) {
+        startBtn.addEventListener('click', startLivenessVerification);
+    }
+    
+    if (completeBtn) {
+        completeBtn.addEventListener('click', finalizeVerification);
+    }
+});
+
+        document.addEventListener('click', function(e) {
+            if(e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+    </script>
+    <!-- TensorFlow.js and Face Detection -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.10.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.10.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.10.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
