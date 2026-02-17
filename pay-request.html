@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Payment Request - Meritwise</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --blue-deep:   #1e40af;
+            --blue-mid:    #2563eb;
+            --blue-bright: #3b82f6;
+            --blue-light:  #dbeafe;
+            --blue-ghost:  #eff6ff;
+            --green:       #059669;
+            --green-light: #dcfce7;
+            --green-dark:  #065f46;
+            --red:         #dc2626;
+            --red-light:   #fee2e2;
+            --amber:       #d97706;
+            --gray-900:    #0f172a;
+            --gray-800:    #1e293b;
+            --gray-600:    #475569;
+            --gray-400:    #94a3b8;
+            --gray-200:    #e2e8f0;
+            --gray-100:    #f1f5f9;
+            --white:       #ffffff;
+            --spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+            --easing:      cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           AMBIENT
+        ============================================ */
+        .ambient {
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.1;
+            animation: drift 8s ease-in-out infinite alternate;
+        }
+        .orb-1 { width: 300px; height: 300px; background: var(--blue-bright); top: -60px; right: -60px; }
+        .orb-2 { width: 200px; height: 200px; background: #818cf8; bottom: 30%; left: -50px; animation-delay:-4s; }
+        @keyframes drift {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(15px, 25px) scale(1.08); }
+        }
+
+        .container {
+            max-width: 480px; margin: 0 auto;
+            min-height: 100vh; position: relative; z-index: 1;
+        }
+
+        /* ============================================
+           HEADER
+        ============================================ */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            padding: 16px 20px;
+            background: rgba(241, 245, 249, 0.92);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            display: flex; align-items: center; gap: 16px;
+            border-bottom: 1px solid rgba(148,163,184,0.15);
+        }
+        .back-btn {
+            width: 40px; height: 40px;
+            background: var(--white); border: 1.5px solid var(--gray-200);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s var(--easing);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .back-btn:active { transform: scale(0.93); }
+        .back-btn svg { width: 18px; height: 18px; stroke: var(--gray-600); }
+        .header-title { flex: 1; font-size: 17px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.3px; }
+        
+        .time-pill {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 12px;
+            background: var(--amber-light, #fef3c7);
+            border: 1px solid rgba(217,119,6,0.25);
+            border-radius: 20px;
+        }
+        .time-dot {
+            width: 7px; height: 7px;
+            background: var(--amber);
+            border-radius: 50%;
+            animation: blink 1.2s infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
+        .time-text { font-size: 11px; font-weight: 700; color: var(--amber); }
+
+        /* ============================================
+           MAIN CONTENT
+        ============================================ */
+        .main { padding: 24px 20px; }
+
+        /* ============================================
+           REQUESTER CARD — cinematic entrance
+        ============================================ */
+        .requester-card {
+            background: var(--white);
+            border-radius: 28px;
+            padding: 28px 24px;
+            margin-bottom: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.07);
+            animation: cardDrop 0.7s var(--spring) both;
+        }
+        @keyframes cardDrop {
+            from { opacity: 0; transform: translateY(-20px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .requester-top {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 22px;
+        }
+        .requester-avatar {
+            width: 60px; height: 60px;
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 800; color: white;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            position: relative;
+            flex-shrink: 0;
+        }
+        .verified-badge {
+            position: absolute;
+            bottom: -4px; right: -4px;
+            width: 20px; height: 20px;
+            background: var(--green);
+            border-radius: 50%;
+            border: 2.5px solid white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px;
+        }
+        .requester-info { flex: 1; }
+        .requester-name {
+            font-size: 17px; font-weight: 800;
+            color: var(--gray-900); letter-spacing: -0.3px;
+            margin-bottom: 4px;
+        }
+        .requester-id {
+            font-size: 12px; color: var(--gray-400);
+            font-family: 'JetBrains Mono', monospace;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .verified-text {
+            color: var(--green); font-size: 10px;
+            font-weight: 700; font-family: 'Sora', sans-serif;
+            background: var(--green-light);
+            padding: 2px 6px; border-radius: 4px;
+        }
+
+        /* ============================================
+           AMOUNT HERO
+        ============================================ */
+        .amount-hero {
+            background: linear-gradient(135deg, var(--blue-deep) 0%, #1d4ed8 60%, var(--blue-bright) 100%);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+        .amount-hero::before {
+            content: '';
+            position: absolute; top: -40%; right: -20%;
+            width: 220px; height: 220px;
+            background: rgba(255,255,255,0.06); border-radius: 50%;
+        }
+        .amount-hero::after {
+            content: '';
+            position: absolute; bottom: -30%; left: -10%;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.04); border-radius: 50%;
+        }
+        .amount-hero-inner { position: relative; z-index: 2; }
+        .amount-hero-label {
+            font-size: 11px; font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px; text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .amount-hero-value {
+            font-size: 46px; font-weight: 800;
+            color: white; letter-spacing: -2px;
+            line-height: 1; margin-bottom: 8px;
+            animation: countUp 0.8s var(--spring) 0.3s both;
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.85); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .amount-hero-note {
+            font-size: 13px; color: rgba(255,255,255,0.7);
+            font-weight: 500; font-style: italic;
+        }
+
+        /* ============================================
+           META ROWS
+        ============================================ */
+        .meta-list { display: flex; flex-direction: column; gap: 0; }
+        .meta-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .meta-row:last-child { border-bottom: none; }
+        .meta-label { font-size: 13px; color: var(--gray-400); font-weight: 500; }
+        .meta-value { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+        .meta-value.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .meta-value.warning { color: var(--amber); }
+
+        /* ============================================
+           BALANCE PEEK — user sees if they can afford it
+        ============================================ */
+        .balance-peek {
+            background: linear-gradient(135deg, var(--green-light), rgba(220,252,231,0.5));
+            border: 1px solid rgba(5,150,105,0.2);
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            animation: cardDrop 0.6s var(--spring) 0.15s both;
+        }
+        .balance-peek-left { display: flex; align-items: center; gap: 10px; }
+        .balance-peek-icon {
+            width: 36px; height: 36px;
+            background: var(--green-light);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            border: 1px solid rgba(5,150,105,0.15);
+        }
+        .balance-peek-label { font-size: 11px; color: var(--green); font-weight: 600; margin-bottom: 2px; }
+        .balance-peek-amount { font-size: 16px; font-weight: 800; color: var(--green-dark); }
+        .can-afford-badge {
+            font-size: 10px; font-weight: 800;
+            color: var(--green); background: rgba(5,150,105,0.12);
+            padding: 4px 10px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .cannot-afford-badge {
+            font-size: 10px; font-weight: 800;
+            color: var(--red); background: var(--red-light);
+            padding: 4px 10px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        /* ============================================
+           ACTION BUTTONS — the most important UI moment
+        ============================================ */
+        .action-zone {
+            padding: 0 0 40px;
+            animation: riseUp 0.6s var(--spring) 0.25s both;
+        }
+        @keyframes riseUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--green-dark), var(--green));
+            color: white; border: none;
+            border-radius: 20px;
+            font-family: 'Sora', sans-serif;
+            font-size: 18px; font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s var(--spring);
+            box-shadow: 0 12px 32px rgba(5,150,105,0.35);
+            letter-spacing: -0.2px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            margin-bottom: 12px;
+            position: relative; overflow: hidden;
+        }
+        .btn-pay::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+        }
+        .btn-pay:active { transform: scale(0.97); box-shadow: 0 6px 16px rgba(5,150,105,0.3); }
+        .btn-pay .btn-icon {
+            font-size: 22px;
+            animation: wiggle 2s ease-in-out 1.5s infinite;
+        }
+        @keyframes wiggle {
+            0%,90%,100% { transform: rotate(0deg); }
+            92%  { transform: rotate(-8deg); }
+            96%  { transform: rotate(8deg); }
+        }
+
+        .btn-decline {
+            width: 100%;
+            padding: 16px;
+            background: var(--white); color: var(--red);
+            border: 1.5px solid rgba(220,38,38,0.25);
+            border-radius: 20px;
+            font-family: 'Sora', sans-serif;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s var(--easing);
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .btn-decline:active { background: var(--red-light); transform: scale(0.98); }
+
+        .btn-remind {
+            width: 100%;
+            padding: 14px;
+            background: transparent; color: var(--gray-400);
+            border: none;
+            font-family: 'Sora', sans-serif;
+            font-size: 13px; font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+            text-decoration: underline; text-underline-offset: 3px;
+        }
+        .btn-remind:active { color: var(--gray-600); }
+
+        /* ============================================
+           CONFIRM MODAL — slide-up bottom sheet
+        ============================================ */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s var(--easing);
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+        .modal-sheet {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+            width: 100%; max-width: 480px;
+            background: var(--white);
+            border-radius: 28px 28px 0 0;
+            padding: 8px 24px 48px;
+            z-index: 600;
+            transition: transform 0.45s var(--spring);
+            box-shadow: 0 -20px 60px rgba(0,0,0,0.15);
+        }
+        .modal-sheet.open { transform: translateX(-50%) translateY(0); }
+
+        .sheet-handle {
+            width: 40px; height: 4px;
+            background: var(--gray-200); border-radius: 4px;
+            margin: 12px auto 24px; display: block;
+        }
+        .sheet-title {
+            font-size: 20px; font-weight: 800;
+            color: var(--gray-900); letter-spacing: -0.4px;
+            margin-bottom: 6px;
+        }
+        .sheet-sub {
+            font-size: 13px; color: var(--gray-400);
+            font-weight: 500; margin-bottom: 24px; line-height: 1.5;
+        }
+
+        .confirm-summary {
+            background: var(--gray-100); border-radius: 16px;
+            padding: 16px 18px; margin-bottom: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .confirm-summary-label { font-size: 13px; color: var(--gray-600); font-weight: 500; }
+        .confirm-summary-amount { font-size: 20px; font-weight: 800; color: var(--gray-900); }
+
+        .pin-label {
+            font-size: 12px; font-weight: 700; color: var(--gray-400);
+            letter-spacing: 0.8px; text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .pin-dots {
+            display: flex; gap: 14px; margin-bottom: 24px;
+        }
+        .pin-dot {
+            width: 52px; height: 56px;
+            border: 2px solid var(--gray-200);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 800; color: var(--gray-900);
+            transition: all 0.2s var(--spring);
+            background: var(--white);
+        }
+        .pin-dot.filled {
+            border-color: var(--blue-bright);
+            background: var(--blue-ghost);
+            transform: scale(1.05);
+        }
+        .pin-dot.filled::after { content: '•'; font-size: 28px; }
+        .pin-dot.active { border-color: var(--blue-bright); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+        .pin-dot.error { border-color: var(--red); background: var(--red-light); animation: shake 0.4s; }
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}
+        }
+
+        /* Mini numpad inside sheet */
+        .mini-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .mini-key {
+            height: 54px; border-radius: 12px; border: none;
+            background: var(--gray-100); color: var(--gray-900);
+            font-family: 'Sora', sans-serif;
+            font-size: 20px; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s var(--spring);
+        }
+        .mini-key:active { transform: scale(0.93); background: var(--blue-ghost); }
+        .mini-key.del { background: var(--white); color: var(--gray-600); border: 1.5px solid var(--gray-200); }
+        .mini-key.del:active { background: var(--red-light); color: var(--red); border-color: var(--red); }
+        .mini-key.empty { background: transparent; pointer-events: none; }
+
+        /* ============================================
+           DECLINE MODAL
+        ============================================ */
+        .decline-options {
+            display: flex; flex-direction: column; gap: 10px;
+            margin-bottom: 20px;
+        }
+        .decline-opt {
+            padding: 14px 18px;
+            background: var(--gray-100); border-radius: 14px;
+            cursor: pointer; font-size: 14px; font-weight: 600;
+            color: var(--gray-700, #374151);
+            border: 1.5px solid transparent;
+            transition: all 0.2s var(--easing);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .decline-opt:active { background: var(--red-light); border-color: var(--red); color: var(--red); }
+        .decline-opt.selected { background: var(--red-light); border-color: var(--red); color: var(--red); }
+        .decline-opt-icon { font-size: 18px; }
+
+        .btn-confirm-decline {
+            width: 100%;
+            padding: 16px;
+            background: var(--red); color: white;
+            border: none; border-radius: 16px;
+            font-family: 'Sora', sans-serif;
+            font-size: 15px; font-weight: 800;
+            cursor: pointer; transition: all 0.2s var(--spring);
+            box-shadow: 0 6px 20px rgba(220,38,38,0.3);
+        }
+        .btn-confirm-decline:active { transform: scale(0.97); }
+        .btn-confirm-decline:disabled { background: var(--gray-200); box-shadow: none; cursor: not-allowed; }
+
+        /* ============================================
+           SUCCESS STATE
+        ============================================ */
+        .success-state {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 32px 20px 48px; text-align: center;
+        }
+        .result-circle {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 50px; margin-bottom: 20px;
+            animation: popIn 0.6s var(--spring);
+        }
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            70%  { transform: scale(1.12); }
+            to   { transform: scale(1); opacity: 1; }
+        }
+        .result-circle.paid { background: var(--green-light); }
+        .result-circle.declined { background: var(--red-light); }
+
+        .result-title { font-size: 26px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.5px; margin-bottom: 8px; }
+        .result-sub { font-size: 14px; color: var(--gray-400); font-weight: 500; line-height: 1.6; max-width: 280px; margin-bottom: 32px; }
+
+        .receipt-card {
+            width: 100%;
+            background: var(--white); border-radius: 20px;
+            padding: 20px; margin-bottom: 24px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            text-align: left;
+        }
+
+        .btn-done {
+            width: 100%; padding: 18px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: white; border: none; border-radius: 20px;
+            font-family: 'Sora', sans-serif;
+            font-size: 16px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 8px 24px rgba(37,99,235,0.3);
+            transition: all 0.2s var(--spring);
+        }
+        .btn-done:active { transform: scale(0.97); }
+
+        /* ============================================
+           COLOR CLASSES
+        ============================================ */
+        .c-0 { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .c-1 { background: linear-gradient(135deg, #065f46, #10b981); }
+        .c-3 { background: linear-gradient(135deg, #9d174d, #f472b6); }
+
+        /* ============================================
+           TOAST
+        ============================================ */
+        .toast {
+            position: fixed; bottom: 90px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--gray-900); color: white;
+            padding: 12px 20px; border-radius: 40px;
+            font-size: 13px; font-weight: 600;
+            z-index: 9999; opacity: 0;
+            transition: all 0.35s var(--spring);
+            white-space: nowrap; pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ============================================
+           EMPTY (no request found)
+        ============================================ */
+        .no-request {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 80px 40px; text-align: center;
+        }
+        .no-request-icon { font-size: 56px; margin-bottom: 20px; }
+        .no-request-title { font-size: 20px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
+        .no-request-sub { font-size: 14px; color: var(--gray-400); font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="ambient">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- PAY CONFIRMATION SHEET -->
+<div class="modal-overlay" id="payOverlay" onclick="closePayModal()"></div>
+<div class="modal-sheet" id="paySheet">
+    <span class="sheet-handle"></span>
+    <div class="sheet-title">Confirm Payment</div>
+    <div class="sheet-sub" id="paySheetSub">Enter your PIN to send ₦0.00</div>
+
+    <div class="confirm-summary">
+        <div class="confirm-summary-label">Amount being sent</div>
+        <div class="confirm-summary-amount" id="paySheetAmount">₦0.00</div>
+    </div>
+
+    <div class="pin-label">Enter 4-digit PIN</div>
+    <div class="pin-dots">
+        <div class="pin-dot active" id="pd-0"></div>
+        <div class="pin-dot" id="pd-1"></div>
+        <div class="pin-dot" id="pd-2"></div>
+        <div class="pin-dot" id="pd-3"></div>
+    </div>
+
+    <div class="mini-pad">
+        <button class="mini-key" onclick="pinKey('1')">1</button>
+        <button class="mini-key" onclick="pinKey('2')">2</button>
+        <button class="mini-key" onclick="pinKey('3')">3</button>
+        <button class="mini-key" onclick="pinKey('4')">4</button>
+        <button class="mini-key" onclick="pinKey('5')">5</button>
+        <button class="mini-key" onclick="pinKey('6')">6</button>
+        <button class="mini-key" onclick="pinKey('7')">7</button>
+        <button class="mini-key" onclick="pinKey('8')">8</button>
+        <button class="mini-key" onclick="pinKey('9')">9</button>
+        <button class="mini-key empty"></button>
+        <button class="mini-key" onclick="pinKey('0')">0</button>
+        <button class="mini-key del" onclick="pinKey('del')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"/>
+                <line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- DECLINE REASON SHEET -->
+<div class="modal-overlay" id="declineOverlay" onclick="closeDeclineModal()"></div>
+<div class="modal-sheet" id="declineSheet">
+    <span class="sheet-handle"></span>
+    <div class="sheet-title">Decline Request</div>
+    <div class="sheet-sub">Let them know why (optional)</div>
+
+    <div class="decline-options" id="declineOptions">
+        <div class="decline-opt" data-reason="Can't afford it right now" onclick="selectReason(this)">
+            <span class="decline-opt-icon">💸</span> Can't afford it right now
+        </div>
+        <div class="decline-opt" data-reason="I don't owe this amount" onclick="selectReason(this)">
+            <span class="decline-opt-icon">🤔</span> I don't owe this amount
+        </div>
+        <div class="decline-opt" data-reason="Wrong amount requested" onclick="selectReason(this)">
+            <span class="decline-opt-icon">✏️</span> Wrong amount requested
+        </div>
+        <div class="decline-opt" data-reason="I'll pay them separately" onclick="selectReason(this)">
+            <span class="decline-opt-icon">📤</span> I'll pay them separately
+        </div>
+        <div class="decline-opt" data-reason="Prefer not to say" onclick="selectReason(this)">
+            <span class="decline-opt-icon">🔒</span> Prefer not to say
+        </div>
+    </div>
+
+    <button class="btn-confirm-decline" id="confirmDeclineBtn" onclick="confirmDecline()" disabled>
+        Decline Request
+    </button>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+    <div class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+        </button>
+        <span class="header-title">Payment Request</span>
+        <div class="time-pill" id="timePill">
+            <div class="time-dot"></div>
+            <span class="time-text" id="timeDisplay">23h left</span>
+        </div>
+    </div>
+
+    <div id="mainContent">
+        <!-- Default view: request pending -->
+        <div class="main" id="requestView">
+
+            <div class="requester-card">
+                <div class="requester-top">
+                    <div class="requester-avatar c-0" id="reqAvatar">GO</div>
+                    <div class="requester-info">
+                        <div class="requester-name" id="reqName">Godwin Okafor</div>
+                        <div class="requester-id">
+                            <span id="reqId">MW-001</span>
+                            <span class="verified-text">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="amount-hero">
+                    <div class="amount-hero-inner">
+                        <div class="amount-hero-label">Is requesting</div>
+                        <div class="amount-hero-value" id="reqAmount">₦12,500.00</div>
+                        <div class="amount-hero-note" id="reqNote">For dinner at Sky Lounge 🍽️</div>
+                    </div>
+                </div>
+
+                <div class="meta-list">
+                    <div class="meta-row">
+                        <span class="meta-label">Request ID</span>
+                        <span class="meta-value mono" id="reqRef">MW-REQ-ABCD1234</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Sent</span>
+                        <span class="meta-value" id="reqSent">Just now</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Expires</span>
+                        <span class="meta-value warning" id="reqExpiry">Tomorrow, 11:59 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="balance-peek" id="balancePeek">
+                <div class="balance-peek-left">
+                    <div class="balance-peek-icon">💰</div>
+                    <div>
+                        <div class="balance-peek-label">Your Balance</div>
+                        <div class="balance-peek-amount" id="userBalance">₦45,200.00</div>
+                    </div>
+                </div>
+                <div class="can-afford-badge" id="affordBadge">Can Afford ✓</div>
+            </div>
+
+            <div class="action-zone">
+                <button class="btn-pay" onclick="openPayModal()">
+                    <span class="btn-icon">💸</span>
+                    Pay ₦12,500.00
+                </button>
+                <button class="btn-decline" onclick="openDeclineModal()">
+                    Decline Request
+                </button>
+                <button class="btn-remind" onclick="remindLater()">
+                    Remind me later
+                </button>
+            </div>
+
+        </div>
+
+        <!-- SUCCESS: PAID -->
+        <div id="paidView" style="display:none;">
+            <div class="success-state">
+                <div class="result-circle paid">✅</div>
+                <div class="result-title">Payment Sent!</div>
+                <div class="result-sub" id="paidSub">
+                    ₦12,500.00 has been sent to Godwin Okafor successfully.
+                </div>
+                <div class="receipt-card">
+                    <div class="meta-list">
+                        <div class="meta-row">
+                            <span class="meta-label">Amount</span>
+                            <span class="meta-value" id="receiptAmount" style="color:var(--red)">-₦12,500.00</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">To</span>
+                            <span class="meta-value" id="receiptTo">Godwin Okafor</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Reference</span>
+                            <span class="meta-value mono" id="receiptRef">—</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Status</span>
+                            <span class="meta-value" style="color:var(--green)">✓ Successful</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-done" onclick="window.location.href='dashboard.html'">Back to Home</button>
+            </div>
+        </div>
+
+        <!-- DECLINED VIEW -->
+        <div id="declinedView" style="display:none;">
+            <div class="success-state">
+                <div class="result-circle declined">✗</div>
+                <div class="result-title">Request Declined</div>
+                <div class="result-sub" id="declinedSub">
+                    You've declined Godwin's request. They'll be notified.
+                </div>
+                <button class="btn-done" onclick="window.location.href='dashboard.html'">Back to Home</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================
+// MOCK REQUEST DATA (replace with real API)
+// In production: parse URL params like ?ref=MW-REQ-XXXX
+// then fetch /api/payment-requests/:ref
+// ============================================
+const requestData = {
+    id: 'MW-REQ-ABCD1234',
+    requester: {
+        name: 'Godwin Okafor',
+        userId: 'MW-001',
+        phone: '08012345678',
+        colorClass: 'c-0',
+        verified: true
+    },
+    amount: 12500,
+    note: 'For dinner at Sky Lounge 🍽️',
+    sentAt: new Date(Date.now() - 1000 * 60 * 5), // 5 min ago
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 23), // 23h from now
+};
+
+const userBalance = 45200;
+const DEMO_PIN = '1234'; // mock PIN
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    populateRequest();
+    startCountdown();
+    checkAffordability();
+});
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+}
+
+function populateRequest() {
+    const r = requestData;
+    
+    // Avatar
+    const av = document.getElementById('reqAvatar');
+    av.textContent = getInitials(r.requester.name);
+    av.className = `requester-avatar ${r.requester.colorClass}`;
+
+    document.getElementById('reqName').textContent = r.requester.name;
+    document.getElementById('reqId').textContent = r.requester.userId;
+    document.getElementById('reqAmount').textContent =
+        `₦${r.amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+    document.getElementById('reqNote').textContent = r.note || 'No note added';
+    document.getElementById('reqRef').textContent = r.id;
+
+    // Sent at
+    const diffMs = Date.now() - r.sentAt.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    document.getElementById('reqSent').textContent =
+        diffMins < 1 ? 'Just now' : `${diffMins} min ago`;
+
+    // Expiry
+    document.getElementById('reqExpiry').textContent =
+        r.expiresAt.toLocaleString('en-NG', { weekday: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
+
+    // Pay button
+    document.querySelector('.btn-pay').innerHTML =
+        `<span class="btn-icon">💸</span> Pay ₦${r.amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+
+    // Pay sheet
+    document.getElementById('paySheetSub').textContent =
+        `Enter your PIN to send ₦${r.amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })} to ${r.requester.name.split(' ')[0]}`;
+    document.getElementById('paySheetAmount').textContent =
+        `₦${r.amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+
+    // Balance
+    document.getElementById('userBalance').textContent =
+        `₦${userBalance.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+}
+
+function checkAffordability() {
+    const badge = document.getElementById('affordBadge');
+    const peek = document.getElementById('balancePeek');
+    if (userBalance >= requestData.amount) {
+        badge.className = 'can-afford-badge';
+        badge.textContent = 'Can Afford ✓';
+        peek.style.background = 'linear-gradient(135deg, var(--green-light), rgba(220,252,231,0.5))';
+        peek.style.borderColor = 'rgba(5,150,105,0.2)';
+    } else {
+        badge.className = 'cannot-afford-badge';
+        badge.textContent = 'Insufficient ✗';
+        peek.style.background = 'linear-gradient(135deg, var(--red-light), rgba(254,226,226,0.5))';
+        peek.style.borderColor = 'rgba(220,38,38,0.2)';
+    }
+}
+
+// ============================================
+// COUNTDOWN
+// ============================================
+function startCountdown() {
+    function update() {
+        const ms = requestData.expiresAt - Date.now();
+        if (ms <= 0) {
+            document.getElementById('timeDisplay').textContent = 'Expired';
+            document.querySelector('.time-dot').style.background = 'var(--red)';
+            return;
+        }
+        const h = Math.floor(ms / 3600000);
+        const m = Math.floor((ms % 3600000) / 60000);
+        document.getElementById('timeDisplay').textContent =
+            h > 0 ? `${h}h ${m}m left` : `${m}m left`;
+    }
+    update();
+    setInterval(update, 30000);
+}
+
+// ============================================
+// PAY FLOW
+// ============================================
+let pinEntry = '';
+
+function openPayModal() {
+    pinEntry = '';
+    resetPinDots();
+    document.getElementById('payOverlay').classList.add('open');
+    document.getElementById('paySheet').classList.add('open');
+}
+
+function closePayModal() {
+    document.getElementById('payOverlay').classList.remove('open');
+    document.getElementById('paySheet').classList.remove('open');
+    pinEntry = '';
+    resetPinDots();
+}
+
+function resetPinDots() {
+    for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById(`pd-${i}`);
+        dot.className = `pin-dot${i === 0 ? ' active' : ''}`;
+    }
+}
+
+function pinKey(key) {
+    if (key === 'del') {
+        if (pinEntry.length > 0) {
+            pinEntry = pinEntry.slice(0, -1);
+            const dot = document.getElementById(`pd-${pinEntry.length}`);
+            dot.className = `pin-dot${pinEntry.length === pinEntry.length ? ' active' : ''}`;
+            dot.classList.remove('filled');
+            // Re-activate correct dot
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`pd-${i}`).classList.remove('active');
+            }
+            if (pinEntry.length < 4) {
+                document.getElementById(`pd-${pinEntry.length}`)?.classList.add('active');
+            }
+        }
+        return;
+    }
+
+    if (pinEntry.length >= 4) return;
+
+    pinEntry += key;
+    const dot = document.getElementById(`pd-${pinEntry.length - 1}`);
+    dot.classList.remove('active');
+    dot.classList.add('filled');
+
+    if (pinEntry.length < 4) {
+        document.getElementById(`pd-${pinEntry.length}`).classList.add('active');
+    }
+
+    if (pinEntry.length === 4) {
+        setTimeout(() => processPin(), 200);
+    }
+}
+
+async function processPin() {
+    if (pinEntry !== DEMO_PIN) {
+        // Shake and reset
+        for (let i = 0; i < 4; i++) {
+            document.getElementById(`pd-${i}`).className = 'pin-dot error';
+        }
+        showToast('Wrong PIN. Try again.');
+        await sleep(600);
+        pinEntry = '';
+        resetPinDots();
+        return;
+    }
+
+    // Correct PIN — simulate payment
+    closePayModal();
+    await sleep(200);
+    showToast('⏳ Processing payment...');
+    await sleep(1800);
+    showPaidState();
+}
+
+function showPaidState() {
+    document.getElementById('requestView').style.display = 'none';
+    document.getElementById('declinedView').style.display = 'none';
+    const paidView = document.getElementById('paidView');
+    paidView.style.display = 'block';
+
+    const r = requestData;
+    document.getElementById('paidSub').textContent =
+        `₦${r.amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })} has been sent to ${r.requester.name} successfully.`;
+    document.getElementById('receiptAmount').textContent =
+        `-₦${r.amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+    document.getElementById('receiptTo').textContent = r.requester.name;
+    document.getElementById('receiptRef').textContent = 'TXN-' + Math.random().toString(36).substring(2,10).toUpperCase();
+    
+    // Update header
+    document.querySelector('.time-pill').style.display = 'none';
+    document.querySelector('.header-title').textContent = 'Payment Sent';
+}
+
+// ============================================
+// DECLINE FLOW
+// ============================================
+let declineReason = null;
+
+function openDeclineModal() {
+    declineReason = null;
+    document.querySelectorAll('.decline-opt').forEach(o => o.classList.remove('selected'));
+    document.getElementById('confirmDeclineBtn').disabled = true;
+    document.getElementById('declineOverlay').classList.add('open');
+    document.getElementById('declineSheet').classList.add('open');
+}
+
+function closeDeclineModal() {
+    document.getElementById('declineOverlay').classList.remove('open');
+    document.getElementById('declineSheet').classList.remove('open');
+}
+
+function selectReason(el) {
+    document.querySelectorAll('.decline-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    declineReason = el.dataset.reason;
+    document.getElementById('confirmDeclineBtn').disabled = false;
+}
+
+async function confirmDecline() {
+    closeDeclineModal();
+    await sleep(300);
+    showToast('⏳ Declining request...');
+    await sleep(1400);
+    showDeclinedState();
+}
+
+function showDeclinedState() {
+    document.getElementById('requestView').style.display = 'none';
+    document.getElementById('paidView').style.display = 'none';
+    const dv = document.getElementById('declinedView');
+    dv.style.display = 'block';
+
+    document.getElementById('declinedSub').textContent =
+        `You've declined ${requestData.requester.name.split(' ')[0]}'s request. They'll be notified. ${declineReason ? `Reason: "${declineReason}"` : ''}`;
+
+    document.querySelector('.time-pill').style.display = 'none';
+    document.querySelector('.header-title').textContent = 'Request Declined';
+}
+
+// ============================================
+// REMIND LATER
+// ============================================
+function remindLater() {
+    showToast('🔔 We\'ll remind you in 1 hour');
+}
+
+// ============================================
+// UTILS
+// ============================================
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+
+</body>
+</html>
