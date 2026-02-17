@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Request Money - Meritwise</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --blue-deep:    #1e40af;
+            --blue-mid:     #2563eb;
+            --blue-bright:  #3b82f6;
+            --blue-light:   #dbeafe;
+            --blue-ghost:   #eff6ff;
+            --green:        #059669;
+            --green-light:  #dcfce7;
+            --red:          #dc2626;
+            --red-light:    #fee2e2;
+            --amber:        #d97706;
+            --amber-light:  #fef3c7;
+            --gray-900:     #0f172a;
+            --gray-800:     #1e293b;
+            --gray-600:     #475569;
+            --gray-400:     #94a3b8;
+            --gray-200:     #e2e8f0;
+            --gray-100:     #f1f5f9;
+            --white:        #ffffff;
+            --surface:      rgba(255,255,255,0.85);
+            --glass:        rgba(255,255,255,0.6);
+            --radius-xl:    24px;
+            --radius-lg:    16px;
+            --radius-md:    12px;
+            --easing:       cubic-bezier(0.4, 0, 0.2, 1);
+            --spring:       cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           AMBIENT BACKGROUND — subtle orbs
+        ============================================ */
+        .ambient {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.12;
+            animation: drift 8s ease-in-out infinite alternate;
+        }
+        .orb-1 { width: 320px; height: 320px; background: var(--blue-bright); top: -80px; right: -80px; animation-delay: 0s; }
+        .orb-2 { width: 200px; height: 200px; background: var(--blue-deep); bottom: 40%; left: -60px; animation-delay: -3s; }
+        .orb-3 { width: 160px; height: 160px; background: #818cf8; bottom: 20%; right: -40px; animation-delay: -5s; }
+
+        @keyframes drift {
+            from { transform: translate(0, 0) scale(1); }
+            to   { transform: translate(20px, 30px) scale(1.1); }
+        }
+
+        /* ============================================
+           CONTAINER
+        ============================================ */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           HEADER
+        ============================================ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 20px 14px;
+            background: rgba(241, 245, 249, 0.9);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .back-btn {
+            width: 40px; height: 40px;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s var(--easing);
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .back-btn:active { transform: scale(0.93); background: var(--gray-100); }
+        .back-btn svg { width: 18px; height: 18px; stroke: var(--gray-600); }
+
+        .header-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.3px;
+        }
+
+        .header-badge {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-bright));
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* ============================================
+           STEP INDICATOR
+        ============================================ */
+        .step-track {
+            padding: 20px 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        .step-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            position: relative;
+        }
+        .step-circle {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.4s var(--spring);
+            position: relative;
+            z-index: 2;
+        }
+        .step-circle.done {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-bright));
+            color: white;
+            box-shadow: 0 4px 16px rgba(59,130,246,0.4);
+        }
+        .step-circle.active {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-bright));
+            color: white;
+            box-shadow: 0 4px 20px rgba(59,130,246,0.5);
+            animation: stepPulse 2s infinite;
+        }
+        .step-circle.pending {
+            background: var(--white);
+            color: var(--gray-400);
+            border: 2px solid var(--gray-200);
+        }
+        @keyframes stepPulse {
+            0%,100% { box-shadow: 0 4px 20px rgba(59,130,246,0.5); }
+            50%      { box-shadow: 0 4px 28px rgba(59,130,246,0.7); }
+        }
+        .step-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--gray-400);
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+        .step-node.active .step-label { color: var(--blue-mid); }
+        .step-node.done .step-label   { color: var(--green); }
+
+        .step-connector {
+            flex: 1;
+            height: 2px;
+            background: var(--gray-200);
+            margin-bottom: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .step-connector-fill {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            background: linear-gradient(90deg, var(--blue-deep), var(--blue-bright));
+            width: 0%;
+            transition: width 0.6s var(--easing);
+        }
+        .step-connector-fill.done { width: 100%; }
+
+        /* ============================================
+           SCREENS — slide system
+        ============================================ */
+        .screens-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            padding: 24px 20px;
+            display: none;
+            animation: slideIn 0.45s var(--spring) forwards;
+        }
+        .screen.active { display: block; }
+        .screen.exit { animation: slideOut 0.35s var(--easing) forwards; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateX(0); }
+            to   { opacity: 0; transform: translateX(-40px); }
+        }
+
+        /* ============================================
+           SECTION LABELS
+        ============================================ */
+        .screen-eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--blue-mid);
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .screen-headline {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+        .screen-sub {
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 500;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           SEARCH / INPUT
+        ============================================ */
+        .search-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px; height: 18px;
+            stroke: var(--gray-400);
+            pointer-events: none;
+            transition: stroke 0.2s;
+        }
+        .search-input {
+            width: 100%;
+            padding: 14px 14px 14px 44px;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
+            outline: none;
+            transition: all 0.25s var(--easing);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .search-input::placeholder { color: var(--gray-400); }
+        .search-input:focus {
+            border-color: var(--blue-bright);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.12), 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .search-input:focus ~ .search-icon { stroke: var(--blue-bright); }
+
+        /* ============================================
+           RECENT CONTACTS
+        ============================================ */
+        .contacts-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-400);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .contacts-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            margin-bottom: 28px;
+            scrollbar-width: none;
+        }
+        .contacts-scroll::-webkit-scrollbar { display: none; }
+
+        .contact-chip {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.2s var(--spring);
+        }
+        .contact-chip:active { transform: scale(0.92); }
+
+        .contact-avatar {
+            width: 52px; height: 52px;
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            position: relative;
+            transition: all 0.25s var(--spring);
+        }
+        .contact-chip:active .contact-avatar { transform: scale(0.95); }
+        .contact-avatar.selected {
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--blue-bright);
+        }
+        .contact-avatar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+        }
+        .contact-avatar .online-dot {
+            position: absolute;
+            bottom: 3px; right: 3px;
+            width: 10px; height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .contact-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-align: center;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* User list results */
+        .user-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s var(--easing);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .user-card:active { transform: scale(0.98); background: var(--blue-ghost); border-color: var(--blue-light); }
+        .user-card.selected { border-color: var(--blue-bright); background: var(--blue-ghost); box-shadow: 0 0 0 4px rgba(59,130,246,0.1); }
+
+        .user-card-avatar {
+            width: 46px; height: 46px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .user-card-info { flex: 1; }
+        .user-card-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; }
+        .user-card-id { font-size: 12px; color: var(--gray-400); font-weight: 500; font-family: 'JetBrains Mono', monospace; }
+
+        .user-card-check {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-200);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s var(--spring);
+        }
+        .user-card.selected .user-card-check {
+            background: var(--blue-bright);
+            border-color: var(--blue-bright);
+        }
+        .user-card-check svg { width: 12px; height: 12px; stroke: white; opacity: 0; transition: opacity 0.2s; }
+        .user-card.selected .user-card-check svg { opacity: 1; }
+
+        /* ============================================
+           AMOUNT SCREEN — the hero moment
+        ============================================ */
+        .amount-display {
+            background: linear-gradient(135deg, var(--blue-deep) 0%, #1d4ed8 50%, var(--blue-bright) 100%);
+            border-radius: 28px;
+            padding: 32px 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(30,64,175,0.35);
+        }
+
+        .amount-display::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -20%;
+            width: 260px; height: 260px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+        .amount-display::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 180px; height: 180px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .amount-display-inner { position: relative; z-index: 2; }
+
+        .amount-to-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.65);
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .recipient-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 14px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .recipient-preview-avatar {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 800; color: white;
+            flex-shrink: 0;
+        }
+        .recipient-preview-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+        .recipient-preview-id {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .amount-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .currency-sym {
+            font-size: 28px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.7);
+            line-height: 1;
+        }
+        .amount-value {
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -2px;
+            line-height: 1;
+            min-width: 2ch;
+            font-feature-settings: 'tnum';
+            font-variant-numeric: tabular-nums;
+            transition: transform 0.1s var(--spring);
+        }
+        .amount-value.pop { animation: amountPop 0.15s var(--spring); }
+        @keyframes amountPop {
+            0%,100% { transform: scale(1); }
+            50%      { transform: scale(1.04); }
+        }
+
+        .amount-hint {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           NUMPAD — Premium feel
+        ============================================ */
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .key {
+            height: 64px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: var(--white);
+            font-family: 'Sora', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gray-900);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s var(--spring);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .key:active {
+            transform: scale(0.93);
+            background: var(--blue-ghost);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .key:active::before { opacity: 1; }
+
+        .key.key-del {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        .key.key-del:active { background: var(--red-light); color: var(--red); }
+
+        .key.key-dec { font-size: 28px; color: var(--gray-400); }
+        .key.key-dec:active { color: var(--blue-bright); }
+
+        .key.key-empty {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* ============================================
+           NOTE INPUT
+        ============================================ */
+        .note-wrap { position: relative; margin-bottom: 24px; }
+        .note-emoji-btn {
+            position: absolute;
+            left: 14px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .note-input {
+            width: 100%;
+            padding: 14px 14px 14px 46px;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
+            outline: none;
+            transition: all 0.25s var(--easing);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .note-input::placeholder { color: var(--gray-400); }
+        .note-input:focus {
+            border-color: var(--blue-bright);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+        }
+        .note-count {
+            position: absolute;
+            right: 14px; bottom: -20px;
+            font-size: 11px; color: var(--gray-400);
+        }
+
+        /* ============================================
+           QUICK AMOUNT PILLS
+        ============================================ */
+        .quick-amounts {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .quick-pill {
+            padding: 8px 16px;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 40px;
+            font-family: 'Sora', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s var(--spring);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .quick-pill:active { transform: scale(0.95); }
+        .quick-pill.active {
+            background: var(--blue-ghost);
+            border-color: var(--blue-bright);
+            color: var(--blue-mid);
+        }
+
+        /* ============================================
+           EXPIRY SELECTOR
+        ============================================ */
+        .expiry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+        .expiry-option {
+            padding: 10px 8px;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s var(--spring);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .expiry-option:active { transform: scale(0.95); }
+        .expiry-option.active {
+            background: var(--blue-ghost);
+            border-color: var(--blue-bright);
+        }
+        .expiry-val {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+        }
+        .expiry-option.active .expiry-val { color: var(--blue-mid); }
+        .expiry-unit {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================
+           REVIEW CARD — Summary before send
+        ============================================ */
+        .review-card {
+            background: var(--white);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .review-header {
+            background: linear-gradient(135deg, var(--blue-deep), #1d4ed8);
+            padding: 28px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .review-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .review-header-inner { position: relative; z-index: 2; }
+
+        .review-amount-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .review-amount {
+            font-size: 42px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1.5px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .review-expires {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 500;
+        }
+
+        .review-body { padding: 24px; }
+
+        .review-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .review-row:last-child { border-bottom: none; }
+
+        .review-row-label {
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+        .review-row-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .review-recipient-avatar {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 800; color: white;
+        }
+
+        /* ============================================
+           PRIMARY BUTTON
+        ============================================ */
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: white;
+            border: none;
+            border-radius: var(--radius-xl);
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s var(--spring);
+            box-shadow: 0 8px 24px rgba(37,99,235,0.35);
+            letter-spacing: -0.2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .btn-primary:hover::before { opacity: 1; }
+        .btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .btn-primary:disabled {
+            background: var(--gray-200);
+            color: var(--gray-400);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-ghost {
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            color: var(--gray-600);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s var(--easing);
+        }
+        .btn-ghost:active { background: var(--gray-100); }
+
+        /* ============================================
+           SUCCESS SCREEN
+        ============================================ */
+        .success-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .success-lottie {
+            width: 120px; height: 120px;
+            background: var(--green-light);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 24px;
+            position: relative;
+            animation: successPop 0.6s var(--spring);
+        }
+        @keyframes successPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .success-lottie::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid rgba(5,150,105,0.2);
+            animation: successRing 1.5s ease-out 0.3s both;
+        }
+        .success-lottie::after {
+            content: '';
+            position: absolute;
+            inset: -16px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(5,150,105,0.1);
+            animation: successRing 1.5s ease-out 0.5s both;
+        }
+        @keyframes successRing {
+            from { transform: scale(0.8); opacity: 1; }
+            to   { transform: scale(1.3); opacity: 0; }
+        }
+        .success-icon { font-size: 52px; }
+
+        .success-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            animation: fadeUp 0.5s var(--spring) 0.2s both;
+        }
+        .success-sub {
+            font-size: 14px;
+            color: var(--gray-400);
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            animation: fadeUp 0.5s var(--spring) 0.3s both;
+            max-width: 280px;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .request-link-card {
+            width: 100%;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-bottom: 24px;
+            animation: fadeUp 0.5s var(--spring) 0.4s both;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .request-link-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-400);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .request-link-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--blue-mid);
+            background: var(--blue-ghost);
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--blue-light);
+            word-break: break-all;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--blue-ghost);
+            border: 1.5px solid var(--blue-light);
+            border-radius: var(--radius-md);
+            font-family: 'Sora', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--blue-mid);
+            cursor: pointer;
+            transition: all 0.2s var(--easing);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .copy-btn:active { transform: scale(0.97); background: var(--blue-light); }
+
+        /* ============================================
+           SHARE OPTIONS
+        ============================================ */
+        .share-strip {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            animation: fadeUp 0.5s var(--spring) 0.5s both;
+            margin-bottom: 16px;
+        }
+        .share-opt {
+            flex: 1;
+            padding: 14px 8px;
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-600);
+            transition: all 0.2s var(--spring);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .share-opt:active { transform: scale(0.95); }
+        .share-opt-icon { font-size: 22px; }
+
+        /* ============================================
+           TOAST
+        ============================================ */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--gray-900);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.35s var(--spring);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ============================================
+           COLOR PALETTE for avatars
+        ============================================ */
+        .c-0  { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .c-1  { background: linear-gradient(135deg, #065f46, #10b981); }
+        .c-2  { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+        .c-3  { background: linear-gradient(135deg, #9d174d, #f472b6); }
+        .c-4  { background: linear-gradient(135deg, #92400e, #f59e0b); }
+        .c-5  { background: linear-gradient(135deg, #164e63, #22d3ee); }
+        .c-6  { background: linear-gradient(135deg, #3730a3, #818cf8); }
+        .c-7  { background: linear-gradient(135deg, #115e59, #34d399); }
+
+        /* ============================================
+           EMPTY STATE
+        ============================================ */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-400);
+        }
+        .empty-icon { font-size: 40px; margin-bottom: 12px; }
+        .empty-text { font-size: 14px; font-weight: 600; }
+        .empty-sub { font-size: 12px; margin-top: 4px; }
+
+        /* ============================================
+           DIVIDER WITH TEXT
+        ============================================ */
+        .or-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-200);
+        }
+        .or-divider-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-400);
+        }
+
+        /* ============================================
+           TOGGLE NOTICE
+        ============================================ */
+        .info-notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--blue-ghost);
+            border: 1px solid var(--blue-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+        .info-notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+        .info-notice-text {
+            font-size: 12px;
+            color: var(--blue-deep);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        .info-notice-text strong { font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <!-- ambient bg -->
+    <div class="ambient">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">
+                <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 5l-7 7 7 7"/>
+                </svg>
+            </button>
+            <span class="header-title" id="headerTitle">Request Money</span>
+            <div class="header-badge" id="headerBadge">Step 1/3</div>
+        </div>
+
+        <!-- STEP INDICATOR -->
+        <div class="step-track">
+            <div class="step-node active" id="step-node-1">
+                <div class="step-circle active" id="step-circle-1">1</div>
+                <div class="step-label">Recipient</div>
+            </div>
+            <div class="step-connector" id="conn-1"><div class="step-connector-fill" id="conn-fill-1"></div></div>
+            <div class="step-node pending" id="step-node-2">
+                <div class="step-circle pending" id="step-circle-2">2</div>
+                <div class="step-label">Amount</div>
+            </div>
+            <div class="step-connector" id="conn-2"><div class="step-connector-fill" id="conn-fill-2"></div></div>
+            <div class="step-node pending" id="step-node-3">
+                <div class="step-circle pending" id="step-circle-3">3</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <div class="screens-wrapper">
+
+            <!-- ================================
+                 SCREEN 1: PICK RECIPIENT
+            ================================ -->
+            <div class="screen active" id="screen-1">
+                <div class="screen-eyebrow">Step 1 of 3</div>
+                <div class="screen-headline">Who's paying?</div>
+                <div class="screen-sub">Search by name, phone, or Meritwise ID</div>
+
+                <div class="search-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+                        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    <input class="search-input" id="searchInput" type="text" placeholder="Search contacts..." autocomplete="off" oninput="handleSearch(this.value)">
+                </div>
+
+                <div id="searchResults" style="display:none;">
+                    <div class="contacts-label">Search Results</div>
+                    <div class="user-list" id="resultsList"></div>
+                </div>
+
+                <div id="recentSection">
+                    <div class="contacts-label">Recent</div>
+                    <div class="contacts-scroll" id="recentContacts"></div>
+
+                    <div class="or-divider"><span class="or-divider-text">or enter manually</span></div>
+
+                    <div class="contacts-label">By Phone / ID</div>
+                    <div class="search-wrap" style="margin-bottom:0">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+                            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/>
+                        </svg>
+                        <input class="search-input" id="phoneInput" type="tel" placeholder="08012345678 or MW-XXXXXX" autocomplete="off" oninput="handlePhoneSearch(this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================================
+                 SCREEN 2: SET AMOUNT
+            ================================ -->
+            <div class="screen" id="screen-2">
+                <div class="screen-eyebrow">Step 2 of 3</div>
+                <div class="screen-headline">How much?</div>
+                <div class="screen-sub">Enter the amount you're requesting</div>
+
+                <div class="amount-display">
+                    <div class="amount-display-inner">
+                        <div class="amount-to-label">Requesting from</div>
+                        <div class="recipient-preview" id="recipientPreview">
+                            <div class="recipient-preview-avatar c-0" id="previewAvatar">--</div>
+                            <div>
+                                <div class="recipient-preview-name" id="previewName">Select recipient</div>
+                                <div class="recipient-preview-id" id="previewId">--</div>
+                            </div>
+                        </div>
+                        <div class="amount-row">
+                            <span class="currency-sym">₦</span>
+                            <span class="amount-value" id="amountDisplay">0</span>
+                        </div>
+                        <div class="amount-hint" id="amountHint">Tap numbers below to enter</div>
+                    </div>
+                </div>
+
+                <div class="quick-amounts">
+                    <button class="quick-pill" onclick="setQuickAmount(1000)">₦1K</button>
+                    <button class="quick-pill" onclick="setQuickAmount(2000)">₦2K</button>
+                    <button class="quick-pill" onclick="setQuickAmount(5000)">₦5K</button>
+                    <button class="quick-pill" onclick="setQuickAmount(10000)">₦10K</button>
+                    <button class="quick-pill" onclick="setQuickAmount(20000)">₦20K</button>
+                    <button class="quick-pill" onclick="setQuickAmount(50000)">₦50K</button>
+                </div>
+
+                <div class="numpad">
+                    <button class="key" onclick="numPad('1')">1</button>
+                    <button class="key" onclick="numPad('2')">2</button>
+                    <button class="key" onclick="numPad('3')">3</button>
+                    <button class="key" onclick="numPad('4')">4</button>
+                    <button class="key" onclick="numPad('5')">5</button>
+                    <button class="key" onclick="numPad('6')">6</button>
+                    <button class="key" onclick="numPad('7')">7</button>
+                    <button class="key" onclick="numPad('8')">8</button>
+                    <button class="key" onclick="numPad('9')">9</button>
+                    <button class="key key-dec" onclick="numPad('.')">.</button>
+                    <button class="key" onclick="numPad('0')">0</button>
+                    <button class="key key-del" onclick="numPad('del')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"/>
+                            <line x1="18" y1="9" x2="12" y2="15"/>
+                            <line x1="12" y1="9" x2="18" y2="15"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="note-wrap">
+                    <span class="note-emoji-btn">📝</span>
+                    <input class="note-input" id="noteInput" type="text" placeholder="Add a note (e.g. For dinner last Friday)" maxlength="80" oninput="updateNoteCount()">
+                    <span class="note-count" id="noteCount">0/80</span>
+                </div>
+
+                <div style="margin-bottom: 8px;">
+                    <div class="contacts-label" style="margin-bottom: 12px;">Expires after</div>
+                    <div class="expiry-grid">
+                        <div class="expiry-option active" data-val="1" onclick="selectExpiry(this, 1)">
+                            <div class="expiry-val">1</div>
+                            <div class="expiry-unit">Day</div>
+                        </div>
+                        <div class="expiry-option" data-val="3" onclick="selectExpiry(this, 3)">
+                            <div class="expiry-val">3</div>
+                            <div class="expiry-unit">Days</div>
+                        </div>
+                        <div class="expiry-option" data-val="7" onclick="selectExpiry(this, 7)">
+                            <div class="expiry-val">7</div>
+                            <div class="expiry-unit">Days</div>
+                        </div>
+                        <div class="expiry-option" data-val="30" onclick="selectExpiry(this, 30)">
+                            <div class="expiry-val">30</div>
+                            <div class="expiry-unit">Days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="continueBtn2" onclick="goToReview()" disabled>
+                    Continue to Review →
+                </button>
+                <button class="btn-ghost" onclick="goToScreen(1)">← Change Recipient</button>
+            </div>
+
+            <!-- ================================
+                 SCREEN 3: REVIEW + SEND
+            ================================ -->
+            <div class="screen" id="screen-3">
+                <div class="screen-eyebrow">Step 3 of 3</div>
+                <div class="screen-headline">Review Request</div>
+                <div class="screen-sub">Confirm the details before sending</div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-header-inner">
+                            <div class="review-amount-label">You are requesting</div>
+                            <div class="review-amount" id="reviewAmount">₦0.00</div>
+                            <div class="review-expires" id="reviewExpires">Expires in 1 day</div>
+                        </div>
+                    </div>
+                    <div class="review-body">
+                        <div class="review-row">
+                            <div class="review-row-label">From</div>
+                            <div class="review-row-value">
+                                <div class="review-recipient-avatar c-0" id="reviewAvatar">--</div>
+                                <span id="reviewName">—</span>
+                            </div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-row-label">Meritwise ID</div>
+                            <div class="review-row-value" id="reviewId" style="font-family:'JetBrains Mono',monospace; font-size:13px;">—</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-row-label">Note</div>
+                            <div class="review-row-value" id="reviewNote" style="max-width:180px; text-align:right; font-size:13px; font-weight:500; color:var(--gray-600);">—</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-row-label">Expires</div>
+                            <div class="review-row-value" id="reviewExpiryDate">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-notice">
+                    <span class="info-notice-icon">🔒</span>
+                    <div class="info-notice-text">
+                        <strong>No money is deducted</strong> until they approve. If they decline or it expires, the request is cancelled automatically.
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="sendBtn" onclick="sendRequest()">
+                    Send Request 💸
+                </button>
+                <button class="btn-ghost" onclick="goToScreen(2)">← Edit Amount</button>
+            </div>
+
+            <!-- ================================
+                 SCREEN 4: SUCCESS 🎉
+            ================================ -->
+            <div class="screen" id="screen-4">
+                <div class="success-screen">
+                    <div class="success-lottie">
+                        <span class="success-icon">✅</span>
+                    </div>
+                    <div class="success-title">Request Sent!</div>
+                    <div class="success-sub" id="successSub">
+                        Waiting for them to approve your request
+                    </div>
+
+                    <div class="request-link-card">
+                        <div class="request-link-label">📨 Request ID</div>
+                        <div class="request-link-value" id="requestIdDisplay">MW-REQ-########</div>
+                        <button class="copy-btn" onclick="copyRequestId()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                            Copy Request ID
+                        </button>
+                    </div>
+
+                    <div class="share-strip">
+                        <div class="share-opt" onclick="shareViaWhatsApp()">
+                            <span class="share-opt-icon">💬</span>
+                            <span>WhatsApp</span>
+                        </div>
+                        <div class="share-opt" onclick="shareViaSMS()">
+                            <span class="share-opt-icon">📱</span>
+                            <span>SMS</span>
+                        </div>
+                        <div class="share-opt" onclick="shareViaLink()">
+                            <span class="share-opt-icon">🔗</span>
+                            <span>Share</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="window.location.href='dashboard.html'" style="animation: fadeUp 0.5s var(--spring) 0.6s both; opacity:0;">
+                        Back to Home
+                    </button>
+                    <button class="btn-ghost" onclick="resetFlow()" style="animation: fadeUp 0.5s var(--spring) 0.7s both; opacity:0;">
+                        Send Another Request
+                    </button>
+                </div>
+            </div>
+
+        </div><!-- end screens-wrapper -->
+    </div>
+
+    <script>
+    // ============================================
+    // STATE
+    // ============================================
+    const state = {
+        step: 1,
+        selectedUser: null,
+        amountRaw: '',
+        note: '',
+        expiryDays: 1,
+        requestId: null
+    };
+
+    // ============================================
+    // MOCK DATA (replace with real API)
+    // ============================================
+    const recentContacts = [
+        { id: 'MW-001', name: 'Emeka Okafor',   phone: '08012345678', colorClass: 'c-0', online: true  },
+        { id: 'MW-002', name: 'Chioma Eze',     phone: '08087654321', colorClass: 'c-3', online: false },
+        { id: 'MW-003', name: 'Godwin Peters',  phone: '07061234567', colorClass: 'c-1', online: true  },
+        { id: 'MW-004', name: 'Adaeze Nwosu',   phone: '09023456789', colorClass: 'c-5', online: false },
+        { id: 'MW-005', name: 'Tobi Adeleke',   phone: '08134567890', colorClass: 'c-4', online: true  },
+    ];
+
+    const allUsers = [
+        ...recentContacts,
+        { id: 'MW-006', name: 'Bola Fashola',   phone: '08099887766', colorClass: 'c-6', online: false },
+        { id: 'MW-007', name: 'Ngozi Okonkwo',  phone: '07011223344', colorClass: 'c-7', online: true  },
+    ];
+
+    // ============================================
+    // INIT
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+        renderRecentContacts();
+        updateStepUI();
+    });
+
+    function getInitials(name) {
+        return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+
+    // ============================================
+    // RENDER RECENT CONTACTS (horizontal scroll)
+    // ============================================
+    function renderRecentContacts() {
+        const container = document.getElementById('recentContacts');
+        container.innerHTML = recentContacts.map(u => `
+            <div class="contact-chip" onclick="selectUser(${JSON.stringify(u).replace(/"/g, '&quot;')})">
+                <div class="contact-avatar ${u.colorClass}">
+                    ${getInitials(u.name)}
+                    ${u.online ? '<div class="online-dot"></div>' : ''}
+                </div>
+                <span class="contact-name">${u.name.split(' ')[0]}</span>
+            </div>
+        `).join('');
+    }
+
+    // ============================================
+    // SEARCH
+    // ============================================
+    let searchTimer;
+    function handleSearch(val) {
+        clearTimeout(searchTimer);
+        const searchSection = document.getElementById('searchResults');
+        const recentSection = document.getElementById('recentSection');
+
+        if (!val.trim()) {
+            searchSection.style.display = 'none';
+            recentSection.style.display = 'block';
+            return;
+        }
+
+        searchSection.style.display = 'block';
+        recentSection.style.display = 'none';
+
+        // simulate debounced API call
+        searchTimer = setTimeout(() => {
+            const results = allUsers.filter(u =>
+                u.name.toLowerCase().includes(val.toLowerCase()) ||
+                u.phone.includes(val) ||
+                u.id.toLowerCase().includes(val.toLowerCase())
+            );
+            renderResults(results, val);
+        }, 250);
+    }
+
+    function handlePhoneSearch(val) {
+        if (val.length >= 7) {
+            handleSearch(val);
+            document.getElementById('searchInput').value = val;
+        }
+    }
+
+    function renderResults(users, query) {
+        const list = document.getElementById('resultsList');
+        if (!users.length) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-text">No user found</div>
+                    <div class="empty-sub">Try searching by phone number</div>
+                </div>`;
+            return;
+        }
+
+        list.innerHTML = users.map(u => {
+            const isSelected = state.selectedUser?.id === u.id;
+            return `
+            <div class="user-card ${isSelected ? 'selected' : ''}" onclick="selectUser(${JSON.stringify(u).replace(/"/g, '&quot;')})">
+                <div class="user-card-avatar ${u.colorClass}">${getInitials(u.name)}</div>
+                <div class="user-card-info">
+                    <div class="user-card-name">${highlight(u.name, query)}</div>
+                    <div class="user-card-id">${u.id} · ${u.phone}</div>
+                </div>
+                <div class="user-card-check">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function highlight(text, query) {
+        if (!query) return text;
+        const reg = new RegExp(`(${query})`, 'gi');
+        return text.replace(reg, '<mark style="background:rgba(59,130,246,0.15);color:var(--blue-mid);border-radius:3px;padding:0 2px">$1</mark>');
+    }
+
+    // ============================================
+    // SELECT USER → go to screen 2
+    // ============================================
+    function selectUser(user) {
+        if (typeof user === 'string') user = JSON.parse(user);
+        state.selectedUser = user;
+
+        // Update preview on screen 2
+        const avatar = document.getElementById('previewAvatar');
+        avatar.textContent = getInitials(user.name);
+        avatar.className = `recipient-preview-avatar ${user.colorClass}`;
+        document.getElementById('previewName').textContent = user.name;
+        document.getElementById('previewId').textContent = user.id + ' · ' + user.phone;
+
+        showToast(`✓ ${user.name.split(' ')[0]} selected`);
+
+        setTimeout(() => goToScreen(2), 280);
+    }
+
+    // ============================================
+    // NUMPAD
+    // ============================================
+    const MAX_AMOUNT = 1000000;
+
+    function numPad(key) {
+        const display = document.getElementById('amountDisplay');
+
+        if (key === 'del') {
+            state.amountRaw = state.amountRaw.slice(0, -1);
+        } else if (key === '.') {
+            if (state.amountRaw.includes('.')) return;
+            if (!state.amountRaw) state.amountRaw = '0';
+            state.amountRaw += '.';
+        } else {
+            // Prevent too many decimals
+            if (state.amountRaw.includes('.')) {
+                const parts = state.amountRaw.split('.');
+                if (parts[1].length >= 2) return;
+            }
+            state.amountRaw += key;
+            // Prevent leading zeros
+            if (state.amountRaw.length > 1 && state.amountRaw[0] === '0' && state.amountRaw[1] !== '.') {
+                state.amountRaw = state.amountRaw.slice(1);
+            }
+        }
+
+        const num = parseFloat(state.amountRaw) || 0;
+        if (num > MAX_AMOUNT) {
+            state.amountRaw = state.amountRaw.slice(0, -1);
+            showToast('Maximum ₦1,000,000 per request');
+            return;
+        }
+
+        // Format display
+        let displayVal = state.amountRaw || '0';
+        if (!state.amountRaw.includes('.')) {
+            const n = parseInt(displayVal) || 0;
+            displayVal = n.toLocaleString('en-NG');
+        } else {
+            const parts = state.amountRaw.split('.');
+            displayVal = parseInt(parts[0] || 0).toLocaleString('en-NG') + '.' + parts[1];
+        }
+
+        display.textContent = displayVal;
+        display.classList.remove('pop');
+        void display.offsetWidth;
+        display.classList.add('pop');
+
+        updateContinueBtn();
+        updateAmountHint(num);
+    }
+
+    function updateAmountHint(num) {
+        const hint = document.getElementById('amountHint');
+        if (num > 0) {
+            hint.textContent = numToWords(num);
+        } else {
+            hint.textContent = 'Tap numbers below to enter';
+        }
+    }
+
+    function numToWords(n) {
+        if (n >= 1000000) return `₦${(n/1000000).toFixed(1)}M`;
+        if (n >= 1000)    return `₦${(n/1000).toFixed(n%1000===0?0:1)}K`;
+        return '';
+    }
+
+    function setQuickAmount(amount) {
+        state.amountRaw = amount.toString();
+        document.querySelectorAll('.quick-pill').forEach(p => p.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('amountDisplay').textContent = amount.toLocaleString('en-NG');
+        document.getElementById('amountDisplay').classList.remove('pop');
+        void document.getElementById('amountDisplay').offsetWidth;
+        document.getElementById('amountDisplay').classList.add('pop');
+        updateContinueBtn();
+        updateAmountHint(amount);
+    }
+
+    function updateContinueBtn() {
+        const num = parseFloat(state.amountRaw) || 0;
+        const btn = document.getElementById('continueBtn2');
+        btn.disabled = num <= 0;
+    }
+
+    // ============================================
+    // NOTE
+    // ============================================
+    function updateNoteCount() {
+        const input = document.getElementById('noteInput');
+        state.note = input.value;
+        document.getElementById('noteCount').textContent = `${input.value.length}/80`;
+    }
+
+    // ============================================
+    // EXPIRY
+    // ============================================
+    function selectExpiry(el, days) {
+        document.querySelectorAll('.expiry-option').forEach(o => o.classList.remove('active'));
+        el.classList.add('active');
+        state.expiryDays = days;
+    }
+
+    // ============================================
+    // SCREEN NAVIGATION
+    // ============================================
+    function goToScreen(n) {
+        const current = document.getElementById(`screen-${state.step}`);
+        current.classList.add('exit');
+        setTimeout(() => {
+            current.classList.remove('active', 'exit');
+            current.style.display = 'none';
+
+            state.step = n;
+            const next = document.getElementById(`screen-${n}`);
+            next.style.display = 'block';
+            setTimeout(() => next.classList.add('active'), 10);
+            
+            updateStepUI();
+        }, 350);
+    }
+
+    function goToReview() {
+        const amount = parseFloat(state.amountRaw) || 0;
+        if (amount <= 0) return;
+
+        // Populate review screen
+        document.getElementById('reviewAmount').textContent =
+            `₦${amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+        document.getElementById('reviewExpires').textContent =
+            `Expires in ${state.expiryDays} day${state.expiryDays > 1 ? 's' : ''}`;
+
+        const u = state.selectedUser;
+        const revAvatar = document.getElementById('reviewAvatar');
+        revAvatar.textContent = getInitials(u.name);
+        revAvatar.className = `review-recipient-avatar ${u.colorClass}`;
+        document.getElementById('reviewName').textContent = u.name;
+        document.getElementById('reviewId').textContent = u.id + ' · ' + u.phone;
+        document.getElementById('reviewNote').textContent = state.note || 'No note added';
+
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + state.expiryDays);
+        document.getElementById('reviewExpiryDate').textContent =
+            expiryDate.toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        goToScreen(3);
+    }
+
+    function goBack() {
+        if (state.step === 1) {
+            window.history.back();
+        } else {
+            goToScreen(state.step - 1);
+        }
+    }
+
+    function updateStepUI() {
+        const labels = ['Recipient', 'Amount', 'Review'];
+        const stepTitles = ['Who\'s paying?', 'Set Amount', 'Review Request'];
+        const badgeLabels = ['Step 1/3', 'Step 2/3', 'Step 3/3', ''];
+
+        document.getElementById('headerBadge').textContent = badgeLabels[state.step - 1] || '';
+        document.getElementById('headerTitle').textContent =
+            state.step === 4 ? 'Request Sent!' : 'Request Money';
+
+        for (let i = 1; i <= 3; i++) {
+            const circle = document.getElementById(`step-circle-${i}`);
+            const node   = document.getElementById(`step-node-${i}`);
+
+            if (i < state.step) {
+                circle.className = 'step-circle done';
+                circle.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+                node.className = 'step-node done';
+            } else if (i === state.step) {
+                circle.className = 'step-circle active';
+                circle.textContent = i;
+                node.className = 'step-node active';
+            } else {
+                circle.className = 'step-circle pending';
+                circle.textContent = i;
+                node.className = 'step-node pending';
+            }
+        }
+
+        // connectors
+        const fill1 = document.getElementById('conn-fill-1');
+        const fill2 = document.getElementById('conn-fill-2');
+        fill1.className = state.step > 1 ? 'step-connector-fill done' : 'step-connector-fill';
+        fill2.className = state.step > 2 ? 'step-connector-fill done' : 'step-connector-fill';
+
+        // Hide step track on success
+        document.querySelector('.step-track').style.display =
+            state.step === 4 ? 'none' : 'flex';
+    }
+
+    // ============================================
+    // SEND REQUEST
+    // ============================================
+    async function sendRequest() {
+        const btn = document.getElementById('sendBtn');
+        btn.textContent = '⏳ Sending...';
+        btn.disabled = true;
+
+        // Simulate API call — replace with real fetch
+        await new Promise(r => setTimeout(r, 1800));
+
+        // Generate mock request ID
+        state.requestId = 'MW-REQ-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+        // Populate success screen
+        const amount = parseFloat(state.amountRaw) || 0;
+        const u = state.selectedUser;
+        document.getElementById('successSub').textContent =
+            `Your request for ₦${amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })} has been sent to ${u.name}. We'll notify you when they respond.`;
+        document.getElementById('requestIdDisplay').textContent = state.requestId;
+
+        goToScreen(4);
+    }
+
+    // ============================================
+    // SUCCESS ACTIONS
+    // ============================================
+    function copyRequestId() {
+        navigator.clipboard?.writeText(state.requestId).catch(() => {});
+        showToast('✓ Request ID copied!');
+    }
+
+    function shareViaWhatsApp() {
+        const amount = parseFloat(state.amountRaw) || 0;
+        const u = state.selectedUser;
+        const msg = encodeURIComponent(
+            `Hi ${u.name.split(' ')[0]}, I sent you a payment request of ₦${amount.toLocaleString('en-NG')} via Meritwise.\nRequest ID: ${state.requestId}\n${state.note ? 'Note: ' + state.note : ''}`
+        );
+        window.open(`https://wa.me/${u.phone.replace(/^0/, '234')}?text=${msg}`, '_blank');
+    }
+
+    function shareViaSMS() {
+        const amount = parseFloat(state.amountRaw) || 0;
+        const u = state.selectedUser;
+        const msg = encodeURIComponent(
+            `Meritwise request: ${u.name.split(' ')[0]}, please pay ₦${amount.toLocaleString('en-NG')}. ID: ${state.requestId}`
+        );
+        window.location.href = `sms:${u.phone}?body=${msg}`;
+    }
+
+    function shareViaLink() {
+        const shareData = {
+            title: 'Meritwise Payment Request',
+            text: `Pay ₦${(parseFloat(state.amountRaw)||0).toLocaleString('en-NG')} via Meritwise`,
+            url: `https://meritwise.app/pay/${state.requestId}`
+        };
+        if (navigator.share) {
+            navigator.share(shareData).catch(() => {});
+        } else {
+            navigator.clipboard?.writeText(shareData.url);
+            showToast('✓ Link copied to clipboard');
+        }
+    }
+
+    function resetFlow() {
+        state.step = 1;
+        state.selectedUser = null;
+        state.amountRaw = '';
+        state.note = '';
+        state.expiryDays = 1;
+        state.requestId = null;
+
+        document.getElementById('searchInput').value = '';
+        document.getElementById('phoneInput').value = '';
+        document.getElementById('noteInput').value = '';
+        document.getElementById('amountDisplay').textContent = '0';
+        document.getElementById('noteCount').textContent = '0/80';
+        document.querySelectorAll('.quick-pill').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.expiry-option').forEach((o, i) => {
+            o.classList.toggle('active', i === 0);
+        });
+
+        document.querySelectorAll('.screen').forEach(s => {
+            s.classList.remove('active', 'exit');
+            s.style.display = 'none';
+        });
+
+        handleSearch('');
+        const screen1 = document.getElementById('screen-1');
+        screen1.style.display = 'block';
+        setTimeout(() => screen1.classList.add('active'), 10);
+
+        updateStepUI();
+        renderRecentContacts();
+    }
+
+    // ============================================
+    // TOAST
+    // ============================================
+    let toastTimer;
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+    }
+    </script>
+</body>
+</html>
