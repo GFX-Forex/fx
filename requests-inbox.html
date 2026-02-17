@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Payment Requests - Meritwise</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --blue-deep:   #1e40af;
+            --blue-mid:    #2563eb;
+            --blue-bright: #3b82f6;
+            --blue-light:  #dbeafe;
+            --blue-ghost:  #eff6ff;
+            --green:       #059669;
+            --green-light: #dcfce7;
+            --red:         #dc2626;
+            --red-light:   #fee2e2;
+            --amber:       #d97706;
+            --amber-light: #fef3c7;
+            --gray-900:    #0f172a;
+            --gray-600:    #475569;
+            --gray-400:    #94a3b8;
+            --gray-200:    #e2e8f0;
+            --gray-100:    #f1f5f9;
+            --white:       #ffffff;
+            --spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+            --easing:      cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        /* Ambient */
+        .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.08; animation: drift 10s ease-in-out infinite alternate; }
+        .orb-1 { width: 350px; height: 350px; background: var(--blue-bright); top: -100px; right: -80px; }
+        .orb-2 { width: 200px; height: 200px; background: #818cf8; bottom: 20%; left: -60px; animation-delay:-5s; }
+        @keyframes drift { from{transform:translate(0,0) scale(1)} to{transform:translate(20px,30px) scale(1.1)} }
+
+        .container { max-width: 480px; margin: 0 auto; position: relative; z-index: 1; }
+
+        /* Header */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            padding: 16px 20px;
+            background: rgba(241,245,249,0.92);
+            backdrop-filter: blur(24px);
+            display: flex; align-items: center; gap: 16px;
+            border-bottom: 1px solid rgba(148,163,184,0.12);
+        }
+        .back-btn {
+            width: 40px; height: 40px;
+            background: var(--white); border: 1.5px solid var(--gray-200);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .back-btn:active { transform: scale(0.93); }
+        .back-btn svg { width: 18px; height: 18px; stroke: var(--gray-600); }
+        .header-title { flex: 1; font-size: 17px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.3px; }
+        .new-btn {
+            height: 36px; padding: 0 14px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: white; border: none; border-radius: 12px;
+            font-family: 'Sora', sans-serif;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s var(--spring);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+        .new-btn:active { transform: scale(0.95); }
+
+        /* Summary bar */
+        .summary-bar {
+            display: flex; gap: 12px;
+            padding: 20px 20px 0;
+        }
+        .summary-chip {
+            flex: 1; padding: 14px 16px;
+            background: var(--white);
+            border-radius: 16px;
+            border: 1.5px solid var(--gray-200);
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer; transition: all 0.2s var(--spring);
+        }
+        .summary-chip:active { transform: scale(0.97); }
+        .summary-chip.pending { border-color: var(--amber); background: var(--amber-light); }
+        .summary-chip-val { font-size: 20px; font-weight: 800; color: var(--gray-900); margin-bottom: 3px; }
+        .summary-chip.pending .summary-chip-val { color: var(--amber); }
+        .summary-chip-label { font-size: 10px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.6px; }
+        .summary-chip.pending .summary-chip-label { color: rgba(217,119,6,0.7); }
+
+        /* Tab bar */
+        .tab-bar {
+            display: flex; gap: 0;
+            padding: 20px 20px 0;
+        }
+        .tab {
+            flex: 1; padding: 12px;
+            background: transparent; border: none;
+            font-family: 'Sora', sans-serif;
+            font-size: 13px; font-weight: 700;
+            color: var(--gray-400);
+            cursor: pointer;
+            border-bottom: 2.5px solid transparent;
+            transition: all 0.2s var(--easing);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .tab.active { color: var(--blue-mid); border-bottom-color: var(--blue-bright); }
+        .tab-count {
+            background: var(--blue-ghost);
+            color: var(--blue-mid);
+            font-size: 10px; font-weight: 800;
+            padding: 2px 7px; border-radius: 20px;
+        }
+        .tab.active .tab-count { background: var(--blue-bright); color: white; }
+
+        /* Sections */
+        .section { padding: 20px; display: none; }
+        .section.active { display: block; }
+
+        .section-group { margin-bottom: 28px; }
+        .group-label {
+            font-size: 11px; font-weight: 700;
+            color: var(--gray-400); letter-spacing: 0.8px;
+            text-transform: uppercase; margin-bottom: 12px;
+            padding: 0 2px;
+        }
+
+        /* Request card */
+        .req-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            border: 1.5px solid var(--gray-200);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            transition: all 0.2s var(--spring);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .req-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 4px;
+        }
+        .req-card.pending-in::before  { background: var(--amber); }
+        .req-card.pending-out::before { background: var(--blue-bright); }
+        .req-card.paid::before        { background: var(--green); }
+        .req-card.declined::before    { background: var(--red); }
+        .req-card.expired::before     { background: var(--gray-400); }
+        .req-card:active { transform: scale(0.99); box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+
+        .req-card-top {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 12px;
+        }
+        .req-avatar {
+            width: 44px; height: 44px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; font-weight: 800; color: white;
+            flex-shrink: 0;
+        }
+        .req-card-info { flex: 1; }
+        .req-card-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; }
+        .req-card-note { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+        .req-card-amount { font-size: 16px; font-weight: 800; }
+        .req-card-amount.in  { color: var(--green); }
+        .req-card-amount.out { color: var(--blue-mid); }
+
+        .req-card-bottom {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .req-meta { font-size: 11px; color: var(--gray-400); font-weight: 500; }
+
+        .status-badge {
+            font-size: 10px; font-weight: 800;
+            padding: 3px 8px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .status-badge.pending  { background: var(--amber-light); color: var(--amber); }
+        .status-badge.paid     { background: var(--green-light); color: var(--green); }
+        .status-badge.declined { background: var(--red-light); color: var(--red); }
+        .status-badge.expired  { background: var(--gray-100); color: var(--gray-400); }
+
+        /* Inline action row (incoming pending only) */
+        .req-actions {
+            display: flex; gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-100);
+        }
+        .req-pay-btn {
+            flex: 1; padding: 10px;
+            background: linear-gradient(135deg, #065f46, var(--green));
+            color: white; border: none; border-radius: 12px;
+            font-family: 'Sora', sans-serif;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s var(--spring);
+            box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+        }
+        .req-pay-btn:active { transform: scale(0.96); }
+        .req-decline-btn {
+            flex: 1; padding: 10px;
+            background: var(--red-light); color: var(--red);
+            border: 1.5px solid rgba(220,38,38,0.2); border-radius: 12px;
+            font-family: 'Sora', sans-serif;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s var(--spring);
+        }
+        .req-decline-btn:active { transform: scale(0.96); background: var(--red); color: white; }
+
+        /* Swipe-to-cancel (outgoing pending) */
+        .cancel-btn {
+            margin-top: 10px;
+            padding-top: 10px; border-top: 1px solid var(--gray-100);
+            display: flex; align-items: center; gap: 6px;
+            background: none; border: none;
+            font-family: 'Sora', sans-serif;
+            font-size: 12px; font-weight: 700;
+            color: var(--gray-400); cursor: pointer;
+            transition: color 0.2s;
+            width: 100%;
+        }
+        .cancel-btn:active { color: var(--red); }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center; padding: 60px 20px;
+        }
+        .empty-icon { font-size: 52px; margin-bottom: 16px; }
+        .empty-title { font-size: 17px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
+        .empty-sub { font-size: 13px; color: var(--gray-400); font-weight: 500; line-height: 1.6; }
+        .empty-cta {
+            margin-top: 20px; padding: 14px 28px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: white; border: none; border-radius: 16px;
+            font-family: 'Sora', sans-serif;
+            font-size: 14px; font-weight: 700;
+            cursor: pointer; box-shadow: 0 6px 20px rgba(37,99,235,0.3);
+            transition: all 0.2s var(--spring);
+        }
+        .empty-cta:active { transform: scale(0.97); }
+
+        /* Countdown badge */
+        .countdown {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 10px; font-weight: 700;
+            color: var(--amber); background: var(--amber-light);
+            padding: 3px 8px; border-radius: 20px;
+        }
+        .countdown-dot { width: 5px; height: 5px; background: var(--amber); border-radius: 50%; animation: blink 1.2s infinite; }
+        @keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+        /* Color classes */
+        .c-0 { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .c-1 { background: linear-gradient(135deg, #065f46, #10b981); }
+        .c-2 { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+        .c-3 { background: linear-gradient(135deg, #9d174d, #f472b6); }
+        .c-4 { background: linear-gradient(135deg, #92400e, #f59e0b); }
+        .c-5 { background: linear-gradient(135deg, #164e63, #22d3ee); }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 90px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--gray-900); color: white;
+            padding: 12px 20px; border-radius: 40px;
+            font-size: 13px; font-weight: 600;
+            z-index: 9999; opacity: 0;
+            transition: all 0.35s var(--spring);
+            white-space: nowrap; pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Animation stagger */
+        .req-card { animation: cardIn 0.4s var(--spring) both; }
+        .req-card:nth-child(1) { animation-delay: 0.05s; }
+        .req-card:nth-child(2) { animation-delay: 0.10s; }
+        .req-card:nth-child(3) { animation-delay: 0.15s; }
+        .req-card:nth-child(4) { animation-delay: 0.20s; }
+        .req-card:nth-child(5) { animation-delay: 0.25s; }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+        </button>
+        <span class="header-title">Payment Requests</span>
+        <button class="new-btn" onclick="window.location.href='request-money.html'">+ New</button>
+    </div>
+
+    <!-- Summary chips -->
+    <div class="summary-bar">
+        <div class="summary-chip pending" onclick="switchTab('received')">
+            <div class="summary-chip-val" id="incomingCount">2</div>
+            <div class="summary-chip-label">Need Action</div>
+        </div>
+        <div class="summary-chip" onclick="switchTab('sent')">
+            <div class="summary-chip-val" id="awaitingCount">3</div>
+            <div class="summary-chip-label">Awaiting Pay</div>
+        </div>
+        <div class="summary-chip" onclick="switchTab('history')">
+            <div class="summary-chip-val">8</div>
+            <div class="summary-chip-label">Completed</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+        <button class="tab active" id="tab-received" onclick="switchTab('received')">
+            Received
+            <span class="tab-count" id="tc-received">2</span>
+        </button>
+        <button class="tab" id="tab-sent" onclick="switchTab('sent')">
+            Sent
+            <span class="tab-count" id="tc-sent">3</span>
+        </button>
+        <button class="tab" id="tab-history" onclick="switchTab('history')">
+            History
+            <span class="tab-count" id="tc-history">8</span>
+        </button>
+    </div>
+
+    <!-- RECEIVED TAB -->
+    <div class="section active" id="section-received">
+        <div class="section-group">
+            <div class="group-label">⚡ Pending — Action Required</div>
+
+            <div class="req-card pending-in" onclick="openRequest('MW-REQ-001')">
+                <div class="req-card-top">
+                    <div class="req-avatar c-0">GO</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Godwin Okafor</div>
+                        <div class="req-card-note">For dinner at Sky Lounge 🍽️</div>
+                    </div>
+                    <div class="req-card-amount in">₦12,500</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">
+                        MW-001 &nbsp;·&nbsp;
+                        <span class="countdown"><span class="countdown-dot"></span>23h left</span>
+                    </div>
+                    <span class="status-badge pending">Pending</span>
+                </div>
+                <div class="req-actions">
+                    <button class="req-pay-btn" onclick="quickPay(event, 'MW-REQ-001', '₦12,500', 'Godwin Okafor')">💸 Pay Now</button>
+                    <button class="req-decline-btn" onclick="quickDecline(event, 'MW-REQ-001')">Decline</button>
+                </div>
+            </div>
+
+            <div class="req-card pending-in" onclick="openRequest('MW-REQ-002')">
+                <div class="req-card-top">
+                    <div class="req-avatar c-3">CE</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Chioma Eze</div>
+                        <div class="req-card-note">Contribution for Emeka's gift 🎁</div>
+                    </div>
+                    <div class="req-card-amount in">₦5,000</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">MW-002 &nbsp;·&nbsp; <span class="countdown"><span class="countdown-dot"></span>2d left</span></div>
+                    <span class="status-badge pending">Pending</span>
+                </div>
+                <div class="req-actions">
+                    <button class="req-pay-btn" onclick="quickPay(event, 'MW-REQ-002', '₦5,000', 'Chioma Eze')">💸 Pay Now</button>
+                    <button class="req-decline-btn" onclick="quickDecline(event, 'MW-REQ-002')">Decline</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SENT TAB -->
+    <div class="section" id="section-sent">
+        <div class="section-group">
+            <div class="group-label">⏳ Awaiting Response</div>
+
+            <div class="req-card pending-out">
+                <div class="req-card-top">
+                    <div class="req-avatar c-1">TA</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Tobi Adeleke</div>
+                        <div class="req-card-note">Owe me from last weekend 🍺</div>
+                    </div>
+                    <div class="req-card-amount out">₦8,000</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Sent 2h ago &nbsp;·&nbsp; <span class="countdown"><span class="countdown-dot"></span>22h left</span></div>
+                    <span class="status-badge pending">Sent</span>
+                </div>
+                <button class="cancel-btn" onclick="cancelRequest(event, this)">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    Cancel Request
+                </button>
+            </div>
+
+            <div class="req-card pending-out">
+                <div class="req-card-top">
+                    <div class="req-avatar c-5">AN</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Adaeze Nwosu</div>
+                        <div class="req-card-note">Airtime reimbursement</div>
+                    </div>
+                    <div class="req-card-amount out">₦2,000</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Sent yesterday &nbsp;·&nbsp; <span class="countdown"><span class="countdown-dot"></span>6h left</span></div>
+                    <span class="status-badge pending">Sent</span>
+                </div>
+                <button class="cancel-btn" onclick="cancelRequest(event, this)">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    Cancel Request
+                </button>
+            </div>
+
+            <div class="req-card pending-out">
+                <div class="req-card-top">
+                    <div class="req-avatar c-2">GP</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Godwin Peters</div>
+                        <div class="req-card-note">Split uber 🚗</div>
+                    </div>
+                    <div class="req-card-amount out">₦3,500</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Sent 3 days ago &nbsp;·&nbsp; <span class="countdown"><span class="countdown-dot"></span>4d left</span></div>
+                    <span class="status-badge pending">Sent</span>
+                </div>
+                <button class="cancel-btn" onclick="cancelRequest(event, this)">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    Cancel Request
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div class="section" id="section-history">
+        <div class="section-group">
+            <div class="group-label">✅ Paid</div>
+
+            <div class="req-card paid">
+                <div class="req-card-top">
+                    <div class="req-avatar c-4">BF</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Bola Fashola</div>
+                        <div class="req-card-note">Groceries split</div>
+                    </div>
+                    <div class="req-card-amount in">₦7,200</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Received &nbsp;·&nbsp; Jan 14, 2026</div>
+                    <span class="status-badge paid">Paid ✓</span>
+                </div>
+            </div>
+
+            <div class="req-card paid">
+                <div class="req-card-top">
+                    <div class="req-avatar c-0">GO</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Godwin Okafor</div>
+                        <div class="req-card-note">Concert tickets 🎵</div>
+                    </div>
+                    <div class="req-card-amount out">₦15,000</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Paid &nbsp;·&nbsp; Jan 10, 2026</div>
+                    <span class="status-badge paid">Paid ✓</span>
+                </div>
+            </div>
+
+            <div class="req-card paid">
+                <div class="req-card-top">
+                    <div class="req-avatar c-3">CE</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Chioma Eze</div>
+                        <div class="req-card-note">Shared lunch</div>
+                    </div>
+                    <div class="req-card-amount in">₦4,500</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Received &nbsp;·&nbsp; Jan 8, 2026</div>
+                    <span class="status-badge paid">Paid ✓</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-group">
+            <div class="group-label">✗ Declined / Expired</div>
+
+            <div class="req-card declined">
+                <div class="req-card-top">
+                    <div class="req-avatar c-2">NO</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Ngozi Okonkwo</div>
+                        <div class="req-card-note">For the party supplies</div>
+                    </div>
+                    <div class="req-card-amount out">₦10,000</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Declined &nbsp;·&nbsp; Jan 5, 2026</div>
+                    <span class="status-badge declined">Declined</span>
+                </div>
+            </div>
+
+            <div class="req-card expired">
+                <div class="req-card-top">
+                    <div class="req-avatar c-5">AN</div>
+                    <div class="req-card-info">
+                        <div class="req-card-name">Adaeze Nwosu</div>
+                        <div class="req-card-note">No note</div>
+                    </div>
+                    <div class="req-card-amount out">₦6,000</div>
+                </div>
+                <div class="req-card-bottom">
+                    <div class="req-meta">Expired &nbsp;·&nbsp; Dec 28, 2025</div>
+                    <span class="status-badge expired">Expired</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.getElementById(`section-${tab}`).classList.add('active');
+}
+
+function openRequest(ref) {
+    window.location.href = `pay-request.html?ref=${ref}`;
+}
+
+function quickPay(event, ref, amount, name) {
+    event.stopPropagation();
+    window.location.href = `pay-request.html?ref=${ref}`;
+}
+
+function quickDecline(event, ref) {
+    event.stopPropagation();
+    if (confirm('Decline this request?')) {
+        const card = event.target.closest('.req-card');
+        card.style.transition = 'all 0.35s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'translateX(-20px)';
+        setTimeout(() => card.remove(), 350);
+        
+        const count = document.getElementById('incomingCount');
+        count.textContent = Math.max(0, parseInt(count.textContent) - 1);
+        document.getElementById('tc-received').textContent =
+            Math.max(0, parseInt(document.getElementById('tc-received').textContent) - 1);
+        
+        showToast('✓ Request declined');
+    }
+}
+
+function cancelRequest(event, btn) {
+    event.stopPropagation();
+    if (confirm('Cancel this request?')) {
+        const card = btn.closest('.req-card');
+        card.style.transition = 'all 0.35s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'translateX(-20px)';
+        setTimeout(() => card.remove(), 350);
+        
+        const count = document.getElementById('awaitingCount');
+        count.textContent = Math.max(0, parseInt(count.textContent) - 1);
+        document.getElementById('tc-sent').textContent =
+            Math.max(0, parseInt(document.getElementById('tc-sent').textContent) - 1);
+        
+        showToast('✓ Request cancelled');
+    }
+}
+
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
