@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Create Ajo Circle - Meritwise</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Sora',sans-serif; background:#f1f5f9; min-height:100vh; padding-bottom:80px; }
+.container { max-width:480px; margin:0 auto; }
+.header { position:sticky; top:0; z-index:100; padding:16px 20px; background:rgba(241,245,249,0.92); backdrop-filter:blur(24px); display:flex; align-items:center; gap:16px; border-bottom:1px solid rgba(148,163,184,0.12); }
+.back-btn { width:40px; height:40px; background:#fff; border:1.5px solid #e2e8f0; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.back-btn:active { transform:scale(0.93); }
+.back-btn svg { width:18px; height:18px; stroke:#475569; }
+.header-title { flex:1; font-size:17px; font-weight:700; color:#0f172a; }
+.badge { background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px; text-transform:uppercase; }
+.screen { padding:24px 20px; display:none; }
+.screen.active { display:block; animation:slideIn 0.4s; }
+@keyframes slideIn { from{opacity:0; transform:translateX(30px)} to{opacity:1; transform:translateX(0)} }
+.eyebrow { font-size:11px; font-weight:700; color:#7c3aed; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:6px; }
+.headline { font-size:22px; font-weight:800; color:#0f172a; margin-bottom:6px; }
+.sub { font-size:13px; color:#94a3b8; margin-bottom:28px; line-height:1.5; }
+.label { font-size:12px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; }
+.input { width:100%; padding:14px 16px; background:#fff; border:1.5px solid #e2e8f0; border-radius:12px; font-family:'Sora'; font-size:14px; font-weight:500; color:#0f172a; outline:none; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+.input:focus { border-color:#7c3aed; box-shadow:0 0 0 4px rgba(124,58,237,0.1); }
+.freq-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:28px; }
+.freq-opt { padding:18px 12px; background:#fff; border:1.5px solid #e2e8f0; border-radius:14px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.freq-opt:active { transform:scale(0.96); }
+.freq-opt.active { background:#ede9fe; border-color:#7c3aed; }
+.freq-icon { font-size:28px; margin-bottom:8px; }
+.freq-label { font-size:13px; font-weight:700; color:#475569; }
+.freq-opt.active .freq-label { color:#7c3aed; }
+.member-card { display:flex; align-items:center; gap:12px; padding:14px 16px; background:#fff; border:1.5px solid #e2e8f0; border-radius:14px; margin-bottom:10px; }
+.member-avatar { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; color:#fff; background:linear-gradient(135deg,#7c3aed,#6d28d9); }
+.member-info { flex:1; }
+.member-name { font-size:14px; font-weight:700; color:#0f172a; }
+.member-id { font-size:12px; color:#94a3b8; }
+.position-num { width:32px; height:32px; background:#ede9fe; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#7c3aed; }
+.btn-primary { width:100%; padding:18px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; border:none; border-radius:20px; font-family:'Sora'; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 8px 24px rgba(124,58,237,0.35); }
+.btn-primary:active { transform:scale(0.97); }
+.btn-primary:disabled { background:#e2e8f0; color:#94a3b8; box-shadow:none; cursor:not-allowed; }
+.btn-ghost { width:100%; padding:16px; background:transparent; color:#475569; border:1.5px solid #e2e8f0; border-radius:20px; font-family:'Sora'; font-size:14px; font-weight:700; cursor:pointer; margin-top:10px; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+<span class="header-title">Create Circle</span>
+<div class="badge" id="stepBadge">Step 1/3</div>
+</div>
+<div class="screen active" id="screen-1">
+<div class="eyebrow">Step 1 of 3</div>
+<div class="headline">Circle Details</div>
+<div class="sub">Set the amount and frequency</div>
+<div style="margin-bottom:20px;"><div class="label">Amount Per Contribution</div><input class="input" type="number" id="amount" placeholder="₦5,000" inputmode="decimal"></div>
+<div class="label">Frequency</div>
+<div class="freq-grid">
+<div class="freq-opt" data-freq="daily" onclick="selectFreq(this,'daily')"><div class="freq-icon">☀️</div><div class="freq-label">Daily</div></div>
+<div class="freq-opt active" data-freq="weekly" onclick="selectFreq(this,'weekly')"><div class="freq-icon">📅</div><div class="freq-label">Weekly</div></div>
+<div class="freq-opt" data-freq="monthly" onclick="selectFreq(this,'monthly')"><div class="freq-icon">🗓️</div><div class="freq-label">Monthly</div></div>
+</div>
+<div style="margin-bottom:20px;"><div class="label">Circle Name</div><input class="input" id="circleName" placeholder="Weekend Savings" maxlength="30"></div>
+<button class="btn-primary" onclick="goToStep(2)">Continue</button>
+</div>
+<div class="screen" id="screen-2">
+<div class="eyebrow">Step 2 of 3</div>
+<div class="headline">Invite Members</div>
+<div class="sub">Add 3-12 members and arrange payout order</div>
+<div class="label">Members (Tap to search)</div>
+<button class="btn-ghost" onclick="alert('Search members - Coming soon')" style="margin-bottom:20px;">+ Add Member</button>
+<div id="membersList"></div>
+<button class="btn-primary" onclick="goToStep(3)" id="continueBtn2" disabled>Continue</button>
+<button class="btn-ghost" onclick="goToStep(1)">← Back</button>
+</div>
+<div class="screen" id="screen-3">
+<div class="eyebrow">Step 3 of 3</div>
+<div class="headline">Review & Launch</div>
+<div class="sub">Confirm details before creating circle</div>
+<div style="background:#fff; border-radius:20px; padding:20px; margin-bottom:20px; border:1.5px solid #e2e8f0;">
+<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #f1f5f9;"><span style="font-size:13px; color:#94a3b8;">Amount</span><span style="font-size:14px; font-weight:700;">₦5,000</span></div>
+<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #f1f5f9;"><span style="font-size:13px; color:#94a3b8;">Frequency</span><span style="font-size:14px; font-weight:700;">Weekly</span></div>
+<div style="display:flex; justify-content:space-between; padding:12px 0;"><span style="font-size:13px; color:#94a3b8;">Members</span><span style="font-size:14px; font-weight:700;">5 people</span></div>
+</div>
+<button class="btn-primary" onclick="createCircle()">Launch Circle 🎯</button>
+<button class="btn-ghost" onclick="goToStep(2)">← Edit Members</button>
+</div>
+</div>
+<script>
+let step=1, freq='weekly';
+function goToStep(n){step=n; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+n).classList.add('active'); document.getElementById('stepBadge').textContent='Step '+n+'/3';}
+function selectFreq(el,f){document.querySelectorAll('.freq-opt').forEach(o=>o.classList.remove('active')); el.classList.add('active'); freq=f;}
+function goBack(){if(step===1)window.history.back();else goToStep(step-1);}
+function createCircle(){alert('Circle created! API call here'); window.location.href='ajo-home.html';}
+</script>
+</body>
+</html>
