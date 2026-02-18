@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Circle Details - Meritwise</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Sora',sans-serif; background:#f1f5f9; padding-bottom:100px; }
+.container { max-width:480px; margin:0 auto; }
+.header { position:sticky; top:0; z-index:100; padding:16px 20px; background:rgba(241,245,249,0.92); backdrop-filter:blur(24px); display:flex; align-items:center; gap:16px; border-bottom:1px solid rgba(148,163,184,0.12); }
+.back-btn { width:40px; height:40px; background:#fff; border:1.5px solid #e2e8f0; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.back-btn svg { width:18px; height:18px; stroke:#475569; }
+.header-title { flex:1; font-size:17px; font-weight:700; }
+.hero { margin:20px 20px 16px; background:linear-gradient(135deg,#7c3aed,#6d28d9); border-radius:24px; padding:28px 24px; color:#fff; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; top:-40%; right:-15%; width:200px; height:200px; background:rgba(255,255,255,0.08); border-radius:50%; }
+.hero-inner { position:relative; z-index:2; }
+.circle-name { font-size:24px; font-weight:800; margin-bottom:8px; }
+.circle-meta { font-size:13px; opacity:0.8; margin-bottom:20px; }
+.amount-big { font-size:38px; font-weight:800; margin-bottom:4px; }
+.freq-label { font-size:12px; opacity:0.7; }
+.progress-section { padding:0 20px 20px; }
+.progress-ring { width:140px; height:140px; margin:0 auto 20px; position:relative; }
+.progress-ring svg { width:100%; height:100%; transform:rotate(-90deg); }
+.progress-ring circle { fill:none; stroke-width:12; }
+.bg-circle { stroke:#e2e8f0; }
+.fill-circle { stroke:#7c3aed; stroke-linecap:round; transition:stroke-dashoffset 0.5s; }
+.progress-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.cycle-num { font-size:28px; font-weight:800; color:#0f172a; }
+.cycle-label { font-size:11px; color:#94a3b8; font-weight:700; text-transform:uppercase; }
+.next-card { background:#fff; border-radius:16px; padding:16px; margin-bottom:20px; border:1.5px solid #e2e8f0; }
+.next-label { font-size:11px; font-weight:700; color:#94a3b8; text-transform:uppercase; margin-bottom:8px; }
+.next-name { font-size:16px; font-weight:800; color:#0f172a; margin-bottom:4px; }
+.next-date { font-size:12px; color:#7c3aed; font-weight:600; }
+.section { padding:0 20px 20px; }
+.section-title { font-size:15px; font-weight:700; margin-bottom:14px; }
+.member-item { display:flex; align-items:center; gap:12px; padding:14px 16px; background:#fff; border-radius:14px; margin-bottom:10px; border:1.5px solid #e2e8f0; }
+.member-avatar { width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg,#3b82f6,#2563eb); color:#fff; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; }
+.member-info { flex:1; }
+.member-name { font-size:14px; font-weight:700; color:#0f172a; }
+.member-pos { font-size:12px; color:#94a3b8; }
+.member-status { font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; }
+.status-paid { background:#dcfce7; color:#059669; }
+.status-pending { background:#fef3c7; color:#d97706; }
+.status-kicked { background:#fee2e2; color:#dc2626; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<button class="back-btn" onclick="window.history.back()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+<span class="header-title">Circle Details</span>
+</div>
+<div class="hero">
+<div class="hero-inner">
+<div class="circle-name">Weekend Savings</div>
+<div class="circle-meta">8 members • Created Jan 15, 2026</div>
+<div class="amount-big">₦5,000</div>
+<div class="freq-label">Per week</div>
+</div>
+</div>
+<div class="progress-section">
+<div class="progress-ring">
+<svg><circle class="bg-circle" cx="70" cy="70" r="60"/><circle class="fill-circle" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="141.375"/></svg>
+<div class="progress-center"><div class="cycle-num">3/8</div><div class="cycle-label">Cycles</div></div>
+</div>
+<div class="next-card">
+<div class="next-label">Next Payout</div>
+<div class="next-name">Adaeze Nwosu</div>
+<div class="next-date">Friday, Feb 21 • 4 days left</div>
+</div>
+</div>
+<div class="section">
+<div class="section-title">Members & Payout Order</div>
+<div class="member-item"><div class="member-avatar">CE</div><div class="member-info"><div class="member-name">Chioma Eze</div><div class="member-pos">#1 • Received ₦40,000</div></div><span class="member-status status-paid">✓ Paid</span></div>
+<div class="member-item"><div class="member-avatar">GO</div><div class="member-info"><div class="member-name">Godwin Okafor</div><div class="member-pos">#2 • Received ₦40,000</div></div><span class="member-status status-paid">✓ Paid</span></div>
+<div class="member-item"><div class="member-avatar">AN</div><div class="member-info"><div class="member-name">Adaeze Nwosu</div><div class="member-pos">#3 • Receives next</div></div><span class="member-status status-pending">⏳ Pending</span></div>
+<div class="member-item"><div class="member-avatar">YO</div><div class="member-info"><div class="member-name">You</div><div class="member-pos">#4 • 2 cycles away</div></div><span class="member-status status-pending">⏳ Pending</span></div>
+</div>
+</div>
+</body>
+</html>
