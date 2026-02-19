@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Ajo Circles - Meritwise</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        :root {
+            --purple: #7c3aed; --purple-dark: #6d28d9; --purple-light: #ede9fe;
+            --blue: #3b82f6; --blue-light: #dbeafe;
+            --green: #059669; --green-light: #dcfce7; --green-dark: #065f46;
+            --red: #dc2626; --red-light: #fee2e2;
+            --amber: #d97706; --amber-light: #fef3c7;
+            --gray-900: #0f172a; --gray-600: #475569; --gray-400: #94a3b8; --gray-200: #e2e8f0; --gray-100: #f1f5f9;
+            --white: #fff; --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Sora', sans-serif; background: var(--gray-100); min-height: 100vh; padding-bottom: 100px; }
+        .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.1; animation: drift 10s ease-in-out infinite alternate; }
+        .orb-1 { width: 350px; height: 350px; background: var(--purple); top: -100px; right: -80px; }
+        .orb-2 { width: 220px; height: 220px; background: var(--blue); bottom: 30%; left: -60px; animation-delay: -5s; }
+        @keyframes drift { from{transform:translate(0,0)} to{transform:translate(20px,30px)} }
+        .container { max-width: 480px; margin: 0 auto; position: relative; z-index: 1; }
+        
+        /* Header */
+        .header { position: sticky; top: 0; z-index: 100; padding: 16px 20px; padding-top: max(20px, env(safe-area-inset-top, 20px)); background: rgba(241,245,249,0.92); backdrop-filter: blur(24px); display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(148,163,184,0.12); }
+        .back-btn { width: 40px; height: 40px; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+        .back-btn:active { transform: scale(0.93); }
+        .back-btn svg { width: 18px; height: 18px; stroke: var(--gray-600); }
+        .header-title { flex: 1; font-size: 17px; font-weight: 700; }
+        
+        /* Hero */
+        .hero { margin: 20px 20px 16px; background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%); border-radius: 24px; padding: 28px 24px; position: relative; overflow: hidden; box-shadow: 0 16px 48px rgba(124,58,237,0.25); }
+        .hero::before { content: ''; position: absolute; top: -40%; right: -15%; width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%; }
+        .hero-inner { position: relative; z-index: 2; }
+        .hero-eyebrow { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
+        .hero-title { font-size: 26px; font-weight: 800; color: white; letter-spacing: -0.5px; margin-bottom: 12px; line-height: 1.2; }
+        .hero-sub { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; line-height: 1.5; }
+        
+        /* Stats */
+        .stats { display: flex; gap: 10px; padding: 0 20px 20px; }
+        .stat-chip { flex: 1; background: var(--white); border-radius: 16px; padding: 14px 12px; text-align: center; border: 1.5px solid var(--gray-200); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .stat-val { font-size: 20px; font-weight: 800; color: var(--gray-900); margin-bottom: 4px; }
+        .stat-label { font-size: 10px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.6px; }
+        
+        /* Section */
+        .section { padding: 0 20px 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .section-title { font-size: 15px; font-weight: 700; }
+        .invite-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--amber-light); border: 1px solid rgba(217,119,6,0.3); border-radius: 20px; font-size: 11px; font-weight: 800; color: var(--amber); letter-spacing: 0.5px; }
+        .invite-dot { width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: blink 1.2s infinite; }
+        @keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
+        
+        /* Circle card */
+        .circle-card { background: var(--white); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1.5px solid var(--gray-200); box-shadow: 0 2px 12px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s var(--spring); position: relative; overflow: hidden; animation: cardIn 0.4s var(--spring) both; }
+        .circle-card:active { transform: scale(0.99); }
+        .circle-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+        .circle-card.daily::before { background: var(--green); }
+        .circle-card.weekly::before { background: var(--blue); }
+        .circle-card.monthly::before { background: var(--purple); }
+        .circle-card:nth-child(1) { animation-delay: 0.05s; }
+        .circle-card:nth-child(2) { animation-delay: 0.10s; }
+        .circle-card:nth-child(3) { animation-delay: 0.15s; }
+        @keyframes cardIn { from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)} }
+        
+        .circle-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+        .circle-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+        .circle-icon.daily { background: var(--green-light); }
+        .circle-icon.weekly { background: var(--blue-light); }
+        .circle-icon.monthly { background: var(--purple-light); }
+        .circle-info { flex: 1; }
+        .circle-name { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+        .circle-meta { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+        .circle-amount { font-size: 18px; font-weight: 800; color: var(--gray-900); }
+        
+        /* Progress */
+        .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .progress-bar { flex: 1; height: 8px; background: var(--gray-100); border-radius: 8px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 8px; transition: width 0.4s; }
+        .progress-fill.daily { background: var(--green); }
+        .progress-fill.weekly { background: var(--blue); }
+        .progress-fill.monthly { background: var(--purple); }
+        .progress-text { font-size: 11px; font-weight: 700; color: var(--gray-400); white-space: nowrap; }
+        
+        .circle-footer { display: flex; justify-content: space-between; align-items: center; }
+        .next-label { font-size: 12px; color: var(--gray-400); font-weight: 600; }
+        .next-name { font-size: 12px; font-weight: 700; color: var(--gray-900); }
+        .days-left { font-size: 11px; font-weight: 700; }
+        .days-left.urgent { color: var(--red); }
+        .days-left.soon { color: var(--amber); }
+        .days-left.normal { color: var(--green); }
+        
+        /* FAB */
+        .fab { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, var(--purple), var(--purple-dark)); border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; cursor: pointer; box-shadow: 0 8px 24px rgba(124,58,237,0.4); transition: all 0.25s var(--spring); z-index: 50; }
+        .fab:active { transform: scale(0.92); }
+        
+        /* Empty */
+        .empty { text-align: center; padding: 60px 40px; }
+        .empty-icon { font-size: 56px; margin-bottom: 16px; }
+        .empty-title { font-size: 17px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
+        .empty-sub { font-size: 13px; color: var(--gray-400); font-weight: 500; line-height: 1.6; margin-bottom: 24px; }
+        .btn-create { padding: 14px 28px; background: linear-gradient(135deg, var(--purple), var(--purple-dark)); color: white; border: none; border-radius: 16px; font-family: 'Sora'; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(124,58,237,0.3); }
+        .btn-create:active { transform: scale(0.97); }
+        
+        /* Status badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-badge.active { background: var(--green-light); color: var(--green-dark); }
+        .status-badge.pending { background: var(--amber-light); color: var(--amber); }
+    </style>
+</head>
+<body>
+
+<div class="ambient">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+        </button>
+        <span class="header-title">Ajo Circles</span>
+    </div>
+
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-eyebrow">Contribute Together, Grow Together</div>
+            <div class="hero-title">Join a contribution circle</div>
+            <div class="hero-sub">Build financial discipline through group contributions. Daily, weekly, or monthly.</div>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-chip">
+            <div class="stat-val" id="activeCount">2</div>
+            <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-chip">
+            <div class="stat-val" id="totalContributed">₦85K</div>
+            <div class="stat-label">Contributed</div>
+        </div>
+        <div class="stat-chip">
+            <div class="stat-val" id="nextPayout">4d</div>
+            <div class="stat-label">Next</div>
+        </div>
+    </div>
+
+    <div class="section" id="invitesSection">
+        <div class="section-header">
+            <div class="section-title">Pending Invites</div>
+            <div class="invite-badge">
+                <div class="invite-dot"></div>
+                <span id="inviteCount">2</span>
+            </div>
+        </div>
+        <div id="invitesList"></div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Active Circles</div>
+        </div>
+        <div id="activeList"></div>
+    </div>
+
+    <button class="fab" onclick="window.location.href='create-ajo-complete.html'">+</button>
+</div>
+
+<script>
+const API_BASE_URL = 'https://meritwise.app/api';
+
+const mockData = {
+    active: [
+        { id: 'AJO-001', name: 'Weekend Fund', frequency: 'weekly', amount: 5000, members: 8, currentCycle: 3, totalCycles: 8, nextPayout: 'Adaeze Nwosu', daysLeft: 4 },
+        { id: 'AJO-002', name: 'Daily Hustle', frequency: 'daily', amount: 500, members: 5, currentCycle: 12, totalCycles: 5, nextPayout: 'You', daysLeft: 0 }
+    ],
+    invites: [
+        { id: 'INV-001', name: 'Office Monthly', frequency: 'monthly', amount: 20000, host: 'Chioma Eze', members: 10, position: 5 },
+        { id: 'INV-002', name: 'Friends Circle', frequency: 'weekly', amount: 3000, host: 'Tobi Adeleke', members: 6, position: 3 }
+    ]
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    // API: GET /api/ajo/my-circles
+    renderInvites();
+    renderActive();
+});
+
+function renderInvites() {
+    const list = document.getElementById('invitesList');
+    list.innerHTML = mockData.invites.map(inv => `
+        <div class="circle-card ${inv.frequency}" onclick="window.location.href='ajo-invite.html?id=${inv.id}'">
+            <div class="circle-top">
+                <div class="circle-icon ${inv.frequency}">
+                    ${inv.frequency === 'daily' ? '☀️' : inv.frequency === 'weekly' ? '📅' : '🗓️'}
+                </div>
+                <div class="circle-info">
+                    <div class="circle-name">${inv.name}</div>
+                    <div class="circle-meta">From ${inv.host} • ${inv.members} members • #${inv.position} in line</div>
+                </div>
+                <div class="circle-amount">₦${inv.amount.toLocaleString('en-NG')}</div>
+            </div>
+            <div class="status-badge pending">⏳ Awaiting Response</div>
+        </div>
+    `).join('');
+}
+
+function renderActive() {
+    const list = document.getElementById('activeList');
+    if (!mockData.active.length) {
+        list.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🎯</div>
+                <div class="empty-title">No Active Circles</div>
+                <div class="empty-sub">Create a new Ajo circle or accept an invite to get started</div>
+                <button class="btn-create" onclick="window.location.href='create-ajo-complete.html'">Create Circle</button>
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = mockData.active.map(c => {
+        const progress = (c.currentCycle / c.totalCycles) * 100;
+        const daysClass = c.daysLeft === 0 ? 'urgent' : c.daysLeft <= 2 ? 'soon' : 'normal';
+        return `
+            <div class="circle-card ${c.frequency}" onclick="window.location.href='ajo-detail.html?id=${c.id}'">
+                <div class="circle-top">
+                    <div class="circle-icon ${c.frequency}">
+                        ${c.frequency === 'daily' ? '☀️' : c.frequency === 'weekly' ? '📅' : '🗓️'}
+                    </div>
+                    <div class="circle-info">
+                        <div class="circle-name">${c.name}</div>
+                        <div class="circle-meta">${c.frequency.charAt(0).toUpperCase() + c.frequency.slice(1)} • ${c.members} members</div>
+                    </div>
+                    <div class="circle-amount">₦${c.amount.toLocaleString('en-NG')}</div>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-bar">
+                        <div class="progress-fill ${c.frequency}" style="width: ${progress}%"></div>
+                    </div>
+                    <span class="progress-text">${c.currentCycle}/${c.totalCycles}</span>
+                </div>
+                <div class="circle-footer">
+                    <div>
+                        <div class="next-label">Next payout:</div>
+                        <div class="next-name">${c.nextPayout}</div>
+                    </div>
+                    <div class="days-left ${daysClass}">
+                        ${c.daysLeft === 0 ? 'Today!' : c.daysLeft + 'd left'}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+</script>
+</body>
+</html>
