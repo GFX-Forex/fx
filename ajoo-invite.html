@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Circle Invitation - Meritwise</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap');
+        :root {
+            --purple: #7c3aed; --purple-dark: #6d28d9; --purple-light: #ede9fe;
+            --amber: #d97706; --amber-light: #fef3c7;
+            --gray-900: #0f172a; --gray-600: #475569; --gray-400: #94a3b8; --gray-200: #e2e8f0; --gray-100: #f1f5f9;
+            --white: #fff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Sora', sans-serif; background: var(--gray-100); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .card { max-width: 420px; width: 100%; background: var(--white); border-radius: 28px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.12); animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes slideUp { from{opacity:0; transform:translateY(40px)} to{opacity:1; transform:translateY(0)} }
+        
+        /* Header */
+        .invite-header { background: linear-gradient(135deg, var(--purple), var(--purple-dark)); padding: 32px 24px; text-align: center; position: relative; overflow: hidden; }
+        .invite-header::before { content: ''; position: absolute; top: -50%; right: -20%; width: 250px; height: 250px; background: rgba(255,255,255,0.06); border-radius: 50%; }
+        .invite-inner { position: relative; z-index: 2; }
+        .invite-icon { font-size: 48px; margin-bottom: 16px; }
+        .invite-title { font-size: 22px; font-weight: 800; color: white; margin-bottom: 6px; }
+        .invite-from { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+        
+        /* Body */
+        .body { padding: 28px 24px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
+        .detail-row:last-of-type { border: none; margin-bottom: 20px; }
+        .detail-label { font-size: 13px; color: var(--gray-400); font-weight: 500; }
+        .detail-value { font-size: 14px; font-weight: 700; color: var(--gray-900); text-align: right; }
+        .detail-value.highlight { color: var(--purple); font-size: 16px; }
+        
+        /* Members preview */
+        .members-preview { background: var(--purple-light); border-radius: 16px; padding: 16px; margin-bottom: 20px; }
+        .members-title { font-size: 12px; font-weight: 700; color: var(--purple); text-transform: uppercase; margin-bottom: 12px; }
+        .members-avatars { display: flex; align-items: center; }
+        .member-mini { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: white; border: 2px solid white; margin-left: -8px; }
+        .member-mini:first-child { margin-left: 0; }
+        .members-count { margin-left: 12px; font-size: 13px; color: var(--purple); font-weight: 700; }
+        
+        /* Warning */
+        .warning { background: var(--amber-light); border: 1px solid rgba(217,119,6,0.3); border-radius: 12px; padding: 14px; margin-bottom: 20px; }
+        .warning-text { font-size: 12px; color: #92400e; font-weight: 500; line-height: 1.6; }
+        .warning-text strong { font-weight: 700; }
+        
+        /* Actions */
+        .actions { display: flex; gap: 12px; }
+        .btn { flex: 1; padding: 16px; border: none; border-radius: 16px; font-family: 'Sora'; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-accept { background: linear-gradient(135deg, var(--purple), var(--purple-dark)); color: white; box-shadow: 0 8px 24px rgba(124,58,237,0.35); }
+        .btn-accept:active { transform: scale(0.97); }
+        .btn-decline { background: var(--gray-100); color: var(--gray-600); }
+        .btn-decline:active { background: var(--gray-200); }
+        
+        /* Color classes */
+        .c-0 { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+        .c-1 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .c-2 { background: linear-gradient(135deg, #059669, #047857); }
+        .c-3 { background: linear-gradient(135deg, #d97706, #b45309); }
+        .c-4 { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="invite-header">
+        <div class="invite-inner">
+            <div class="invite-icon">💰</div>
+            <div class="invite-title" id="circleName">Office Monthly Fund</div>
+            <div class="invite-from" id="hostName">Invited by Chioma Eze</div>
+        </div>
+    </div>
+
+    <div class="body">
+        <div class="detail-row">
+            <span class="detail-label">Contribution Amount</span>
+            <span class="detail-value highlight" id="amount">₦20,000</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Frequency</span>
+            <span class="detail-value" id="frequency">Monthly</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Total Members</span>
+            <span class="detail-value" id="totalMembers">10 people</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Your Position</span>
+            <span class="detail-value" id="position">#5 in payout order</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Expected Payout (after 2% fee)</span>
+            <span class="detail-value" id="payout">₦196,000</span>
+        </div>
+
+        <div class="members-preview">
+            <div class="members-title">👥 Other Members</div>
+            <div class="members-avatars" id="membersAvatars">
+                <div class="member-mini c-0">CE</div>
+                <div class="member-mini c-1">GO</div>
+                <div class="member-mini c-2">AN</div>
+                <div class="member-mini c-3">TA</div>
+                <span class="members-count">+5 more</span>
+            </div>
+        </div>
+
+        <div class="warning">
+            <div class="warning-text"><strong>⚠️ Auto-Debit:</strong> ₦<span id="warningAmount">20,000</span> will be deducted <span id="warningFreq">monthly</span>. If you have insufficient funds on contribution day, you'll be removed from the circle automatically.</div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-decline" onclick="decline()">Decline</button>
+            <button class="btn btn-accept" onclick="accept()">Accept & Join</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const API_BASE_URL = 'https://meritwise.app/api';
+
+const mockInvite = {
+    id: 'INV-001',
+    circleName: 'Office Monthly Fund',
+    hostName: 'Chioma Eze',
+    amount: 20000,
+    frequency: 'monthly',
+    totalMembers: 10,
+    position: 5,
+    members: [
+        { name: 'Chioma Eze', initials: 'CE', colorClass: 'c-0' },
+        { name: 'Godwin Okafor', initials: 'GO', colorClass: 'c-1' },
+        { name: 'Adaeze Nwosu', initials: 'AN', colorClass: 'c-2' },
+        { name: 'Tobi Adeleke', initials: 'TA', colorClass: 'c-3' },
+        { name: 'Ngozi Obi', initials: 'NO', colorClass: 'c-4' }
+    ]
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    // API: GET /api/ajo/invite/:id
+    loadInvite();
+});
+
+function loadInvite() {
+    document.getElementById('circleName').textContent = mockInvite.circleName;
+    document.getElementById('hostName').textContent = `Invited by ${mockInvite.hostName}`;
+    document.getElementById('amount').textContent = `₦${mockInvite.amount.toLocaleString('en-NG')}`;
+    document.getElementById('frequency').textContent = mockInvite.frequency.charAt(0).toUpperCase() + mockInvite.frequency.slice(1);
+    document.getElementById('totalMembers').textContent = `${mockInvite.totalMembers} people`;
+    document.getElementById('position').textContent = `#${mockInvite.position} in payout order`;
+    
+    const totalCollected = mockInvite.amount * mockInvite.totalMembers;
+    const platformFee = Math.floor(totalCollected * 0.02);
+    const netPayout = totalCollected - platformFee;
+    document.getElementById('payout').textContent = `₦${netPayout.toLocaleString('en-NG')}`;
+    
+    document.getElementById('warningAmount').textContent = mockInvite.amount.toLocaleString('en-NG');
+    document.getElementById('warningFreq').textContent = mockInvite.frequency;
+    
+    const avatarsHTML = mockInvite.members.slice(0, 4).map(m => 
+        `<div class="member-mini ${m.colorClass}">${m.initials}</div>`
+    ).join('');
+    const remaining = mockInvite.totalMembers - 4;
+    document.getElementById('membersAvatars').innerHTML = avatarsHTML + (remaining > 0 ? `<span class="members-count">+${remaining} more</span>` : '');
+}
+
+function accept() {
+    // API: POST /api/ajo/accept-invite/:id
+    const payload = { inviteId: mockInvite.id };
+    console.log('Accepting invitation:', payload);
+    
+    alert('✅ You've joined the circle! Contributions start on the next cycle.');
+    window.location.href = 'ajo-home.html';
+}
+
+function decline() {
+    if (confirm('Decline this invitation?\n\nYou can't rejoin once declined.')) {
+        // API: POST /api/ajo/decline-invite/:id
+        console.log('Declining invitation:', mockInvite.id);
+        alert('Invitation declined.');
+        window.location.href = 'ajo-home.html';
+    }
+}
+</script>
+</body>
+</html>
