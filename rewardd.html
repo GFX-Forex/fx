@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards — Meritwise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface-2: #18181f;
+            --surface-3: #1f1f2a;
+            --border: rgba(255,255,255,0.07);
+            --border-active: rgba(255,255,255,0.15);
+            --accent: #7c6ef5;
+            --accent-2: #5de0b1;
+            --accent-warm: #f5a623;
+            --text-primary: #f0efff;
+            --text-secondary: rgba(240,239,255,0.5);
+            --text-dim: rgba(240,239,255,0.28);
+            --green: #4ade80;
+            --amber: #fbbf24;
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* ─── BACKGROUND ORBS ─── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .orb-1 {
+            width: 300px; height: 300px;
+            background: rgba(124, 110, 245, 0.12);
+            top: -80px; right: -60px;
+        }
+        .orb-2 {
+            width: 200px; height: 200px;
+            background: rgba(93, 224, 177, 0.08);
+            bottom: 200px; left: -60px;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            padding: 56px 24px 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .back-btn {
+            width: 40px; height: 40px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 17px;
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: var(--surface-3); color: var(--text-primary); }
+
+        .header-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(124,110,245,0.12);
+            border: 1px solid rgba(124,110,245,0.25);
+            border-radius: 100px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent);
+            font-family: 'Syne', sans-serif;
+        }
+        .header-badge span { font-size: 14px; }
+
+        .header-icon-btn {
+            width: 40px; height: 40px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-title .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* ─── BALANCE CARD ─── */
+        .balance-card {
+            margin: 0 20px 24px;
+            background: linear-gradient(145deg, #1a1830 0%, #131128 100%);
+            border: 1px solid rgba(124,110,245,0.2);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -40px;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, rgba(124,110,245,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .balance-card::after {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: -30px;
+            width: 140px; height: 140px;
+            background: radial-gradient(circle, rgba(93,224,177,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .balance-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .balance-amount {
+            font-family: 'Syne', sans-serif;
+            font-size: 44px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #fff 60%, rgba(255,255,255,0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .balance-naira { font-size: 28px; }
+
+        .balance-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-weight: 300;
+        }
+
+        .balance-sub strong {
+            color: var(--accent-2);
+            font-weight: 500;
+        }
+
+        .balance-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-withdraw {
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent), #9d8ff7);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s;
+            letter-spacing: 0.3px;
+        }
+        .btn-withdraw:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-withdraw:active { transform: scale(0.97); }
+
+        .btn-history {
+            padding: 14px;
+            background: transparent;
+            border: 1px solid var(--border-active);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-history:hover { background: var(--surface-2); color: var(--text-primary); }
+
+        /* ─── STATS ROW ─── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 0 20px 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-pill {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px 12px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .stat-pill:hover { border-color: var(--border-active); }
+
+        .stat-val {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-val.green { color: var(--green); }
+        .stat-val.amber { color: var(--amber); }
+        .stat-val.accent { color: var(--accent); }
+
+        .stat-lbl {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* ─── SECTION LABEL ─── */
+        .section-wrap {
+            padding: 0 20px;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 14px;
+        }
+
+        /* ─── REFERRAL CODE ─── */
+        .code-card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+
+        .code-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface-3);
+            border: 1px dashed rgba(124,110,245,0.35);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+        }
+
+        .code-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--text-primary);
+        }
+
+        .btn-copy {
+            display: flex; align-items: center; gap: 6px;
+            padding: 9px 16px;
+            background: rgba(124,110,245,0.15);
+            border: 1px solid rgba(124,110,245,0.3);
+            border-radius: 8px;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-copy:hover { background: rgba(124,110,245,0.25); }
+        .btn-copy:active { transform: scale(0.95); }
+
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .share-item {
+            background: var(--surface-3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 8px;
+            display: flex; flex-direction: column; align-items: center; gap: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .share-item:hover { border-color: var(--border-active); background: var(--surface-2); transform: translateY(-2px); }
+        .share-item:active { transform: scale(0.95); }
+
+        .share-icon { font-size: 22px; }
+        .share-lbl { font-size: 10px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.3px; }
+
+        /* ─── HOW IT WORKS ─── */
+        .how-card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+        .step-item:last-child { border-bottom: none; }
+        .step-item:hover { background: var(--surface-3); }
+
+        .step-num {
+            width: 32px; height: 32px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .step-num.s1 { background: rgba(124,110,245,0.15); color: var(--accent); }
+        .step-num.s2 { background: rgba(93,224,177,0.12); color: var(--accent-2); }
+        .step-num.s3 { background: rgba(245,166,35,0.12); color: var(--accent-warm); }
+        .step-num.s4 { background: rgba(74,222,128,0.12); color: var(--green); }
+
+        .step-body { flex: 1; padding-top: 2px; }
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'Syne', sans-serif;
+        }
+        .step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; font-weight: 300; }
+        .step-desc .highlight-green { color: var(--green); font-weight: 500; }
+        .step-desc .highlight-accent { color: var(--accent); font-weight: 500; }
+
+        /* ─── REWARD MECHANIC CARD ─── */
+        .mechanic-card {
+            background: linear-gradient(145deg, #0f1f18 0%, #0c1a14 100%);
+            border: 1px solid rgba(93,224,177,0.2);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mechanic-card::before {
+            content: '';
+            position: absolute;
+            top: -30px; right: -30px;
+            width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(93,224,177,0.12) 0%, transparent 70%);
+        }
+
+        .mechanic-icon {
+            font-size: 36px;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .mechanic-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .mechanic-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .mechanic-callout {
+            background: rgba(93,224,177,0.08);
+            border: 1px solid rgba(93,224,177,0.2);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .callout-icon {
+            width: 44px; height: 44px;
+            background: rgba(93,224,177,0.12);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .callout-text { flex: 1; }
+        .callout-amount {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent-2);
+            letter-spacing: -0.5px;
+        }
+        .callout-sub { font-size: 12px; color: var(--text-secondary); font-weight: 300; }
+
+        /* ─── LEADERBOARD ─── */
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .lb-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .lb-item:hover { border-color: var(--border-active); transform: translateX(2px); }
+
+        .lb-item.you {
+            background: rgba(124,110,245,0.06);
+            border-color: rgba(124,110,245,0.25);
+        }
+
+        .lb-rank {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .lb-rank.r1 { color: #fbbf24; }
+        .lb-rank.r2 { color: #d1d5db; }
+        .lb-rank.r3 { color: #f97316; }
+        .lb-rank.rn { color: var(--text-dim); }
+
+        .lb-avatar {
+            width: 38px; height: 38px;
+            background: var(--surface-3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+
+        .lb-item.you .lb-avatar { border-color: rgba(124,110,245,0.4); }
+
+        .lb-info { flex: 1; }
+        .lb-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+        .lb-sub { font-size: 12px; color: var(--text-dim); font-weight: 300; }
+
+        .lb-earn {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .you-tag {
+            font-size: 10px;
+            background: rgba(124,110,245,0.15);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* ─── HISTORY ─── */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .hist-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hist-item:hover { border-color: var(--border-active); }
+
+        .hist-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .hist-icon.earned { background: rgba(74,222,128,0.1); }
+        .hist-icon.pending { background: rgba(251,191,36,0.1); }
+
+        .hist-info { flex: 1; }
+        .hist-name { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+        .hist-meta { font-size: 12px; color: var(--text-dim); font-weight: 300; }
+
+        .hist-right { text-align: right; }
+        .hist-amount {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .hist-amount.earned { color: var(--green); }
+        .hist-amount.pending { color: var(--amber); }
+
+        .hist-badge {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 100px;
+            text-transform: uppercase;
+        }
+        .hist-badge.earned { background: rgba(74,222,128,0.1); color: var(--green); }
+        .hist-badge.pending { background: rgba(251,191,36,0.1); color: var(--amber); }
+
+        /* ─── PROGRESS INLINE ─── */
+        .progress-block {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 8px;
+        }
+
+        .prog-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .prog-name { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+        .prog-val {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-2);
+        }
+
+        .prog-bar {
+            height: 5px;
+            background: var(--surface-3);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .prog-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-2), #8ef5d3);
+            border-radius: 3px;
+            transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .prog-sub { font-size: 11px; color: var(--text-dim); }
+
+        /* ─── BOTTOM NAV ─── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: rgba(10,10,15,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 20px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+            cursor: pointer; flex: 1;
+            transition: all 0.2s;
+        }
+
+        .nav-icon { font-size: 22px; opacity: 0.35; transition: all 0.2s; }
+        .nav-label { font-size: 10px; font-weight: 600; color: var(--text-dim); letter-spacing: 0.5px; font-family: 'Syne', sans-serif; }
+
+        .nav-item.active .nav-icon { opacity: 1; }
+        .nav-item.active .nav-label { color: var(--accent); }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--surface-2);
+            border: 1px solid var(--border-active);
+            color: var(--text-primary);
+            padding: 13px 22px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ─── DIVIDER ─── */
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 20px 28px;
+        }
+
+        /* ─── PENDING NOTE ─── */
+        .pending-note {
+            background: rgba(251,191,36,0.06);
+            border: 1px solid rgba(251,191,36,0.15);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .pending-note-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .pending-note-text { font-size: 12px; color: var(--text-secondary); line-height: 1.6; font-weight: 300; }
+        .pending-note-text strong { color: var(--amber); font-weight: 500; }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeUp 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+        .delay-4 { animation-delay: 0.2s; }
+        .delay-5 { animation-delay: 0.25s; }
+        .delay-6 { animation-delay: 0.3s; }
+
+        /* view-all link */
+        .view-all-link {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header animate-in">
+            <div class="header-row">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <div class="header-badge"><span>✦</span> Referral Program</div>
+                <button class="header-icon-btn" onclick="scrollToHistory()">📜</button>
+            </div>
+            <div class="page-title">Earn with<br><span class="highlight">every share.</span></div>
+            <div class="page-subtitle">When your friend spends ₦50k in data or airtime,<br>you get ₦500 — automatically.</div>
+        </div>
+
+        <!-- BALANCE CARD -->
+        <div class="balance-card animate-in delay-1">
+            <div class="balance-label">Reward Wallet</div>
+            <div class="balance-amount"><span class="balance-naira">₦</span>12,000</div>
+            <div class="balance-sub">From <strong>8 completed</strong> referrals</div>
+            <div class="balance-actions">
+                <button class="btn-withdraw" onclick="withdrawEarnings()">Withdraw Funds</button>
+                <button class="btn-history" onclick="scrollToHistory()">View History</button>
+            </div>
+        </div>
+
+        <!-- STATS ROW -->
+        <div class="stats-row animate-in delay-2">
+            <div class="stat-pill">
+                <div class="stat-val accent">12</div>
+                <div class="stat-lbl">Total</div>
+            </div>
+            <div class="stat-pill">
+                <div class="stat-val green">8</div>
+                <div class="stat-lbl">Earned</div>
+            </div>
+            <div class="stat-pill">
+                <div class="stat-val amber">4</div>
+                <div class="stat-lbl">Pending</div>
+            </div>
+        </div>
+
+        <!-- REFERRAL CODE -->
+        <div class="section-wrap animate-in delay-2">
+            <div class="section-label">Your Referral Code</div>
+            <div class="code-card">
+                <div class="code-box">
+                    <div class="code-text" id="referralCode">MW-EA2024</div>
+                    <button class="btn-copy" onclick="copyCode()">📋 Copy</button>
+                </div>
+                <div class="share-grid">
+                    <button class="share-item" onclick="shareVia('whatsapp')">
+                        <div class="share-icon">💬</div>
+                        <div class="share-lbl">WhatsApp</div>
+                    </button>
+                    <button class="share-item" onclick="shareVia('twitter')">
+                        <div class="share-icon">🐦</div>
+                        <div class="share-lbl">Twitter</div>
+                    </button>
+                    <button class="share-item" onclick="shareVia('facebook')">
+                        <div class="share-icon">📘</div>
+                        <div class="share-lbl">Facebook</div>
+                    </button>
+                    <button class="share-item" onclick="shareVia('more')">
+                        <div class="share-icon">＋</div>
+                        <div class="share-lbl">More</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- HOW IT WORKS -->
+        <div class="section-wrap animate-in delay-3">
+            <div class="section-label">How It Works</div>
+            <div class="how-card">
+                <div class="step-item">
+                    <div class="step-num s1">01</div>
+                    <div class="step-body">
+                        <div class="step-title">Share your code</div>
+                        <div class="step-desc">Send your unique referral code to friends and family over any platform.</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num s2">02</div>
+                    <div class="step-body">
+                        <div class="step-title">They sign up & verify</div>
+                        <div class="step-desc">Your friend registers using your code and completes their account verification.</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num s3">03</div>
+                    <div class="step-body">
+                        <div class="step-title">They hit the threshold</div>
+                        <div class="step-desc">Once they spend a cumulative <span class="highlight-accent">₦50,000</span> on data or airtime, the reward unlocks.</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num s4">04</div>
+                    <div class="step-body">
+                        <div class="step-title">You earn ₦500 instantly</div>
+                        <div class="step-desc"><span class="highlight-green">₦500</span> is credited to your reward wallet automatically — no claims needed.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REWARD MECHANIC -->
+        <div class="section-wrap animate-in delay-3">
+            <div class="section-label">The Reward</div>
+            <div class="mechanic-card">
+                <span class="mechanic-icon">🎯</span>
+                <div class="mechanic-title">Spend-based Rewards</div>
+                <div class="mechanic-desc">We reward loyalty — yours and your friends'. When the people you refer reach ₦50,000 in data or airtime purchases, you earn. It's that simple. No tiers, no complexity — just straightforward cash in your wallet.</div>
+                <div class="mechanic-callout">
+                    <div class="callout-icon">💸</div>
+                    <div class="callout-text">
+                        <div class="callout-amount">₦500</div>
+                        <div class="callout-sub">per referral who reaches the ₦50k threshold</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- LEADERBOARD -->
+        <div class="section-wrap animate-in delay-4">
+            <div class="section-header">
+                <div class="section-label" style="margin-bottom:0">Top Referrers</div>
+                <a class="view-all-link" onclick="showToast('Full leaderboard coming soon!')">View All →</a>
+            </div>
+            <div class="leaderboard-list">
+                <div class="lb-item">
+                    <div class="lb-rank r1">🥇</div>
+                    <div class="lb-avatar">AO</div>
+                    <div class="lb-info">
+                        <div class="lb-name">Adebayo Oluwaseun</div>
+                        <div class="lb-sub">45 referrals completed</div>
+                    </div>
+                    <div class="lb-earn">₦22,500</div>
+                </div>
+                <div class="lb-item">
+                    <div class="lb-rank r2">🥈</div>
+                    <div class="lb-avatar">CI</div>
+                    <div class="lb-info">
+                        <div class="lb-name">Chioma Ibrahim</div>
+                        <div class="lb-sub">38 referrals completed</div>
+                    </div>
+                    <div class="lb-earn">₦19,000</div>
+                </div>
+                <div class="lb-item">
+                    <div class="lb-rank r3">🥉</div>
+                    <div class="lb-avatar">MY</div>
+                    <div class="lb-info">
+                        <div class="lb-name">Mohammed Yusuf</div>
+                        <div class="lb-sub">32 referrals completed</div>
+                    </div>
+                    <div class="lb-earn">₦16,000</div>
+                </div>
+                <div class="lb-item you">
+                    <div class="lb-rank rn">8</div>
+                    <div class="lb-avatar" style="color: var(--accent-2);">EA</div>
+                    <div class="lb-info">
+                        <div class="lb-name">Emmanuel <span class="you-tag">You</span></div>
+                        <div class="lb-sub">12 referrals · 8 completed</div>
+                    </div>
+                    <div class="lb-earn">₦4,000</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- REFERRAL HISTORY -->
+        <div class="section-wrap animate-in delay-5" id="historySection">
+            <div class="section-header">
+                <div class="section-label" style="margin-bottom:0">Referral History</div>
+            </div>
+
+            <!-- Pending notice -->
+            <div class="pending-note">
+                <div class="pending-note-icon">⚡</div>
+                <div class="pending-note-text">
+                    <strong>4 referrals are pending.</strong> They'll unlock once each person spends a cumulative ₦50,000 on data or airtime.
+                </div>
+            </div>
+
+            <!-- Pending progress -->
+            <div class="progress-block" style="margin-top:12px; margin-bottom: 12px;">
+                <div class="prog-header">
+                    <div class="prog-name">David Eze — Pending</div>
+                    <div class="prog-val">₦32,000 / ₦50,000</div>
+                </div>
+                <div class="prog-bar">
+                    <div class="prog-fill" style="width: 0%" data-width="64%"></div>
+                </div>
+                <div class="prog-sub">64% — needs ₦18,000 more in data/airtime</div>
+            </div>
+
+            <div class="history-list">
+                <div class="hist-item" onclick="showToast('Earned from Blessing Okoro\'s referral')">
+                    <div class="hist-icon earned">✓</div>
+                    <div class="hist-info">
+                        <div class="hist-name">Blessing Okoro</div>
+                        <div class="hist-meta">Completed threshold · 2 days ago</div>
+                    </div>
+                    <div class="hist-right">
+                        <div class="hist-amount earned">+₦500</div>
+                        <span class="hist-badge earned">Earned</span>
+                    </div>
+                </div>
+
+                <div class="hist-item" onclick="showToast('David Eze needs to reach ₦50k threshold')">
+                    <div class="hist-icon pending">⏱</div>
+                    <div class="hist-info">
+                        <div class="hist-name">David Eze</div>
+                        <div class="hist-meta">₦32,000 of ₦50,000 spent</div>
+                    </div>
+                    <div class="hist-right">
+                        <div class="hist-amount pending">₦500</div>
+                        <span class="hist-badge pending">Pending</span>
+                    </div>
+                </div>
+
+                <div class="hist-item" onclick="showToast('Earned from Faith Okafor\'s referral')">
+                    <div class="hist-icon earned">✓</div>
+                    <div class="hist-info">
+                        <div class="hist-name">Faith Okafor</div>
+                        <div class="hist-meta">Completed threshold · 5 days ago</div>
+                    </div>
+                    <div class="hist-right">
+                        <div class="hist-amount earned">+₦500</div>
+                        <span class="hist-badge earned">Earned</span>
+                    </div>
+                </div>
+
+                <div class="hist-item" onclick="showToast('Earned from Ibrahim Musa\'s referral')">
+                    <div class="hist-icon earned">✓</div>
+                    <div class="hist-info">
+                        <div class="hist-name">Ibrahim Musa</div>
+                        <div class="hist-meta">Completed threshold · 1 week ago</div>
+                    </div>
+                    <div class="hist-right">
+                        <div class="hist-amount earned">+₦500</div>
+                        <span class="hist-badge earned">Earned</span>
+                    </div>
+                </div>
+
+                <div class="hist-item" onclick="showToast('Grace Akinola needs to reach ₦50k threshold')">
+                    <div class="hist-icon pending">⏱</div>
+                    <div class="hist-info">
+                        <div class="hist-name">Grace Akinola</div>
+                        <div class="hist-meta">₦15,000 of ₦50,000 spent</div>
+                    </div>
+                    <div class="hist-right">
+                        <div class="hist-amount pending">₦500</div>
+                        <span class="hist-badge pending">Pending</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+        <div class="nav-item"><div class="nav-icon">💳</div><div class="nav-label">Services</div></div>
+        <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">History</div></div>
+        <div class="nav-item active"><div class="nav-icon">✦</div><div class="nav-label">Rewards</div></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ─── Copy referral code ───
+        function copyCode() {
+            const code = document.getElementById('referralCode').textContent.trim();
+            navigator.clipboard ? navigator.clipboard.writeText(code).then(() => showToast('Code copied!')) : fallbackCopy(code);
+        }
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); showToast('Code copied!'); } catch(e) { showToast('Copy failed'); }
+            document.body.removeChild(ta);
+        }
+
+        // ─── Share ───
+        function shareVia(platform) {
+            const code = document.getElementById('referralCode').textContent.trim();
+            const msg = `Hey! Join me on Meritwise and start spending smarter. Use my referral code: ${code} — https://meritwise.app`;
+            switch(platform) {
+                case 'whatsapp': window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank'); break;
+                case 'twitter': window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}`, '_blank'); break;
+                case 'facebook': window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(msg)}`, '_blank'); break;
+                case 'more':
+                    navigator.share ? navigator.share({ title: 'Join Meritwise', text: msg }).catch(()=>{}) : copyCode();
+                    break;
+            }
+        }
+
+        // ─── Withdraw ───
+        function withdrawEarnings() {
+            if (!confirm('Withdraw ₦12,000 to your main wallet?')) return;
+            showToast('Processing withdrawal…');
+            setTimeout(() => showToast('₦12,000 added to your wallet ✓'), 2000);
+        }
+
+        // ─── Scroll to history ───
+        function scrollToHistory() {
+            document.getElementById('historySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ─── Toast ───
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ─── Bottom nav ───
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ─── Animate progress bars on load ───
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.prog-fill[data-width]').forEach(el => {
+                    el.style.width = el.dataset.width;
+                });
+            }, 600);
+        });
+
+        // ─── Online/Offline ───
+        window.addEventListener('online', () => showToast('Back online — synced ✓'));
+        window.addEventListener('offline', () => showToast('You\'re offline'));
+
+        console.log('%c Meritwise Rewards ✦ ', 'background:#7c6ef5;color:white;font-size:14px;padding:4px 8px;border-radius:4px;');
+    </script>
+</body>
+</html>
