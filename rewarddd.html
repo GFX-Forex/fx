@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Referral & Rewards - Meritwise</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 52px 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 220px; height: 220px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: 20px; left: -40px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-btn {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .back-btn:active { background: rgba(255,255,255,0.25); }
+
+        .header-title { flex: 1; }
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2px;
+        }
+        .header-title p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .history-btn {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: background 0.2s;
+        }
+        .history-btn:active { background: rgba(255,255,255,0.25); }
+
+        /* ─── STATS CARD ─── */
+        .stats-card {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            margin-bottom: 3px;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+        }
+
+        .balance-block {
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-top: 18px;
+        }
+
+        .balance-label-sm {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .balance-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .balance-amount {
+            font-size: 30px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        .withdraw-btn {
+            padding: 11px 20px;
+            background: white;
+            color: #1e40af;
+            border: none;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .withdraw-btn:active { transform: scale(0.97); }
+
+        /* ─── WHITE CURVE ─── */
+        .curve-pull {
+            height: 24px;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            margin-top: -1px;
+        }
+
+        /* ─── SECTIONS ─── */
+        .section {
+            padding: 0 20px 24px;
+            background: white;
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 14px;
+        }
+
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .view-all-link {
+            font-size: 12px;
+            color: #3b82f6;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ─── CODE CARD ─── */
+        .code-card {
+            background: #f8faff;
+            border: 1px solid #e0e7ff;
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .code-hint {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .code-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            border: 2px dashed #93c5fd;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+        }
+
+        .code-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1e40af;
+            letter-spacing: 3px;
+        }
+
+        .copy-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 9px 16px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:active { transform: scale(0.95); opacity: 0.9; }
+
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .share-btn {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 8px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .share-btn:hover { border-color: #93c5fd; background: #f8faff; }
+        .share-btn:active { transform: scale(0.95); }
+        .share-icon { font-size: 22px; }
+        .share-lbl { font-size: 10px; font-weight: 600; color: #6b7280; }
+
+        /* ─── MECHANIC CARD ─── */
+        .mechanic-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mechanic-icon-box {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        .mechanic-body { flex: 1; }
+        .mechanic-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+        }
+        .mechanic-desc {
+            font-size: 12px;
+            color: #3b5ba9;
+            line-height: 1.6;
+        }
+        .mechanic-desc b { color: #1e40af; }
+
+        .mechanic-amount {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1e40af;
+            letter-spacing: -0.5px;
+            flex-shrink: 0;
+        }
+
+        /* ─── STEPS ─── */
+        .steps-card {
+            background: #f9fafb;
+            border: 1px solid #f3f4f6;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 18px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s;
+        }
+        .step-row:last-child { border-bottom: none; }
+
+        .step-num-box {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            color: white;
+        }
+        .step-num-box.s1 { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .step-num-box.s2 { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
+        .step-num-box.s3 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+        .step-num-box.s4 { background: linear-gradient(135deg, #059669, #34d399); }
+
+        .step-body { padding-top: 4px; }
+        .step-title { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 3px; }
+        .step-desc { font-size: 12px; color: #6b7280; line-height: 1.6; }
+        .step-desc b { color: #1e40af; font-weight: 600; }
+
+        /* ─── DIVIDER ─── */
+        .section-divider {
+            height: 8px;
+            background: #f5f5f5;
+        }
+
+        /* ─── LEADERBOARD ─── */
+        .lb-list { display: flex; flex-direction: column; gap: 8px; }
+
+        .lb-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #f9fafb;
+            border: 1px solid #f3f4f6;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lb-item:hover { border-color: #bfdbfe; background: #f8faff; }
+        .lb-item.you { background: #eff6ff; border-color: #93c5fd; }
+
+        .lb-rank { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
+        .lb-rank-num { font-size: 13px; font-weight: 700; color: #9ca3af; width: 28px; text-align: center; flex-shrink: 0; }
+
+        .lb-avatar {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: white;
+            flex-shrink: 0;
+        }
+        .lb-item.you .lb-avatar { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
+
+        .lb-info { flex: 1; }
+        .lb-name { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 2px; }
+        .lb-sub { font-size: 12px; color: #9ca3af; }
+        .lb-earn { font-size: 14px; font-weight: 700; color: #059669; }
+
+        .you-chip {
+            display: inline-block;
+            font-size: 9px; font-weight: 700;
+            background: #dbeafe; color: #1e40af;
+            padding: 2px 7px; border-radius: 100px;
+            margin-left: 6px; vertical-align: middle;
+        }
+
+        /* ─── HISTORY ─── */
+        .pending-banner {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 13px 15px;
+            display: flex; align-items: flex-start; gap: 10px;
+            margin-bottom: 14px;
+        }
+        .pending-banner-text { font-size: 12px; color: #92400e; line-height: 1.6; }
+        .pending-banner-text strong { color: #d97706; }
+
+        .progress-card {
+            background: #f9fafb;
+            border: 1px solid #f3f4f6;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+        .prog-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8px;
+        }
+        .prog-name { font-size: 13px; font-weight: 600; color: #374151; }
+        .prog-val { font-size: 12px; font-weight: 600; color: #3b82f6; }
+        .prog-bar { height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+        .prog-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .prog-hint { font-size: 11px; color: #9ca3af; }
+
+        .hist-list { display: flex; flex-direction: column; gap: 8px; }
+
+        .hist-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 16px;
+            background: #f9fafb;
+            border: 1px solid #f3f4f6;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hist-item:hover { border-color: #e5e7eb; }
+
+        .hist-icon-box {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .hist-icon-box.earned { background: #dcfce7; }
+        .hist-icon-box.pending { background: #fef3c7; }
+
+        .hist-info { flex: 1; }
+        .hist-name { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 2px; }
+        .hist-meta { font-size: 12px; color: #9ca3af; }
+
+        .hist-right { text-align: right; }
+        .hist-amount { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+        .hist-amount.earned { color: #059669; }
+        .hist-amount.pending { color: #d97706; }
+
+        .hist-badge {
+            display: inline-block;
+            font-size: 9px; font-weight: 700;
+            padding: 3px 8px; border-radius: 100px;
+            text-transform: uppercase;
+        }
+        .hist-badge.earned { background: #dcfce7; color: #059669; }
+        .hist-badge.pending { background: #fef3c7; color: #d97706; }
+
+        /* ─── BOTTOM NAV ─── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 100%; max-width: 480px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex; justify-content: space-around;
+            padding: 10px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            cursor: pointer; flex: 1;
+        }
+        .nav-icon { width: 24px; height: 24px; stroke-width: 2; color: #6b7280; transition: color 0.2s; }
+        .nav-item.active .nav-icon { color: #2563eb; }
+        .nav-label { font-size: 11px; font-weight: 600; color: #9ca3af; }
+        .nav-item.active .nav-label { color: #3b82f6; }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 100px; left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            background: #1f2937; color: white;
+            padding: 12px 20px; border-radius: 100px;
+            font-size: 13px; font-weight: 600;
+            z-index: 9999; opacity: 0; pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-top">
+            <button class="back-btn" onclick="history.back()">
+                <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+            </button>
+            <div class="header-title">
+                <h1>Referral & Rewards</h1>
+                <p>Earn ₦500 per qualified referral</p>
+            </div>
+            <button class="history-btn" onclick="scrollToHistory()">
+                <i data-lucide="clock" style="width:16px;height:16px;"></i>
+            </button>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Total Referred</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+            <div class="balance-block">
+                <div class="balance-label-sm">Reward Wallet Balance</div>
+                <div class="balance-row">
+                    <div class="balance-amount">₦4,000</div>
+                    <button class="withdraw-btn" onclick="withdrawEarnings()">Withdraw</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="curve-pull"></div>
+
+    <!-- REFERRAL CODE -->
+    <div class="section">
+        <div class="section-label">Your Referral Code</div>
+        <div class="code-card">
+            <div class="code-hint">Share this code — earn ₦500 when your referral hits ₦50,000 on data or airtime</div>
+            <div class="code-box">
+                <div class="code-text" id="referralCode">MW-EA2024</div>
+                <button class="copy-btn" onclick="copyCode()">
+                    <i data-lucide="copy" style="width:13px;height:13px;"></i>
+                    Copy
+                </button>
+            </div>
+            <div class="share-grid">
+                <button class="share-btn" onclick="shareVia('whatsapp')">
+                    <div class="share-icon">💬</div>
+                    <div class="share-lbl">WhatsApp</div>
+                </button>
+                <button class="share-btn" onclick="shareVia('twitter')">
+                    <div class="share-icon">🐦</div>
+                    <div class="share-lbl">Twitter</div>
+                </button>
+                <button class="share-btn" onclick="shareVia('facebook')">
+                    <div class="share-icon">📘</div>
+                    <div class="share-lbl">Facebook</div>
+                </button>
+                <button class="share-btn" onclick="shareVia('more')">
+                    <div class="share-icon">➕</div>
+                    <div class="share-lbl">More</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- REWARD MECHANIC -->
+    <div class="section" style="padding-top:20px;">
+        <div class="section-label">The Reward</div>
+        <div class="mechanic-card">
+            <div class="mechanic-icon-box">
+                <i data-lucide="target" style="width:26px;height:26px;color:white;"></i>
+            </div>
+            <div class="mechanic-body">
+                <div class="mechanic-title">Spend-based Reward</div>
+                <div class="mechanic-desc">When your referral spends <b>₦50,000</b> on data or airtime, <b>₦500</b> is automatically credited to your reward wallet.</div>
+            </div>
+            <div class="mechanic-amount">₦500</div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- HOW IT WORKS -->
+    <div class="section" style="padding-top:20px;">
+        <div class="section-label">How It Works</div>
+        <div class="steps-card">
+            <div class="step-row">
+                <div class="step-num-box s1">
+                    <i data-lucide="share-2" style="width:15px;height:15px;"></i>
+                </div>
+                <div class="step-body">
+                    <div class="step-title">Share your code</div>
+                    <div class="step-desc">Send your unique referral code to friends via any platform.</div>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-num-box s2">
+                    <i data-lucide="user-plus" style="width:15px;height:15px;"></i>
+                </div>
+                <div class="step-body">
+                    <div class="step-title">They sign up & verify</div>
+                    <div class="step-desc">Your friend registers with your code and completes their verification.</div>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-num-box s3">
+                    <i data-lucide="smartphone" style="width:15px;height:15px;"></i>
+                </div>
+                <div class="step-body">
+                    <div class="step-title">They reach the ₦50,000 threshold</div>
+                    <div class="step-desc">Once they cumulatively spend <b>₦50,000</b> on data or airtime, the reward unlocks.</div>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-num-box s4">
+                    <i data-lucide="wallet" style="width:15px;height:15px;"></i>
+                </div>
+                <div class="step-body">
+                    <div class="step-title">₦500 hits your reward wallet</div>
+                    <div class="step-desc">No claiming needed. <b>₦500</b> is credited to you instantly and automatically.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- LEADERBOARD -->
+    <div class="section" style="padding-top:20px;">
+        <div class="section-header">
+            <div class="section-label" style="margin-bottom:0">Top Referrers</div>
+            <span class="view-all-link" onclick="showToast('Full leaderboard coming soon!')">View All →</span>
+        </div>
+        <div class="lb-list">
+            <div class="lb-item" onclick="showToast('Adebayo Oluwaseun — #1 Referrer')">
+                <span class="lb-rank">🥇</span>
+                <div class="lb-avatar">AO</div>
+                <div class="lb-info">
+                    <div class="lb-name">Adebayo Oluwaseun</div>
+                    <div class="lb-sub">45 referrals completed</div>
+                </div>
+                <div class="lb-earn">₦22,500</div>
+            </div>
+            <div class="lb-item" onclick="showToast('Chioma Ibrahim — #2 Referrer')">
+                <span class="lb-rank">🥈</span>
+                <div class="lb-avatar">CI</div>
+                <div class="lb-info">
+                    <div class="lb-name">Chioma Ibrahim</div>
+                    <div class="lb-sub">38 referrals completed</div>
+                </div>
+                <div class="lb-earn">₦19,000</div>
+            </div>
+            <div class="lb-item" onclick="showToast('Mohammed Yusuf — #3 Referrer')">
+                <span class="lb-rank">🥉</span>
+                <div class="lb-avatar">MY</div>
+                <div class="lb-info">
+                    <div class="lb-name">Mohammed Yusuf</div>
+                    <div class="lb-sub">32 referrals completed</div>
+                </div>
+                <div class="lb-earn">₦16,000</div>
+            </div>
+            <div class="lb-item you">
+                <span class="lb-rank-num">8</span>
+                <div class="lb-avatar">EA</div>
+                <div class="lb-info">
+                    <div class="lb-name">Emmanuel <span class="you-chip">You</span></div>
+                    <div class="lb-sub">12 referred · 8 completed</div>
+                </div>
+                <div class="lb-earn">₦4,000</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- REFERRAL HISTORY -->
+    <div class="section" style="padding-top:20px;" id="historySection">
+        <div class="section-label">Referral History</div>
+
+        <div class="pending-banner">
+            <i data-lucide="info" style="width:16px;height:16px;color:#d97706;flex-shrink:0;margin-top:1px;"></i>
+            <div class="pending-banner-text">
+                <strong>4 referrals pending.</strong> They each need to spend a cumulative ₦50,000 on data or airtime to unlock your ₦500 reward.
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="prog-row">
+                <div class="prog-name">David Eze — Closest to unlocking</div>
+                <div class="prog-val">₦32,000 / ₦50,000</div>
+            </div>
+            <div class="prog-bar">
+                <div class="prog-fill" data-width="64%"></div>
+            </div>
+            <div class="prog-hint">64% complete — needs ₦18,000 more</div>
+        </div>
+
+        <div class="hist-list">
+            <div class="hist-item" onclick="showToast('Earned from Blessing Okoro')">
+                <div class="hist-icon-box earned">
+                    <i data-lucide="check-circle" style="width:20px;height:20px;color:#059669;"></i>
+                </div>
+                <div class="hist-info">
+                    <div class="hist-name">Blessing Okoro</div>
+                    <div class="hist-meta">Threshold reached · 2 days ago</div>
+                </div>
+                <div class="hist-right">
+                    <div class="hist-amount earned">+₦500</div>
+                    <span class="hist-badge earned">Earned</span>
+                </div>
+            </div>
+
+            <div class="hist-item" onclick="showToast('David Eze needs ₦18,000 more')">
+                <div class="hist-icon-box pending">
+                    <i data-lucide="clock" style="width:20px;height:20px;color:#d97706;"></i>
+                </div>
+                <div class="hist-info">
+                    <div class="hist-name">David Eze</div>
+                    <div class="hist-meta">₦32,000 of ₦50,000 spent</div>
+                </div>
+                <div class="hist-right">
+                    <div class="hist-amount pending">₦500</div>
+                    <span class="hist-badge pending">Pending</span>
+                </div>
+            </div>
+
+            <div class="hist-item" onclick="showToast('Earned from Faith Okafor')">
+                <div class="hist-icon-box earned">
+                    <i data-lucide="check-circle" style="width:20px;height:20px;color:#059669;"></i>
+                </div>
+                <div class="hist-info">
+                    <div class="hist-name">Faith Okafor</div>
+                    <div class="hist-meta">Threshold reached · 5 days ago</div>
+                </div>
+                <div class="hist-right">
+                    <div class="hist-amount earned">+₦500</div>
+                    <span class="hist-badge earned">Earned</span>
+                </div>
+            </div>
+
+            <div class="hist-item" onclick="showToast('Earned from Ibrahim Musa')">
+                <div class="hist-icon-box earned">
+                    <i data-lucide="check-circle" style="width:20px;height:20px;color:#059669;"></i>
+                </div>
+                <div class="hist-info">
+                    <div class="hist-name">Ibrahim Musa</div>
+                    <div class="hist-meta">Threshold reached · 1 week ago</div>
+                </div>
+                <div class="hist-right">
+                    <div class="hist-amount earned">+₦500</div>
+                    <span class="hist-badge earned">Earned</span>
+                </div>
+            </div>
+
+            <div class="hist-item" onclick="showToast('Grace Akinola needs ₦35,000 more')">
+                <div class="hist-icon-box pending">
+                    <i data-lucide="clock" style="width:20px;height:20px;color:#d97706;"></i>
+                </div>
+                <div class="hist-info">
+                    <div class="hist-name">Grace Akinola</div>
+                    <div class="hist-meta">₦15,000 of ₦50,000 spent</div>
+                </div>
+                <div class="hist-right">
+                    <div class="hist-amount pending">₦500</div>
+                    <span class="hist-badge pending">Pending</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <div class="nav-item" onclick="window.location.href='dashboard.html'">
+        <i data-lucide="home" class="nav-icon"></i>
+        <div class="nav-label">Home</div>
+    </div>
+    <div class="nav-item" onclick="window.location.href='requests-inbox.html'">
+        <i data-lucide="inbox" class="nav-icon"></i>
+        <div class="nav-label">Requests</div>
+    </div>
+    <div class="nav-item" onclick="window.location.href='history.html'">
+        <i data-lucide="history" class="nav-icon"></i>
+        <div class="nav-label">History</div>
+    </div>
+    <div class="nav-item active">
+        <i data-lucide="gift" class="nav-icon"></i>
+        <div class="nav-label">Rewards</div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+
+    function copyCode() {
+        const code = document.getElementById('referralCode').textContent.trim();
+        navigator.clipboard
+            ? navigator.clipboard.writeText(code).then(() => showToast('Referral code copied!'))
+            : fallbackCopy(code);
+    }
+    function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); showToast('Code copied!'); } catch(e) { showToast('Copy failed'); }
+        document.body.removeChild(ta);
+    }
+
+    function shareVia(platform) {
+        const code = document.getElementById('referralCode').textContent.trim();
+        const msg = `Hey! Join me on Meritwise — the smart way to buy data & airtime. Use my referral code: ${code}. Sign up: https://meritwise.app`;
+        switch(platform) {
+            case 'whatsapp': window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank'); break;
+            case 'twitter': window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}`, '_blank'); break;
+            case 'facebook': window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(msg)}`, '_blank'); break;
+            case 'more':
+                navigator.share ? navigator.share({ title: 'Join Meritwise', text: msg }).catch(()=>{}) : copyCode();
+                break;
+        }
+    }
+
+    function withdrawEarnings() {
+        if (!confirm('Withdraw ₦4,000 to your main wallet?')) return;
+        showToast('Processing withdrawal…');
+        setTimeout(() => showToast('₦4,000 added to your wallet ✓'), 2000);
+    }
+
+    function scrollToHistory() {
+        document.getElementById('historySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.querySelectorAll('.prog-fill[data-width]').forEach(el => {
+                el.style.width = el.dataset.width;
+            });
+        }, 500);
+    });
+</script>
+</body>
+</html>
