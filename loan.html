@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MeriLoan - Meritwise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-deep:#1e40af; --blue-mid:#3b82f6; --blue-light:#60a5fa;
+            --blue-ghost:#eff6ff; --green:#059669; --green-light:#d1fae5;
+            --amber:#d97706; --amber-light:#fef3c7; --red:#dc2626; --red-light:#fee2e2;
+            --gray-900:#111827; --gray-700:#374151; --gray-500:#6b7280;
+            --gray-300:#d1d5db; --gray-100:#f3f4f6; --white:#ffffff;
+            --radius-xl:20px; --radius-lg:16px; --radius-md:12px;
+            --shadow-card:0 4px 24px rgba(30,64,175,0.10);
+            --shadow-btn:0 8px 20px rgba(59,130,246,0.35);
+        }
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{font-family:'Sora',sans-serif;background:#f0f4ff;min-height:100vh;padding-bottom:100px;overflow-x:hidden;}
+
+        /* HERO */
+        .hero{background:linear-gradient(145deg,#0f2563 0%,#1e40af 45%,#3b82f6 100%);padding:56px 20px 80px;position:relative;overflow:hidden;}
+        .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,0.04);border-radius:50%;}
+        .hero::after{content:'';position:absolute;bottom:-40px;left:-40px;width:180px;height:180px;background:rgba(96,165,250,0.12);border-radius:50%;}
+        .hero-inner{max-width:480px;margin:0 auto;position:relative;z-index:2;}
+        .back-row{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+        .back-btn{width:36px;height:36px;background:rgba(255,255,255,0.15);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;backdrop-filter:blur(10px);transition:all 0.2s;}
+        .back-btn:active{background:rgba(255,255,255,0.25);transform:scale(0.95);}
+        .hero-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);}
+        .hero-title{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:700;color:white;line-height:1.15;margin-bottom:8px;}
+        .hero-title span{background:linear-gradient(90deg,#93c5fd,#e0f2fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .hero-sub{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:28px;}
+        .hero-limit-row{display:flex;gap:12px;}
+        .hero-limit-card{flex:1;background:rgba(255,255,255,0.1);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius-lg);padding:14px 16px;}
+        .hlc-label{font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:4px;}
+        .hlc-value{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:white;}
+        .hlc-sub{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px;}
+
+        /* WAVE */
+        .wave-transition{height:40px;background:#f0f4ff;margin-top:-40px;border-radius:40px 40px 0 0;position:relative;z-index:5;}
+
+        /* CONTENT */
+        .content{max-width:480px;margin:0 auto;padding:0 16px;}
+
+        /* TABS */
+        .tabs{display:flex;gap:4px;background:var(--gray-100);padding:4px;border-radius:14px;margin-bottom:20px;}
+        .tab{flex:1;padding:10px;border:none;border-radius:11px;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--gray-500);transition:all 0.2s;}
+        .tab.active{background:white;color:var(--blue-deep);box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+
+        /* SCORE CARD */
+        .score-card{background:white;border-radius:var(--radius-xl);padding:24px 20px;box-shadow:var(--shadow-card);margin-bottom:16px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden;}
+        .score-card::before{content:'';position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle at top right,rgba(59,130,246,0.06) 0%,transparent 70%);}
+        .score-ring{position:relative;width:84px;height:84px;flex-shrink:0;}
+        .score-ring svg{transform:rotate(-90deg);width:84px;height:84px;}
+        .score-ring-bg{fill:none;stroke:#e0e7ff;stroke-width:7;}
+        .score-ring-fill{fill:none;stroke:url(#scoreGrad);stroke-width:7;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset 1.5s cubic-bezier(0.34,1.56,0.64,1);}
+        .score-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+        .score-num{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--blue-deep);line-height:1;}
+        .score-lbl{font-size:8px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;}
+        .score-info{flex:1;}
+        .score-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:4px;}
+        .score-desc{font-size:12px;color:var(--gray-500);line-height:1.6;margin-bottom:12px;}
+        .score-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-light);color:var(--green);font-size:11px;font-weight:700;padding:5px 10px;border-radius:100px;}
+
+        /* ELIGIBLE CARD */
+        .eligible-card{background:linear-gradient(135deg,var(--blue-deep) 0%,var(--blue-mid) 100%);border-radius:var(--radius-xl);padding:24px 20px;margin-bottom:16px;position:relative;overflow:hidden;}
+        .eligible-card::before{content:'';position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:rgba(255,255,255,0.05);border-radius:50%;}
+        .eligible-card::after{content:'';position:absolute;bottom:-50px;left:-20px;width:120px;height:120px;background:rgba(255,255,255,0.04);border-radius:50%;}
+        .ec-inner{position:relative;z-index:2;}
+        .ec-label{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:6px;}
+        .ec-amount{font-family:'Clash Display',sans-serif;font-size:38px;font-weight:700;color:white;letter-spacing:-1px;margin-bottom:4px;}
+        .ec-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:20px;}
+        .ec-stats{display:flex;gap:8px;}
+        .ec-stat{flex:1;background:rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:10px 12px;border:1px solid rgba(255,255,255,0.1);}
+        .ec-stat-val{font-size:14px;font-weight:700;color:white;margin-bottom:2px;}
+        .ec-stat-lbl{font-size:10px;color:rgba(255,255,255,0.5);font-weight:600;}
+
+        /* CALCULATOR */
+        .calc-card{background:white;border-radius:var(--radius-xl);padding:24px 20px;box-shadow:var(--shadow-card);margin-bottom:16px;}
+        .calc-title{font-family:'Clash Display',sans-serif;font-size:17px;font-weight:600;color:var(--gray-900);margin-bottom:20px;}
+        .slider-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+        .slider-label{font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;}
+        .slider-value{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;color:var(--blue-deep);}
+        input[type="range"]{width:100%;height:6px;border-radius:3px;background:linear-gradient(to right,var(--blue-mid) 0%,var(--blue-mid) 20%,#e0e7ff 20%,#e0e7ff 100%);outline:none;border:none;-webkit-appearance:none;appearance:none;cursor:pointer;}
+        input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:white;border:3px solid var(--blue-mid);border-radius:50%;box-shadow:0 2px 8px rgba(59,130,246,0.3);cursor:pointer;transition:transform 0.15s;}
+        input[type="range"]::-webkit-slider-thumb:active{transform:scale(1.2);}
+        .range-limits{display:flex;justify-content:space-between;font-size:10px;color:var(--gray-500);font-weight:600;margin-top:6px;margin-bottom:20px;}
+        .duration-chips{display:flex;gap:8px;margin-bottom:20px;}
+        .duration-chip{flex:1;padding:10px 6px;background:var(--gray-100);border:2px solid transparent;border-radius:var(--radius-md);font-size:12px;font-weight:700;color:var(--gray-500);text-align:center;cursor:pointer;transition:all 0.2s;}
+        .duration-chip.active{background:var(--blue-ghost);border-color:var(--blue-mid);color:var(--blue-deep);}
+        .duration-chip.disabled{opacity:0.35;cursor:not-allowed;}
+        .calc-summary{background:var(--blue-ghost);border-radius:var(--radius-lg);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+        .cs-label{font-size:11px;color:var(--gray-500);font-weight:600;margin-bottom:2px;}
+        .cs-value{font-size:15px;font-weight:700;color:var(--gray-900);}
+        .cs-value.highlight{color:var(--blue-deep);}
+        .cs-value.green{color:var(--green);}
+        .apply-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));border:none;border-radius:var(--radius-lg);color:white;font-family:'Sora',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-btn);transition:all 0.2s;letter-spacing:0.3px;}
+        .apply-btn:active{transform:scale(0.98);opacity:0.92;}
+
+        /* SECTION LABEL */
+        .section-label{font-size:12px;font-weight:700;color:var(--gray-500);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:12px;margin-top:24px;}
+
+        /* RATE TABLE */
+        .rate-card{background:white;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-card);margin-bottom:16px;}
+        .rate-header{background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));padding:16px 20px;}
+        .rate-header-title{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:600;color:white;}
+        .rate-row{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid var(--gray-100);}
+        .rate-row:last-child{border-bottom:none;}
+        .rate-row.highlight{background:var(--blue-ghost);}
+        .rate-range{flex:1;font-size:13px;font-weight:600;color:var(--gray-700);}
+        .rate-pct{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;color:var(--blue-deep);margin-right:8px;}
+        .rate-duration{font-size:11px;color:var(--gray-500);font-weight:600;}
+
+        /* ACTIVE LOAN */
+        .loan-card{background:white;border-radius:var(--radius-xl);padding:20px;box-shadow:var(--shadow-card);margin-bottom:12px;border-left:4px solid var(--blue-mid);}
+        .loan-card.completed{border-left-color:var(--green);}
+        .lc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+        .lc-type{font-size:13px;font-weight:700;color:var(--gray-900);margin-bottom:2px;}
+        .lc-ref{font-size:10px;color:var(--gray-500);font-weight:600;}
+        .lc-status{font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.5px;}
+        .lc-status.active{background:#dbeafe;color:var(--blue-deep);}
+        .lc-status.completed{background:var(--green-light);color:var(--green);}
+        .lc-progress-bar{height:6px;background:#e0e7ff;border-radius:3px;overflow:hidden;margin-bottom:10px;}
+        .lc-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue-deep),var(--blue-mid));border-radius:3px;transition:width 1.2s cubic-bezier(0.34,1.56,0.64,1);}
+        .lc-stats{display:flex;justify-content:space-between;}
+        .lc-stat{text-align:center;}
+        .lc-stat-val{font-size:13px;font-weight:700;color:var(--gray-900);}
+        .lc-stat-lbl{font-size:10px;color:var(--gray-500);font-weight:600;margin-top:2px;}
+        .repay-btn{width:100%;margin-top:14px;padding:13px;background:var(--blue-ghost);border:1.5px solid #bfdbfe;border-radius:var(--radius-md);color:var(--blue-deep);font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+        .repay-btn:active{background:#dbeafe;}
+
+        /* ELIGIBILITY */
+        .eligibility-card{background:white;border-radius:var(--radius-xl);padding:20px;box-shadow:var(--shadow-card);margin-bottom:16px;}
+        .elig-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:16px;}
+        .elig-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);}
+        .elig-row:last-child{border-bottom:none;}
+        .elig-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+        .elig-info{flex:1;}
+        .elig-name{font-size:13px;font-weight:600;color:var(--gray-900);margin-bottom:2px;}
+        .elig-sub{font-size:11px;color:var(--gray-500);}
+        .elig-right{text-align:right;}
+        .elig-pts{font-size:14px;font-weight:700;color:var(--blue-deep);}
+        .elig-pts-lbl{font-size:10px;color:var(--gray-500);font-weight:600;}
+        .elig-bar{height:4px;background:var(--gray-100);border-radius:2px;overflow:hidden;margin-top:6px;}
+        .elig-fill{height:100%;border-radius:2px;transition:width 1.5s cubic-bezier(0.34,1.56,0.64,1);}
+
+        /* BOTTOM NAV */
+        .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;border-top:1px solid var(--gray-100);display:flex;padding:10px 0 12px;z-index:100;}
+        .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;}
+        .nav-icon{width:22px;height:22px;color:#9ca3af;}
+        .nav-item.active .nav-icon{color:var(--blue-mid);}
+        .nav-label{font-size:10px;font-weight:700;color:#9ca3af;letter-spacing:0.3px;}
+        .nav-item.active .nav-label{color:var(--blue-mid);}
+
+        /* MODAL */
+        .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:999;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+        .modal-backdrop.show{opacity:1;pointer-events:all;}
+        .modal{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:480px;background:white;border-radius:28px 28px 0 0;padding:28px 20px 40px;z-index:1000;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+        .modal.show{transform:translateX(-50%) translateY(0);}
+        .modal-handle{width:40px;height:4px;background:var(--gray-300);border-radius:2px;margin:0 auto 24px;}
+        .modal-title{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--gray-900);margin-bottom:6px;}
+        .modal-sub{font-size:13px;color:var(--gray-500);margin-bottom:24px;line-height:1.6;}
+        .modal-row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--gray-100);}
+        .modal-row:last-of-type{border-bottom:none;margin-bottom:20px;}
+        .mr-label{font-size:13px;color:var(--gray-500);font-weight:500;}
+        .mr-value{font-size:14px;font-weight:700;color:var(--gray-900);}
+        .mr-value.blue{color:var(--blue-deep);}
+        .mr-value.green{color:var(--green);}
+        .modal-confirm{width:100%;padding:16px;background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));border:none;border-radius:var(--radius-lg);color:white;font-family:'Sora',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-btn);margin-bottom:12px;transition:all 0.2s;}
+        .modal-confirm:active{transform:scale(0.98);}
+        .modal-cancel{width:100%;padding:14px;background:transparent;border:none;color:var(--gray-500);font-family:'Sora',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+
+        /* TOAST */
+        .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--gray-900);color:white;padding:12px 22px;border-radius:100px;font-size:13px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;}
+        .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+        .fade-up{animation:fadeUp 0.5s ease both;}
+        .d1{animation-delay:0.05s;} .d2{animation-delay:0.1s;} .d3{animation-delay:0.15s;} .d4{animation-delay:0.2s;}
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="hero-inner">
+        <div class="back-row">
+            <button class="back-btn" onclick="history.back()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+            </button>
+            <span class="hero-tag">MeriLoan · Beta</span>
+        </div>
+        <div class="hero-title">Smart Loans,<br><span>Fair Rates</span></div>
+        <div class="hero-sub">Borrow up to ₦200,000 at 10–15% monthly. No collateral. Based on your real activity.</div>
+        <div class="hero-limit-row">
+            <div class="hero-limit-card">
+                <div class="hlc-label">Your Limit</div>
+                <div class="hlc-value" id="heroLimit">₦45,000</div>
+                <div class="hlc-sub">Activity-based</div>
+            </div>
+            <div class="hero-limit-card">
+                <div class="hlc-label">Interest</div>
+                <div class="hlc-value">10–15%</div>
+                <div class="hlc-sub">Monthly flat</div>
+            </div>
+            <div class="hero-limit-card">
+                <div class="hlc-label">Max Term</div>
+                <div class="hlc-value">3 Months</div>
+                <div class="hlc-sub">Flexible plans</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wave-transition"></div>
+
+<div style="max-width:480px;margin:0 auto;">
+<div class="content">
+
+    <div class="tabs fade-up d1">
+        <button class="tab active" onclick="switchTab('apply',this)">Apply</button>
+        <button class="tab" onclick="switchTab('active',this)">My Loans</button>
+        <button class="tab" onclick="switchTab('eligibility',this)">Eligibility</button>
+    </div>
+
+    <!-- ══ APPLY TAB ══ -->
+    <div id="tab-apply">
+
+        <div class="score-card fade-up d2">
+            <div class="score-ring">
+                <svg viewBox="0 0 84 84">
+                    <defs>
+                        <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#1e40af"/>
+                            <stop offset="100%" style="stop-color:#3b82f6"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="score-ring-bg" cx="42" cy="42" r="35"/>
+                    <circle class="score-ring-fill" id="scoreCircle" cx="42" cy="42" r="35"/>
+                </svg>
+                <div class="score-center">
+                    <div class="score-num" id="scoreNum">72</div>
+                    <div class="score-lbl">Score</div>
+                </div>
+            </div>
+            <div class="score-info">
+                <div class="score-title">Good Credit</div>
+                <div class="score-desc">Your activity qualifies you for loans up to ₦45,000. Keep transacting to unlock more.</div>
+                <div class="score-badge">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    Eligible to Borrow
+                </div>
+            </div>
+        </div>
+
+        <div class="eligible-card fade-up d3">
+            <div class="ec-inner">
+                <div class="ec-label">💰 Available to Borrow</div>
+                <div class="ec-amount">₦45,000</div>
+                <div class="ec-sub">Repay on time to unlock up to ₦200,000</div>
+                <div class="ec-stats">
+                    <div class="ec-stat"><div class="ec-stat-val">15%</div><div class="ec-stat-lbl">Rate ≤ ₦100k</div></div>
+                    <div class="ec-stat"><div class="ec-stat-val">10%</div><div class="ec-stat-lbl">Rate > ₦100k</div></div>
+                    <div class="ec-stat"><div class="ec-stat-val">0</div><div class="ec-stat-lbl">Active Loans</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-card fade-up d4">
+            <div class="calc-title">🧮 Loan Calculator</div>
+
+            <div class="slider-label-row">
+                <span class="slider-label">Loan Amount</span>
+                <span class="slider-value" id="loanAmountDisplay">₦5,000</span>
+            </div>
+            <input type="range" id="loanSlider" min="1000" max="45000" step="1000" value="5000" oninput="updateCalc()">
+            <div class="range-limits"><span>₦1,000</span><span id="maxLbl">₦45,000</span></div>
+
+            <div class="slider-label-row" style="margin-bottom:10px;">
+                <span class="slider-label">Repayment Duration</span>
+            </div>
+            <div class="duration-chips">
+                <div class="duration-chip active" data-months="1" onclick="selectDuration(this)">1 Month</div>
+                <div class="duration-chip disabled" data-months="2" onclick="selectDuration(this)">2 Months</div>
+                <div class="duration-chip disabled" data-months="3" onclick="selectDuration(this)">3 Months</div>
+            </div>
+
+            <div class="calc-summary">
+                <div><div class="cs-label">Loan Amount</div><div class="cs-value highlight" id="sPrincipal">₦5,000</div></div>
+                <div><div class="cs-label">Interest Rate</div><div class="cs-value" id="sRate">15% / month</div></div>
+                <div><div class="cs-label">Total Interest</div><div class="cs-value" id="sInterest">₦750</div></div>
+                <div><div class="cs-label">Total Repayment</div><div class="cs-value highlight" id="sTotal">₦5,750</div></div>
+                <div><div class="cs-label">Monthly Payment</div><div class="cs-value green" id="sMonthly">₦5,750</div></div>
+                <div><div class="cs-label">Due Date</div><div class="cs-value" id="sDue">—</div></div>
+            </div>
+
+            <button class="apply-btn" onclick="showModal('apply')">Apply for Loan →</button>
+        </div>
+
+        <div class="section-label">Rate Guide</div>
+        <div class="rate-card">
+            <div class="rate-header"><div class="rate-header-title">📊 Rates & Repayment Options</div></div>
+            <div class="rate-row"><div class="rate-range">₦1,000 – ₦40,000</div><div class="rate-pct">15%</div><div class="rate-duration">1 month only</div></div>
+            <div class="rate-row highlight"><div class="rate-range">₦40,001 – ₦100,000</div><div class="rate-pct">15%</div><div class="rate-duration">1–2 months</div></div>
+            <div class="rate-row"><div class="rate-range">₦100,001 – ₦200,000</div><div class="rate-pct">10%</div><div class="rate-duration">1–3 months</div></div>
+        </div>
+    </div>
+
+    <!-- ══ MY LOANS TAB ══ -->
+    <div id="tab-active" style="display:none;">
+        <div class="section-label">Current Loan</div>
+        <div class="loan-card fade-up d1">
+            <div class="lc-top">
+                <div><div class="lc-type">Personal Loan</div><div class="lc-ref">REF: LN-2026-0001</div></div>
+                <div class="lc-status active">Active</div>
+            </div>
+            <div class="lc-progress-bar"><div class="lc-progress-fill" id="loanProg" style="width:0%"></div></div>
+            <div class="lc-stats">
+                <div class="lc-stat"><div class="lc-stat-val">₦20,000</div><div class="lc-stat-lbl">Borrowed</div></div>
+                <div class="lc-stat"><div class="lc-stat-val" style="color:var(--green)">₦8,000</div><div class="lc-stat-lbl">Paid</div></div>
+                <div class="lc-stat"><div class="lc-stat-val" style="color:var(--amber)">₦15,000</div><div class="lc-stat-lbl">Remaining</div></div>
+                <div class="lc-stat"><div class="lc-stat-val">12 days</div><div class="lc-stat-lbl">Due In</div></div>
+            </div>
+            <button class="repay-btn" onclick="showModal('repay')">💳 Make Repayment</button>
+        </div>
+
+        <div class="section-label">History</div>
+        <div class="loan-card completed fade-up d2">
+            <div class="lc-top">
+                <div><div class="lc-type">Personal Loan</div><div class="lc-ref">REF: LN-2025-0744</div></div>
+                <div class="lc-status completed">Completed</div>
+            </div>
+            <div class="lc-stats">
+                <div class="lc-stat"><div class="lc-stat-val">₦10,000</div><div class="lc-stat-lbl">Borrowed</div></div>
+                <div class="lc-stat"><div class="lc-stat-val" style="color:var(--green)">₦11,500</div><div class="lc-stat-lbl">Repaid</div></div>
+                <div class="lc-stat"><div class="lc-stat-val">15%</div><div class="lc-stat-lbl">Rate</div></div>
+                <div class="lc-stat"><div class="lc-stat-val" style="color:var(--green)">On Time ✓</div><div class="lc-stat-lbl">Status</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ ELIGIBILITY TAB ══ -->
+    <div id="tab-eligibility" style="display:none;">
+        <div class="score-card fade-up d1" style="margin-bottom:16px;">
+            <div class="score-ring">
+                <svg viewBox="0 0 84 84">
+                    <defs>
+                        <linearGradient id="scoreGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#059669"/>
+                            <stop offset="100%" style="stop-color:#34d399"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="score-ring-bg" cx="42" cy="42" r="35"/>
+                    <circle class="score-ring-fill" id="scoreCircle2" style="stroke:url(#scoreGrad2)" cx="42" cy="42" r="35"/>
+                </svg>
+                <div class="score-center">
+                    <div class="score-num" style="color:var(--green)">72</div>
+                    <div class="score-lbl">/ 100</div>
+                </div>
+            </div>
+            <div class="score-info">
+                <div class="score-title">Credit Breakdown</div>
+                <div class="score-desc">Score builds from real service usage. Higher score = higher limit.</div>
+                <div style="font-size:12px;color:var(--gray-500);font-weight:600;">28 pts to next tier → <span style="color:var(--blue-deep)">₦100k limit</span></div>
+            </div>
+        </div>
+
+        <div class="eligibility-card fade-up d2">
+            <div class="elig-title">📈 Score Breakdown</div>
+            <div class="elig-row">
+                <div class="elig-icon" style="background:#dbeafe;">📱</div>
+                <div class="elig-info">
+                    <div class="elig-name">Airtime Purchases</div>
+                    <div class="elig-sub">115 transactions · ₦22,865 spent</div>
+                    <div class="elig-bar"><div class="elig-fill" id="ef1" style="width:0%;background:var(--blue-mid);"></div></div>
+                </div>
+                <div class="elig-right"><div class="elig-pts">+34</div><div class="elig-pts-lbl">points</div></div>
+            </div>
+            <div class="elig-row">
+                <div class="elig-icon" style="background:#dbeafe;">🌐</div>
+                <div class="elig-info">
+                    <div class="elig-name">Data Purchases</div>
+                    <div class="elig-sub">4 transactions · ₦850 spent</div>
+                    <div class="elig-bar"><div class="elig-fill" id="ef2" style="width:0%;background:var(--blue-mid);"></div></div>
+                </div>
+                <div class="elig-right"><div class="elig-pts">+6</div><div class="elig-pts-lbl">points</div></div>
+            </div>
+            <div class="elig-row">
+                <div class="elig-icon" style="background:#fef3c7;">⚡</div>
+                <div class="elig-info">
+                    <div class="elig-name">Electricity Bills</div>
+                    <div class="elig-sub">No payments yet</div>
+                    <div class="elig-bar"><div class="elig-fill" style="width:0%;background:var(--amber);"></div></div>
+                </div>
+                <div class="elig-right"><div class="elig-pts" style="color:var(--gray-300)">+0</div><div class="elig-pts-lbl">points</div></div>
+            </div>
+            <div class="elig-row">
+                <div class="elig-icon" style="background:#fef3c7;">📺</div>
+                <div class="elig-info">
+                    <div class="elig-name">Cable TV</div>
+                    <div class="elig-sub">No payments yet</div>
+                    <div class="elig-bar"><div class="elig-fill" style="width:0%;background:var(--amber);"></div></div>
+                </div>
+                <div class="elig-right"><div class="elig-pts" style="color:var(--gray-300)">+0</div><div class="elig-pts-lbl">points</div></div>
+            </div>
+            <div class="elig-row">
+                <div class="elig-icon" style="background:#d1fae5;">🔒</div>
+                <div class="elig-info">
+                    <div class="elig-name">Lockfund Activity</div>
+                    <div class="elig-sub">₦0 currently locked</div>
+                    <div class="elig-bar"><div class="elig-fill" style="width:0%;background:var(--green);"></div></div>
+                </div>
+                <div class="elig-right"><div class="elig-pts" style="color:var(--gray-300)">+0</div><div class="elig-pts-lbl">points</div></div>
+            </div>
+            <div class="elig-row" style="background:var(--blue-ghost);border-radius:var(--radius-md);padding:12px;margin-top:8px;border-bottom:none;">
+                <div class="elig-icon" style="background:transparent;">🎯</div>
+                <div class="elig-info"><div class="elig-name" style="color:var(--blue-deep)">Total Score</div><div class="elig-sub">Good · 30+ days active</div></div>
+                <div class="elig-right"><div class="elig-pts" style="font-size:20px">72</div><div class="elig-pts-lbl">/ 100</div></div>
+            </div>
+        </div>
+
+        <div class="section-label">Unlock Higher Limits</div>
+        <div class="rate-card fade-up d3">
+            <div class="rate-header"><div class="rate-header-title">🚀 How to Increase Your Score</div></div>
+            <div class="rate-row"><div class="rate-range">Pay electricity bills</div><div class="rate-pct" style="font-size:13px;color:var(--green)">+15 pts</div></div>
+            <div class="rate-row highlight"><div class="rate-range">Subscribe to cable TV</div><div class="rate-pct" style="font-size:13px;color:var(--green)">+15 pts</div></div>
+            <div class="rate-row"><div class="rate-range">Lock ₦5,000+ for 14 days</div><div class="rate-pct" style="font-size:13px;color:var(--green)">+20 pts</div></div>
+            <div class="rate-row highlight"><div class="rate-range">Repay loan on time</div><div class="rate-pct" style="font-size:13px;color:var(--green)">+10 pts</div></div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <div class="nav-item" onclick="location.href='dashboard.html'">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div class="nav-label">Home</div>
+    </div>
+    <div class="nav-item" onclick="location.href='requests-inbox.html'">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <div class="nav-label">Requests</div>
+    </div>
+    <div class="nav-item" onclick="location.href='history.html'">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        <div class="nav-label">History</div>
+    </div>
+    <div class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <div class="nav-label">Loan</div>
+    </div>
+</div>
+
+<!-- APPLY MODAL -->
+<div class="modal-backdrop" id="applyBackdrop" onclick="closeModal('apply')"></div>
+<div class="modal" id="applyModal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Confirm Loan</div>
+    <div class="modal-sub">Review your loan details carefully before confirming.</div>
+    <div class="modal-row"><span class="mr-label">Loan Amount</span><span class="mr-value blue" id="mPrincipal">₦5,000</span></div>
+    <div class="modal-row"><span class="mr-label">Interest Rate</span><span class="mr-value" id="mRate">15% per month</span></div>
+    <div class="modal-row"><span class="mr-label">Duration</span><span class="mr-value" id="mDuration">1 Month</span></div>
+    <div class="modal-row"><span class="mr-label">Total Interest</span><span class="mr-value" id="mInterest">₦750</span></div>
+    <div class="modal-row"><span class="mr-label">Total Repayment</span><span class="mr-value blue" id="mTotal">₦5,750</span></div>
+    <div class="modal-row"><span class="mr-label">Monthly Payment</span><span class="mr-value green" id="mMonthly">₦5,750</span></div>
+    <div class="modal-row"><span class="mr-label">Due Date</span><span class="mr-value" id="mDue">—</span></div>
+    <button class="modal-confirm" onclick="confirmLoan()">✅ Confirm & Disburse to Wallet</button>
+    <button class="modal-cancel" onclick="closeModal('apply')">Cancel</button>
+</div>
+
+<!-- REPAY MODAL -->
+<div class="modal-backdrop" id="repayBackdrop" onclick="closeModal('repay')"></div>
+<div class="modal" id="repayModal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Make Repayment</div>
+    <div class="modal-sub">Repayment will be deducted from your main wallet balance instantly.</div>
+    <div class="modal-row"><span class="mr-label">Outstanding Balance</span><span class="mr-value blue">₦15,000</span></div>
+    <div class="modal-row"><span class="mr-label">Your Wallet Balance</span><span class="mr-value green">₦2,392.01</span></div>
+    <div class="modal-row"><span class="mr-label">After Repayment</span><span class="mr-value">Insufficient — top up first</span></div>
+    <button class="modal-confirm" onclick="confirmRepay()">💳 Repay Full Amount</button>
+    <button class="modal-cancel" onclick="closeModal('repay')">Cancel</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let selectedMonths = 1;
+let loanAmount = 5000;
+const MAX_LOAN = 45000; // will be fetched from API
+
+function updateCalc() {
+    const slider = document.getElementById('loanSlider');
+    loanAmount = parseInt(slider.value);
+    const min = parseInt(slider.min), max = parseInt(slider.max);
+    const pct = ((loanAmount - min) / (max - min)) * 100;
+    slider.style.background = `linear-gradient(to right,#3b82f6 0%,#3b82f6 ${pct}%,#e0e7ff ${pct}%,#e0e7ff 100%)`;
+    document.getElementById('loanAmountDisplay').textContent = '₦' + loanAmount.toLocaleString();
+
+    // Chip availability
+    const chips = document.querySelectorAll('.duration-chip');
+    chips.forEach((c, i) => {
+        const m = i + 1;
+        const maxMonths = loanAmount <= 40000 ? 1 : loanAmount <= 100000 ? 2 : 3;
+        c.classList.toggle('disabled', m > maxMonths);
+        if (m > maxMonths && c.classList.contains('active')) {
+            c.classList.remove('active');
+            chips[0].classList.add('active');
+            selectedMonths = 1;
+        }
+    });
+    recalc();
+}
+
+function selectDuration(el) {
+    if (el.classList.contains('disabled')) { showToast('⚠️ Increase loan amount to unlock this option'); return; }
+    document.querySelectorAll('.duration-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    selectedMonths = parseInt(el.dataset.months);
+    recalc();
+}
+
+function recalc() {
+    const rate = loanAmount > 100000 ? 0.10 : 0.15;
+    const rateLabel = loanAmount > 100000 ? '10%' : '15%';
+    const interest = Math.round(loanAmount * rate * selectedMonths);
+    const total = loanAmount + interest;
+    const monthly = Math.round(total / selectedMonths);
+    const due = new Date(); due.setMonth(due.getMonth() + selectedMonths);
+    const dueStr = due.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+    document.getElementById('sPrincipal').textContent = '₦' + loanAmount.toLocaleString();
+    document.getElementById('sRate').textContent = rateLabel + ' / month';
+    document.getElementById('sInterest').textContent = '₦' + interest.toLocaleString();
+    document.getElementById('sTotal').textContent = '₦' + total.toLocaleString();
+    document.getElementById('sMonthly').textContent = '₦' + monthly.toLocaleString();
+    document.getElementById('sDue').textContent = dueStr;
+
+    // Sync modal
+    document.getElementById('mPrincipal').textContent = '₦' + loanAmount.toLocaleString();
+    document.getElementById('mRate').textContent = rateLabel + ' per month';
+    document.getElementById('mDuration').textContent = selectedMonths + ' Month' + (selectedMonths > 1 ? 's' : '');
+    document.getElementById('mInterest').textContent = '₦' + interest.toLocaleString();
+    document.getElementById('mTotal').textContent = '₦' + total.toLocaleString();
+    document.getElementById('mMonthly').textContent = '₦' + monthly.toLocaleString();
+    document.getElementById('mDue').textContent = dueStr;
+}
+
+function switchTab(name, el) {
+    ['apply','active','eligibility'].forEach(t => {
+        document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+    });
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    if (name === 'active') setTimeout(() => { document.getElementById('loanProg').style.width = '53%'; }, 300);
+    if (name === 'eligibility') setTimeout(() => {
+        document.getElementById('scoreCircle2').style.strokeDashoffset = '61.6';
+        document.getElementById('ef1').style.width = '85%';
+        document.getElementById('ef2').style.width = '15%';
+    }, 300);
+}
+
+function showModal(type) {
+    document.getElementById(type + 'Backdrop').classList.add('show');
+    document.getElementById(type + 'Modal').classList.add('show');
+}
+
+function closeModal(type) {
+    document.getElementById(type + 'Backdrop').classList.remove('show');
+    document.getElementById(type + 'Modal').classList.remove('show');
+}
+
+function confirmLoan() {
+    closeModal('apply');
+    showToast('✅ Loan disbursed to your wallet!');
+    // TODO: POST /api/loans/apply
+}
+
+function confirmRepay() {
+    closeModal('repay');
+    showToast('⚠️ Insufficient balance — please top up first');
+    // TODO: POST /api/loans/repay
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateCalc();
+    setTimeout(() => {
+        document.getElementById('scoreCircle').style.strokeDashoffset = '61.6';
+    }, 500);
+});
+</script>
+</body>
+</html>
