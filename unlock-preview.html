@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Lockfund Unlocked - Meritwise</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-deep:   #0f1f5c;
+            --blue-mid:    #1e40af;
+            --blue-brand:  #2563eb;
+            --blue-light:  #3b82f6;
+            --blue-pale:   #dbeafe;
+            --blue-ghost:  #eff6ff;
+            --ink-2:       #1f2937;
+            --ink-3:       #4b5563;
+            --ink-4:       #9ca3af;
+            --surface:     #ffffff;
+            --surface-2:   #f8fafc;
+            --surface-3:   #f1f5f9;
+            --border:      #e8edf5;
+            --green:       #059669;
+            --green-mid:   #10b981;
+            --green-light: #34d399;
+            --green-bg:    #dcfce7;
+            --radius-sm:   10px;
+            --radius-md:   16px;
+            --radius-lg:   24px;
+            --radius-xl:   32px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--surface-2);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 20px 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-wrap {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* ── CONFETTI BURST ── */
+        .confetti-wrap {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            opacity: 0;
+            animation: confettiFall var(--dur) ease-out var(--delay) forwards;
+            transform-origin: center;
+        }
+
+        @keyframes confettiFall {
+            0%   { opacity: 1; transform: translateY(-20px) rotate(0deg) scale(1); }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(700px) rotate(var(--rot)) scale(0.5); }
+        }
+
+        /* ── MAIN CARD ── */
+        .unlock-card {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(160deg, #064e3b 0%, #065f46 30%, #047857 60%, #059669 85%, #10b981 100%);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            animation: cardEntrance 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes cardEntrance {
+            0%   { opacity: 0; transform: scale(0.88) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Dot grid */
+        .card-dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+            background-size: 22px 22px;
+            pointer-events: none;
+        }
+
+        /* Orb glows */
+        .card-orb-1 {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(52,211,153,0.25) 0%, transparent 70%);
+            top: -100px;
+            right: -60px;
+            pointer-events: none;
+        }
+
+        .card-orb-2 {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(6,78,59,0.5) 0%, transparent 70%);
+            bottom: -40px;
+            left: -50px;
+            pointer-events: none;
+        }
+
+        .card-inner {
+            position: relative;
+            z-index: 2;
+            padding: 32px 24px 28px;
+        }
+
+        /* ── ICON RING ── */
+        .icon-ring-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .icon-ring {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .icon-ring-outer {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.15);
+            animation: ringPulse 2.2s ease-in-out infinite;
+        }
+
+        .icon-ring-mid {
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            animation: ringPulse 2.2s ease-in-out 0.4s infinite;
+        }
+
+        .icon-ring-inner {
+            position: absolute;
+            inset: 16px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            font-size: 26px;
+            animation: iconBounce 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+        }
+
+        @keyframes ringPulse {
+            0%,100% { transform: scale(1); opacity: 0.6; }
+            50%      { transform: scale(1.06); opacity: 1; }
+        }
+
+        @keyframes iconBounce {
+            0%   { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ── HEADER TEXT ── */
+        .unlock-eyebrow {
+            text-align: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 6px;
+            animation: fadeUp 0.5s ease 0.4s both;
+        }
+
+        .unlock-headline {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+            animation: fadeUp 0.5s ease 0.5s both;
+        }
+
+        .unlock-sub {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 24px;
+            animation: fadeUp 0.5s ease 0.55s both;
+        }
+
+        @keyframes fadeUp {
+            0%   { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── AMOUNT BLOCK ── */
+        .amount-block {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: var(--radius-md);
+            padding: 20px 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(12px);
+            animation: fadeUp 0.5s ease 0.6s both;
+        }
+
+        .amount-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 8px;
+        }
+
+        .amount-value {
+            font-size: 40px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -2px;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .amount-returned {
+            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.55);
+        }
+
+        .amount-returned span {
+            color: #6ee7b7;
+            font-weight: 700;
+        }
+
+        /* ── DETAILS ROWS ── */
+        .details-box {
+            background: rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 20px;
+            animation: fadeUp 0.5s ease 0.7s both;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .detail-row:last-child { border-bottom: none; }
+
+        .detail-row-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-icon ion-icon { font-size: 15px; color: rgba(255,255,255,0.8); }
+
+        .detail-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .detail-value {
+            font-size: 12px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.2px;
+            text-align: right;
+        }
+
+        .detail-value.highlight {
+            color: #6ee7b7;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.5s ease 0.75s both;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .divider-text {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+        }
+
+        /* ── BUTTONS ── */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            animation: fadeUp 0.5s ease 0.8s both;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--green);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary ion-icon { font-size: 18px; }
+        .btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.22);
+            border-radius: var(--radius-sm);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.85);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-secondary ion-icon { font-size: 16px; }
+        .btn-secondary:active { background: rgba(255,255,255,0.18); transform: scale(0.97); }
+
+        /* ── BOTTOM SHARE STRIP ── */
+        .share-strip {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            animation: fadeUp 0.5s ease 0.9s both;
+        }
+
+        .share-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .share-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50px;
+            padding: 5px 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.75);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .share-btn ion-icon { font-size: 12px; }
+        .share-btn:active { background: rgba(255,255,255,0.2); }
+
+        /* ── BADGE ── */
+        .success-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            padding: 5px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(8px);
+            animation: badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.8s both;
+        }
+
+        @keyframes badgePop {
+            0%   { opacity: 0; transform: scale(0.6); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: blinkGreen 1.4s ease-in-out infinite;
+        }
+
+        @keyframes blinkGreen { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+        .badge-text {
+            font-size: 9px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONFETTI -->
+    <div class="confetti-wrap" id="confettiWrap"></div>
+
+    <div class="page-wrap">
+        <div class="unlock-card">
+            <div class="card-dots"></div>
+            <div class="card-orb-1"></div>
+            <div class="card-orb-2"></div>
+
+            <!-- Live badge -->
+            <div class="success-badge">
+                <div class="badge-dot"></div>
+                <span class="badge-text">Completed</span>
+            </div>
+
+            <div class="card-inner">
+
+                <!-- Icon ring -->
+                <div class="icon-ring-wrap">
+                    <div class="icon-ring">
+                        <div class="icon-ring-outer"></div>
+                        <div class="icon-ring-mid"></div>
+                        <div class="icon-ring-inner">🔓</div>
+                    </div>
+                </div>
+
+                <!-- Headline -->
+                <div class="unlock-eyebrow">Lockfund Complete</div>
+                <div class="unlock-headline">Funds Unlocked! 🎉</div>
+                <div class="unlock-sub">Your savings discipline paid off</div>
+
+                <!-- Amount -->
+                <div class="amount-block">
+                    <div class="amount-label">Amount Returned to Wallet</div>
+                    <div class="amount-value" id="unlockAmount">₦25,000.00</div>
+                    <div class="amount-returned">Back to <span>Available Balance</span></div>
+                </div>
+
+                <!-- Details -->
+                <div class="details-box">
+                    <div class="detail-row">
+                        <div class="detail-row-left">
+                            <div class="detail-icon">
+                                <ion-icon name="time-outline"></ion-icon>
+                            </div>
+                            <div class="detail-label">Duration</div>
+                        </div>
+                        <div class="detail-value highlight" id="unlockDuration">30 days</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-row-left">
+                            <div class="detail-icon">
+                                <ion-icon name="calendar-outline"></ion-icon>
+                            </div>
+                            <div class="detail-label">Started</div>
+                        </div>
+                        <div class="detail-value" id="unlockStartDate">01 Jan 2025</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-row-left">
+                            <div class="detail-icon">
+                                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                            </div>
+                            <div class="detail-label">Completed</div>
+                        </div>
+                        <div class="detail-value" id="unlockEndDate">31 Jan 2025</div>
+                    </div>
+                </div>
+
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-text">What's next?</div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="goToDashboard()">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                        View Wallet Balance
+                    </button>
+                    <button class="btn-secondary" onclick="createAnotherLock()">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        Create Another Lock
+                    </button>
+                </div>
+
+                <!-- Share strip -->
+                <div class="share-strip">
+                    <span class="share-text">Share milestone</span>
+                    <button class="share-btn">
+                        <ion-icon name="share-social-outline"></ion-icon>
+                        Share
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Confetti ──
+        function launchConfetti() {
+            const wrap = document.getElementById('confettiWrap');
+            const colors = ['#4ade80','#22d3ee','#f472b6','#facc15','#a78bfa','#ffffff','#34d399','#60a5fa'];
+            for (let i = 0; i < 60; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.cssText = `
+                    left: ${Math.random() * 100}%;
+                    top: -10px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                    width: ${4 + Math.random() * 8}px;
+                    height: ${4 + Math.random() * 8}px;
+                    --dur: ${1.8 + Math.random() * 1.4}s;
+                    --delay: ${Math.random() * 0.8}s;
+                    --rot: ${Math.random() > 0.5 ? '' : '-'}${200 + Math.random() * 360}deg;
+                `;
+                wrap.appendChild(piece);
+                piece.addEventListener('animationend', () => piece.remove());
+            }
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function createAnotherLock() {
+            // In real lockfund.html this calls dismissUnlock()
+            alert('Would dismiss and show create form');
+        }
+
+        // Launch confetti on load
+        window.addEventListener('load', () => {
+            setTimeout(launchConfetti, 300);
+            setTimeout(launchConfetti, 900);
+        });
+    </script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
