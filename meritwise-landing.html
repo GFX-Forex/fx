@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meritwise — Money That Moves With You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --blue: #1545B8;
+  --blue-bright: #2563EB;
+  --blue-glow: #3B82F6;
+  --ink: #050510;
+  --ink-2: #0F0F2E;
+  --ink-3: #1E1E4A;
+  --white: #FFFFFF;
+  --offwhite: #F8F8FF;
+  --gold: #F5A623;
+  --gold-2: #FFD166;
+  --green: #00C896;
+  --surface: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --display: 'Clash Display', sans-serif;
+  --body: 'Cabinet Grotesk', sans-serif;
+  --serif: 'Instrument Serif', serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--body);
+  background: var(--ink);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--blue-glow);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.15s ease, opacity 0.3s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(99,154,255,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.cursor-ring.hovered { transform: scale(2.5); border-color: var(--gold); }
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── GRID BG ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(21,69,184,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21,69,184,0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  background: rgba(5,5,16,0.7);
+}
+
+.nav-logo {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-logo-mark {
+  width: 32px; height: 32px;
+  background: var(--blue);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  letter-spacing: 0.2px;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: white; }
+
+.nav-cta {
+  background: var(--blue);
+  color: white !important;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-cta:hover { background: var(--blue-bright) !important; transform: scale(1.03); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 24px 80px;
+  text-align: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Orb backgrounds */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+.orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(21,69,184,0.35) 0%, transparent 70%);
+  top: -100px; left: -100px;
+  animation: orbFloat1 12s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
+  bottom: -80px; right: -80px;
+  animation: orbFloat2 15s ease-in-out infinite;
+}
+
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+  top: 50%; left: 60%;
+  animation: orbFloat3 10s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 30px) scale(1.08); }
+}
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -20px) scale(1.05); }
+}
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(21,69,184,0.15);
+  border: 1px solid rgba(59,130,246,0.25);
+  border-radius: 100px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue-glow);
+  letter-spacing: 0.5px;
+  margin-bottom: 28px;
+  animation: fadeSlideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+.badge-dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.hero-headline {
+  font-family: var(--display);
+  font-size: clamp(52px, 8vw, 110px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -3px;
+  margin-bottom: 28px;
+  animation: fadeSlideDown 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+.hero-headline .line-1 { display: block; color: white; }
+.hero-headline .line-2 {
+  display: block;
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #F5A623 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+  font-family: var(--serif);
+}
+.hero-headline .line-3 { display: block; color: rgba(255,255,255,0.9); }
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.5);
+  max-width: 560px;
+  line-height: 1.65;
+  margin-bottom: 44px;
+  animation: fadeSlideDown 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeSlideDown 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 100px;
+  font-family: var(--body);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 0 0 rgba(37,99,235,0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(37,99,235,0.45); }
+.btn-primary:hover::before { opacity: 1; }
+
+.btn-ghost {
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-family: var(--body);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.3);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.hero-social-proof {
+  margin-top: 64px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  animation: fadeSlideDown 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both;
+}
+
+.avatar-stack {
+  display: flex;
+}
+
+.avatar-item {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  margin-left: -10px;
+  overflow: hidden;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.avatar-item:first-child { margin-left: 0; }
+
+.social-text { font-size: 13px; color: rgba(255,255,255,0.5); }
+.social-text strong { color: white; font-weight: 700; }
+
+/* ── PHONE MOCKUP ── */
+.hero-phone {
+  position: relative;
+  margin-top: 72px;
+  animation: fadeSlideDown 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+}
+
+.phone-outer {
+  width: 280px;
+  height: 560px;
+  background: linear-gradient(145deg, #1a1a3e 0%, #0d0d25 100%);
+  border-radius: 44px;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 6px rgba(255,255,255,0.04),
+    0 60px 120px rgba(0,0,0,0.8),
+    0 0 100px rgba(21,69,184,0.2);
+  margin: 0 auto;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px; height: 26px;
+  background: #050510;
+  border-radius: 30px;
+  z-index: 10;
+}
+
+.phone-screen {
+  position: absolute;
+  inset: 0;
+  padding: 60px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.phone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.phone-avatar {
+  width: 32px; height: 32px;
+  background: var(--blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.phone-greeting {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
+
+.phone-balance-card {
+  background: rgba(21,69,184,0.25);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 18px;
+  padding: 16px;
+  text-align: center;
+}
+
+.pbc-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 6px;
+}
+
+.pbc-amount {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: white;
+  animation: countUp 2s ease-out 1s both;
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.pbc-change {
+  font-size: 10px;
+  color: var(--green);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.phone-actions-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.phone-action {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.phone-action-icon {
+  width: 24px; height: 24px;
+  background: rgba(21,69,184,0.3);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.phone-action-label {
+  font-size: 8px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+}
+
+.phone-txn-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: -0.2px;
+}
+
+.phone-txn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.phone-txn-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.phone-txn-details { flex: 1; }
+.phone-txn-name { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.8); }
+.phone-txn-date { font-size: 9px; color: rgba(255,255,255,0.3); margin-top: 1px; }
+.phone-txn-amount { font-size: 11px; font-weight: 700; }
+.phone-txn-amount.credit { color: var(--green); }
+.phone-txn-amount.debit { color: rgba(255,255,255,0.7); }
+
+.phone-glow {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(21,69,184,0.4) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── FLOATING NOTIFICATION CARDS ── */
+.float-card {
+  position: absolute;
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(15,15,46,0.85);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  animation: floatCard 6s ease-in-out infinite;
+  z-index: 5;
+}
+
+.float-card-1 {
+  left: -120px;
+  top: 40px;
+  animation-delay: 0s;
+  animation-duration: 7s;
+}
+
+.float-card-2 {
+  right: -90px;
+  top: 120px;
+  animation-delay: 1.5s;
+  animation-duration: 8s;
+}
+
+.float-card-3 {
+  right: -110px;
+  bottom: 120px;
+  animation-delay: 3s;
+  animation-duration: 6s;
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+.fc-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.fc-icon.green { background: rgba(0,200,150,0.2); }
+.fc-icon.blue { background: rgba(21,69,184,0.3); }
+.fc-icon.gold { background: rgba(245,166,35,0.2); }
+
+.fc-text { white-space: nowrap; }
+.fc-label { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; }
+.fc-value { font-size: 14px; font-weight: 700; color: white; }
+
+/* ── SCROLL TICKER ── */
+.ticker-wrap {
+  width: 100%;
+  background: rgba(21,69,184,0.12);
+  border-top: 1px solid rgba(21,69,184,0.2);
+  border-bottom: 1px solid rgba(21,69,184,0.2);
+  padding: 16px 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.ticker-track {
+  display: flex;
+  gap: 0;
+  animation: ticker 30s linear infinite;
+  width: max-content;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 48px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.ticker-dot {
+  width: 4px; height: 4px;
+  background: var(--blue);
+  border-radius: 50%;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── SECTIONS COMMON ── */
+section {
+  position: relative;
+  z-index: 2;
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue-glow);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 68px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+}
+
+.section-title .accent {
+  font-style: italic;
+  font-family: var(--serif);
+  background: linear-gradient(135deg, #60A5FA, #A78BFA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-sub {
+  font-size: 17px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+/* ── FEATURES SECTION ── */
+.features {
+  padding: 120px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-header {
+  margin-bottom: 72px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.feature-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(21,69,184,0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.feature-card:hover {
+  border-color: rgba(59,130,246,0.2);
+  transform: translateY(-4px);
+}
+
+.feature-card:hover::before { opacity: 1; }
+
+.feature-card.large {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.feature-card.tall {
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-icon-wrapper {
+  width: 52px; height: 52px;
+  background: rgba(21,69,184,0.2);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
+
+.feature-title {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.feature-desc {
+  font-size: 15px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.65;
+}
+
+.feature-spacer { flex: 1; }
+
+/* Large card visual */
+.feature-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mini-stat {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.mini-stat:hover { background: rgba(21,69,184,0.1); border-color: rgba(59,130,246,0.2); }
+
+.mini-stat-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}
+
+.mini-stat-value {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.mini-stat-value.up { color: var(--green); }
+.mini-stat-value.blue { color: var(--blue-glow); }
+.mini-stat-value.gold { color: var(--gold); }
+
+/* Card accent strip */
+.card-accent {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--blue-glow), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.feature-card:hover .card-accent { opacity: 1; }
+
+/* ── STATS BAND ── */
+.stats-band {
+  padding: 80px 48px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(21,69,184,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-band::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 700px; height: 300px;
+  background: radial-gradient(ellipse, rgba(21,69,184,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.stats-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 48px;
+  position: relative;
+  z-index: 2;
+}
+
+.stat-item { text-align: center; }
+
+.stat-number {
+  font-family: var(--display);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}
+
+/* ── SERVICES SHOWCASE ── */
+.services {
+  padding: 120px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.services-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 72px;
+}
+
+.services-header .section-sub {
+  margin: 0 auto;
+}
+
+.services-scroll {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.service-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 32px;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle at top right, rgba(21,69,184,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(59,130,246,0.25);
+  background: rgba(21,69,184,0.06);
+}
+
+.service-emoji {
+  font-size: 32px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.service-name {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+
+.service-info {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.service-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,200,150,0.12);
+  border: 1px solid rgba(0,200,150,0.2);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+}
+
+/* ── HOW IT WORKS ── */
+.how {
+  padding: 120px 48px;
+  background: rgba(255,255,255,0.015);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.how-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.how-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.how-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.how-step:hover {
+  background: rgba(21,69,184,0.08);
+  border-color: rgba(59,130,246,0.15);
+  transform: translateX(6px);
+}
+
+.step-number {
+  width: 40px; height: 40px;
+  background: var(--blue);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.step-title {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.step-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
+}
+
+/* How Visual */
+.how-visual {
+  position: relative;
+}
+
+.how-phone {
+  width: 220px;
+  height: 440px;
+  background: linear-gradient(160deg, #16163a 0%, #0a0a1f 100%);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 36px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 60px rgba(21,69,184,0.15);
+}
+
+.how-phone-notch {
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  width: 70px; height: 22px;
+  background: #050510;
+  border-radius: 20px;
+}
+
+.how-phone-content {
+  padding: 50px 12px 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.how-progress {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.how-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--blue-glow));
+  border-radius: 4px;
+  width: 0%;
+  animation: progressFill 3s ease-out 1s forwards;
+}
+
+@keyframes progressFill {
+  to { width: 78%; }
+}
+
+.how-field {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.how-field-label {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 4px;
+}
+
+.how-field-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.how-confirm-btn {
+  background: var(--blue);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  margin-top: auto;
+  box-shadow: 0 6px 24px rgba(21,69,184,0.4);
+}
+
+.how-floating {
+  position: absolute;
+  background: rgba(15,15,46,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  backdrop-filter: blur(16px);
+  white-space: nowrap;
+}
+
+.how-floating.f1 {
+  top: 20px; right: -40px;
+  animation: floatCard 5s ease-in-out infinite;
+  color: var(--green);
+}
+
+.how-floating.f2 {
+  bottom: 40px; left: -60px;
+  animation: floatCard 7s ease-in-out infinite 2s;
+  color: var(--gold);
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials {
+  padding: 120px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.testi-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 32px;
+  transition: all 0.3s ease;
+}
+
+.testi-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59,130,246,0.2);
+}
+
+.testi-stars {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 18px;
+}
+
+.star { color: var(--gold); font-size: 14px; }
+
+.testi-quote {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.testi-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--blue-glow));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.testi-name {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.testi-role {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+}
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 80px 48px 120px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(21,69,184,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1.0;
+  margin-bottom: 24px;
+}
+
+.cta-title .em {
+  background: linear-gradient(135deg, #60A5FA, #F5A623);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+.cta-sub {
+  font-size: 17px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 44px;
+  line-height: 1.6;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-primary-large {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 18px 40px;
+  border-radius: 100px;
+  font-family: var(--body);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary-large::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-primary-large:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 60px rgba(21,69,184,0.5);
+}
+
+.btn-primary-large:hover::after { opacity: 1; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 60px 48px 40px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  z-index: 2;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.7;
+  margin-top: 14px;
+  max-width: 280px;
+}
+
+.footer-col h4 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 20px;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col ul a {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-col ul a:hover { color: white; }
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: rgba(255,255,255,0.25);
+}
+
+.footer-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-badge {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 120px 24px 60px; }
+  .float-card-1, .float-card-2, .float-card-3 { display: none; }
+  .features, .services, .testimonials { padding: 80px 24px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feature-card.large { grid-column: span 1; grid-template-columns: 1fr; gap: 24px; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 32px; }
+  .stats-band { padding: 60px 24px; }
+  .services-scroll { grid-template-columns: 1fr; }
+  .how { padding: 80px 24px; }
+  .how-inner { grid-template-columns: 1fr; gap: 48px; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 60px 24px 80px; }
+  footer { padding: 48px 24px 32px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .hero-headline { font-size: 44px; letter-spacing: -2px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-badges { flex-wrap: wrap; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">M</div>
+    Meritwise
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">How it Works</a></li>
+    <li><a href="#" class="nav-cta">Get Started Free</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Nigeria's Smartest Digital Wallet
+  </div>
+
+  <h1 class="hero-headline">
+    <span class="line-1">Your Money,</span>
+    <span class="line-2">Smarter</span>
+    <span class="line-3">Than Ever.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Send, receive, save and pay bills — all from one app. Meritwise gives your money superpowers. Lock funds, earn rewards, and move cash at the speed of thought.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Create Free Account
+    </a>
+    <a href="#how" class="btn-ghost">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      See How It Works
+    </a>
+  </div>
+
+  <div class="hero-social-proof">
+    <div class="avatar-stack">
+      <div class="avatar-item" style="background:#1545B8;">AK</div>
+      <div class="avatar-item" style="background:#7C3AED;">BT</div>
+      <div class="avatar-item" style="background:#059669;">CO</div>
+      <div class="avatar-item" style="background:#DC2626;">DE</div>
+      <div class="avatar-item" style="background:#D97706;">FN</div>
+    </div>
+    <p class="social-text"><strong>12,000+</strong> Nigerians already trust us</p>
+  </div>
+
+  <!-- Phone Mockup -->
+  <div class="hero-phone">
+    <!-- Float cards -->
+    <div class="float-card float-card-1">
+      <div class="fc-icon green">💸</div>
+      <div class="fc-text">
+        <div class="fc-label">Credit Alert</div>
+        <div class="fc-value">+₦50,000</div>
+      </div>
+    </div>
+    <div class="float-card float-card-2">
+      <div class="fc-icon blue">🔒</div>
+      <div class="fc-text">
+        <div class="fc-label">Lockfund Active</div>
+        <div class="fc-value">₦120,000</div>
+      </div>
+    </div>
+    <div class="float-card float-card-3">
+      <div class="fc-icon gold">⭐</div>
+      <div class="fc-text">
+        <div class="fc-label">Reward Earned</div>
+        <div class="fc-value">+500 pts</div>
+      </div>
+    </div>
+
+    <div class="phone-outer">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="phone-header">
+          <div>
+            <div class="phone-greeting">Hello, Tunde 👋</div>
+          </div>
+          <div class="phone-avatar">TK</div>
+        </div>
+
+        <div class="phone-balance-card">
+          <div class="pbc-label">Available Balance</div>
+          <div class="pbc-amount" id="heroBalance">₦284,500.00</div>
+          <div class="pbc-change">↑ +₦12,400 this week</div>
+        </div>
+
+        <div class="phone-actions-row">
+          <div class="phone-action">
+            <div class="phone-action-icon">↔</div>
+            <div class="phone-action-label">Transfer</div>
+          </div>
+          <div class="phone-action">
+            <div class="phone-action-icon">🔒</div>
+            <div class="phone-action-label">Lockfund</div>
+          </div>
+          <div class="phone-action">
+            <div class="phone-action-icon">💬</div>
+            <div class="phone-action-label">MeriChat</div>
+          </div>
+          <div class="phone-action">
+            <div class="phone-action-icon">✓</div>
+            <div class="phone-action-label">Request</div>
+          </div>
+        </div>
+
+        <div class="phone-txn-header">Recent Activity</div>
+
+        <div class="phone-txn">
+          <div class="phone-txn-icon" style="background:rgba(0,200,150,0.15);">💰</div>
+          <div class="phone-txn-details">
+            <div class="phone-txn-name">Wallet Funding</div>
+            <div class="phone-txn-date">Today, 2:14 PM</div>
+          </div>
+          <div class="phone-txn-amount credit">+₦50,000</div>
+        </div>
+
+        <div class="phone-txn">
+          <div class="phone-txn-icon" style="background:rgba(21,69,184,0.2);">📱</div>
+          <div class="phone-txn-details">
+            <div class="phone-txn-name">MTN Airtime</div>
+            <div class="phone-txn-date">Today, 10:02 AM</div>
+          </div>
+          <div class="phone-txn-amount debit">-₦2,000</div>
+        </div>
+
+        <div class="phone-txn">
+          <div class="phone-txn-icon" style="background:rgba(245,166,35,0.15);">⚡</div>
+          <div class="phone-txn-details">
+            <div class="phone-txn-name">EKEDC Electric</div>
+            <div class="phone-txn-date">Yesterday</div>
+          </div>
+          <div class="phone-txn-amount debit">-₦8,500</div>
+        </div>
+      </div>
+      <div class="phone-glow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker">
+    <div class="ticker-item"><span class="ticker-dot"></span> Instant Transfers</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Lockfund Savings</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Airtime & Data</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Electricity Bills</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Cable TV</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> MeriChat</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Referral Rewards</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Ajo Groups</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Real-Time Alerts</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> MeriLoan</div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><span class="ticker-dot"></span> Instant Transfers</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Lockfund Savings</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Airtime & Data</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Electricity Bills</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Cable TV</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> MeriChat</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Referral Rewards</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Ajo Groups</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> Real-Time Alerts</div>
+    <div class="ticker-item"><span class="ticker-dot"></span> MeriLoan</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features reveal" id="features">
+  <div class="features-header reveal">
+    <div class="section-tag">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Why Meritwise
+    </div>
+    <h2 class="section-title">Built for how <br><span class="accent">Nigerians move</span></h2>
+    <p class="section-sub">Every feature crafted for the way you live, earn and spend. No hidden fees. No wahala.</p>
+  </div>
+
+  <div class="features-grid">
+
+    <!-- Large Card -->
+    <div class="feature-card large reveal">
+      <div>
+        <div class="feature-icon-wrapper">🔒</div>
+        <div class="feature-title">Lockfund — Save With Discipline</div>
+        <div class="feature-desc">Lock your money away until you're ready. No temptation to spend. Set a date, we hold the bag. Perfect for saving towards a goal without cheating yourself.</div>
+      </div>
+      <div class="feature-visual">
+        <div class="mini-stat">
+          <div class="mini-stat-label">Your savings goal</div>
+          <div class="mini-stat-value blue">₦500,000</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Currently locked</div>
+          <div class="mini-stat-value up">₦312,000</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Unlock date</div>
+          <div class="mini-stat-value gold">Dec 31, 2025</div>
+        </div>
+        <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;margin-top:4px;">
+          <div style="height:100%;width:62%;background:linear-gradient(90deg,#1545B8,#3B82F6);border-radius:6px;"></div>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.3);text-align:right;">62% saved</div>
+      </div>
+      <div class="card-accent"></div>
+    </div>
+
+    <!-- Card 1 -->
+    <div class="feature-card tall reveal">
+      <div class="feature-icon-wrapper">⚡</div>
+      <div class="feature-title">Real-Time Everything</div>
+      <div class="feature-desc">Your balance updates the moment money moves. Live WebSocket alerts so you're never left wondering where your money is.</div>
+      <div class="feature-spacer"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;">
+        <span style="background:rgba(0,200,150,0.12);border:1px solid rgba(0,200,150,0.2);color:#00C896;font-size:11px;font-weight:600;padding:5px 12px;border-radius:100px;">Live Balance</span>
+        <span style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2);color:#60A5FA;font-size:11px;font-weight:600;padding:5px 12px;border-radius:100px;">Push Alerts</span>
+        <span style="background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.2);color:#F5A623;font-size:11px;font-weight:600;padding:5px 12px;border-radius:100px;">Auto Sync</span>
+      </div>
+      <div class="card-accent"></div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="feature-card tall reveal">
+      <div class="feature-icon-wrapper">👥</div>
+      <div class="feature-title">Ajo — Digital Thrift Club</div>
+      <div class="feature-desc">The traditional rotating savings circle — reimagined for the digital age. Create or join an Ajo group. Contributions tracked automatically. Fair, transparent, powerful.</div>
+      <div class="feature-spacer"></div>
+      <div style="margin-top:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Active Group</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px;">Family Contribution</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">8 members · ₦50,000/month</div>
+      </div>
+      <div class="card-accent"></div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="feature-card tall reveal">
+      <div class="feature-icon-wrapper">🎁</div>
+      <div class="feature-title">Refer & Earn ₦500</div>
+      <div class="feature-desc">Share your link. When a friend joins and funds their wallet, you both get rewarded instantly. Real cash, not points — directly to your wallet.</div>
+      <div class="feature-spacer"></div>
+      <div style="margin-top:20px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.15);border-radius:12px;padding:14px 16px;">
+        <div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:2px;">Total earned</div>
+          <div style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;color:#F5A623;">₦4,500</div>
+        </div>
+        <div style="font-size:28px;">🏆</div>
+      </div>
+      <div class="card-accent"></div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="feature-card tall reveal">
+      <div class="feature-icon-wrapper">💬</div>
+      <div class="feature-title">MeriChat — Send Money in Chat</div>
+      <div class="feature-desc">Talk and transact in one place. Request money, send funds, or chat with support — all inside MeriChat. Banking meets messaging.</div>
+      <div class="feature-spacer"></div>
+      <div style="margin-top:20px;display:flex;flex-direction:column;gap:6px;">
+        <div style="background:rgba(21,69,184,0.15);border-radius:12px 12px 12px 4px;padding:10px 14px;font-size:12px;color:rgba(255,255,255,0.7);max-width:80%;">Can you send me ₦5,000? 🙏</div>
+        <div style="background:rgba(0,200,150,0.12);border-radius:12px 12px 4px 12px;padding:10px 14px;font-size:12px;color:rgba(255,255,255,0.7);margin-left:auto;max-width:80%;">Done! ₦5,000 sent ✅</div>
+      </div>
+      <div class="card-accent"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band reveal">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-number">12K+</div>
+      <div class="stat-label">Active Users</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">₦2B+</div>
+      <div class="stat-label">Processed Monthly</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">99.9%</div>
+      <div class="stat-label">Uptime Guaranteed</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">0.3s</div>
+      <div class="stat-label">Average Transaction Time</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header reveal">
+    <div class="section-tag">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Services
+    </div>
+    <h2 class="section-title">Pay for <span class="accent">everything</span></h2>
+    <p class="section-sub" style="margin:0 auto;">Airtime, data, electricity, cable TV — top up and pay bills in seconds, right from your wallet.</p>
+  </div>
+
+  <div class="services-scroll">
+    <div class="service-card reveal">
+      <span class="service-emoji">📱</span>
+      <div class="service-name">Airtime & Data</div>
+      <div class="service-info">Top up any network instantly. MTN, Airtel, Glo, 9mobile. Never run dry again.</div>
+      <div class="service-pill">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        Instant delivery
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-emoji">⚡</span>
+      <div class="service-name">Electricity</div>
+      <div class="service-info">Pay EKEDC, AEDC, IKEDC and more. Get your token instantly after payment.</div>
+      <div class="service-pill">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        Token in seconds
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-emoji">📺</span>
+      <div class="service-name">Cable TV</div>
+      <div class="service-info">Renew DStv, GOtv, Startimes and more without leaving the app.</div>
+      <div class="service-pill">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        All providers
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-emoji">🏦</span>
+      <div class="service-name">MeriLoan</div>
+      <div class="service-info">Quick access loans when you need it most. Apply and receive funds in minutes.</div>
+      <div class="service-pill">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        Fast disbursement
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-emoji">💳</span>
+      <div class="service-name">Virtual Account</div>
+      <div class="service-info">Your own dedicated bank account number. Accept transfers from any bank, any time.</div>
+      <div class="service-pill">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        All banks supported
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-emoji">↔️</span>
+      <div class="service-name">Wallet Transfers</div>
+      <div class="service-info">Send money to any Meritwise user instantly. Zero fees between wallets.</div>
+      <div class="service-pill">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        Free & instant
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div>
+      <div class="section-tag reveal">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        How It Works
+      </div>
+      <h2 class="section-title reveal">Up and running <br><span class="accent">in minutes</span></h2>
+      <p class="section-sub reveal" style="margin-bottom:48px;">No bank visit. No long forms. Just download, sign up, fund your wallet and you're live.</p>
+
+      <div class="how-steps">
+        <div class="how-step reveal">
+          <div class="step-number">1</div>
+          <div>
+            <div class="step-title">Create Your Account</div>
+            <div class="step-desc">Sign up with your phone number and BVN. Takes under 2 minutes. No documents required to start.</div>
+          </div>
+        </div>
+        <div class="how-step reveal">
+          <div class="step-number">2</div>
+          <div>
+            <div class="step-title">Fund Your Wallet</div>
+            <div class="step-desc">Transfer to your dedicated virtual account from any Nigerian bank. Money reflects instantly.</div>
+          </div>
+        </div>
+        <div class="how-step reveal">
+          <div class="step-number">3</div>
+          <div>
+            <div class="step-title">Do More With Money</div>
+            <div class="step-desc">Send, save, pay bills, join Ajo groups, earn rewards. Your full financial life, one app.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone visual -->
+    <div class="how-visual reveal">
+      <div class="how-phone">
+        <div class="how-phone-notch"></div>
+        <div class="how-phone-content">
+          <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:-0.2px;">Fund Wallet</div>
+          <div class="how-progress"><div class="how-progress-bar"></div></div>
+
+          <div class="how-field">
+            <div class="how-field-label">Your Account No.</div>
+            <div class="how-field-value">0123456789 · GTBank</div>
+          </div>
+          <div class="how-field">
+            <div class="how-field-label">Account Name</div>
+            <div class="how-field-value">Meritwise / Tunde K.</div>
+          </div>
+          <div class="how-field">
+            <div class="how-field-label">Amount</div>
+            <div class="how-field-value" style="color:#60A5FA;">₦50,000.00</div>
+          </div>
+
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.5;margin-top:4px;">
+            Transfer from any bank to this account. Reflects in seconds.
+          </div>
+
+          <div class="how-confirm-btn">Share Account Details</div>
+        </div>
+      </div>
+
+      <div class="how-floating f1">✓ ₦50,000 received!</div>
+      <div class="how-floating f2">🔒 Lockfund enabled</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-header reveal">
+    <div class="section-tag" style="justify-content:center;">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Real People, Real Results
+    </div>
+    <h2 class="section-title">They're already <span class="accent">winning</span></h2>
+  </div>
+
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testi-quote">"The Lockfund feature is everything. I've been trying to save for my rent for months and I keep spending it. Now I lock it and the temptation is gone. Made saving effortless."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">AO</div>
+        <div>
+          <div class="testi-name">Amaka Okafor</div>
+          <div class="testi-role">Teacher, Abuja</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card reveal">
+      <div class="testi-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testi-quote">"I referred 9 people and earned ₦4,500 in one week. The real-time alerts are mad — I know the second money drops. Best fintech app in Nigeria right now. No debate."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#7C3AED,#8B5CF6);">TN</div>
+        <div>
+          <div class="testi-name">Tochukwu Nweke</div>
+          <div class="testi-role">Entrepreneur, Lagos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card reveal">
+      <div class="testi-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testi-quote">"Our Ajo group of 12 people used to fight every month about who contributed. Meritwise fixed that completely. Automated, transparent, zero drama. We're all happy now."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#059669,#10B981);">FK</div>
+        <div>
+          <div class="testi-name">Funmi Kassim</div>
+          <div class="testi-role">Civil Servant, Ibadan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <div class="section-tag" style="justify-content:center;">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Get Started Today
+    </div>
+    <h2 class="cta-title">Your money deserves<br><span class="em">better tools.</span></h2>
+    <p class="cta-sub">Join thousands of Nigerians who take control of their finances with Meritwise. Free to start. Powerful from day one.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-primary-large">
+        Create Free Account
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <p style="margin-top:20px;font-size:13px;color:rgba(255,255,255,0.25);">No credit card required · Free forever plan available</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="margin-bottom:4px;">
+        <div class="nav-logo-mark">M</div>
+        Meritwise
+      </a>
+      <p>Nigeria's smartest digital wallet. Send money, pay bills, save smarter — all in one place.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Wallet</a></li>
+        <li><a href="#">Lockfund</a></li>
+        <li><a href="#">Ajo Groups</a></li>
+        <li><a href="#">MeriLoan</a></li>
+        <li><a href="#">MeriChat</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Airtime & Data</a></li>
+        <li><a href="#">Electricity</a></li>
+        <li><a href="#">Cable TV</a></li>
+        <li><a href="#">Transfers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Meritwise. All rights reserved. Licensed by CBN.</div>
+    <div class="footer-badges">
+      <div class="footer-badge">🔒 SSL Secured</div>
+      <div class="footer-badge">🏦 CBN Licensed</div>
+      <div class="footer-badge">🛡️ NDIC Insured</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── CUSTOM CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 6 + 'px';
+  cursor.style.top  = my - 6 + 'px';
+});
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx - 18 + 'px';
+  ring.style.top  = ry - 18 + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button, .feature-card, .service-card, .testi-card, .how-step').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+});
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), 80);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── STAGGERED CHILDREN ──
+document.querySelectorAll('.features-grid, .services-scroll, .testi-grid, .how-steps, .stats-grid').forEach(grid => {
+  Array.from(grid.children).forEach((child, i) => {
+    child.style.transitionDelay = (i * 80) + 'ms';
+  });
+});
+
+// ── BALANCE COUNTER ──
+function animateBalance() {
+  const el = document.getElementById('heroBalance');
+  if (!el) return;
+  const target = 284500;
+  let current = 0;
+  const duration = 2000;
+  const start = Date.now();
+  function step() {
+    const elapsed = Date.now() - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    current = Math.floor(eased * target);
+    el.textContent = '₦' + current.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  setTimeout(step, 1200);
+}
+animateBalance();
+
+// ── NAV SCROLL EFFECT ──
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.borderBottomColor =
+    window.scrollY > 40 ? 'rgba(255,255,255,0.08)' : 'transparent';
+}, { passive: true });
+</script>
+</body>
+</html>
