@@ -266,7 +266,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255
 /* footer */
 footer{padding:60px 48px 36px;border-top:1px solid var(--ink-5);background:white;}
 .footer-inner{max-width:1200px;margin:0 auto;}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+.footer-top{display:grid;grid-template-columns:2fr 3fr;gap:48px;margin-bottom:48px;}
+.footer-cols-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;}
 .footer-brand p{font-size:13px;color:var(--ink-4);line-height:1.7;margin-top:12px;max-width:260px;}
 .footer-col h4{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-4);margin-bottom:18px;}
 .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:11px;}
@@ -298,14 +299,30 @@ footer{padding:60px 48px 36px;border-top:1px solid var(--ink-5);background:white
   .testi-grid{grid-template-columns:1fr;}
   .cta-section{padding:64px 24px 80px;}
   footer{padding:48px 24px 28px;}
-  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
+  .footer-top{grid-template-columns:1fr;gap:32px;}
+  .footer-cols-grid{grid-template-columns:repeat(2,1fr);gap:28px;}
   .footer-bottom{flex-direction:column;gap:12px;text-align:center;}
 }
 @media(max-width:500px){
   .hero-h1{font-size:40px;letter-spacing:-2px;}
   .svc-grid{grid-template-columns:1fr;}
   .stats-inner{grid-template-columns:1fr 1fr;}
-  .footer-top{grid-template-columns:1fr;}
+  .footer-top{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .footer-brand{
+    padding-bottom:24px;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--ink-5);
+  }
+  .footer-brand p{max-width:100%;}
+  .footer-cols-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px 20px;
+  }
 }
 </style>
 </head>
@@ -844,6 +861,7 @@ footer{padding:60px 48px 36px;border-top:1px solid var(--ink-5);background:white
         <a href="#" class="nav-logo"><div class="nav-logo-mark">M</div>Meritwise</a>
         <p>Nigeria's smartest digital wallet. Send money, pay bills, save smarter and grow together — all in one app.</p>
       </div>
+      <div class="footer-cols-grid">
       <div class="footer-col">
         <h4>Product</h4>
         <ul>
@@ -893,9 +911,10 @@ footer{padding:60px 48px 36px;border-top:1px solid var(--ink-5);background:white
           </li>
         </ul>
       </div>
+      </div><!-- end footer-cols-grid -->
     </div>
     <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Meritwise. All rights reserved.</div>
+      <div class="footer-copy">© <span id="copy-year"></span> Meritwise. All rights reserved.</div>
       <div style="display:flex;align-items:center;gap:10px;">
         <a href="https://x.com/MeritwiseApp" target="_blank" title="@MeritwiseApp on X" style="width:32px;height:32px;background:var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -934,6 +953,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 });
 
 // balance removed - phone shows real value
+document.getElementById('copy-year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
